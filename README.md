@@ -2,10 +2,10 @@
 
 
 **Roles:**
-- Anna Goco (aeg3dh): Requirments Manager
+- Anna Goco (aeg3dh): Requirements Manager
 - Tyler Kim (tkj9ep): Scrum Master 
 - Hayden Johnson (cxy6nx): Testing Manager
-- Anna Goco (aeg3dh): UX Designer
+- Jade Gregoire (dze3jz): UX Designer
 - Franklin Glance (fpg2kv): DevOps Manager
 
 
