@@ -1,8 +1,5 @@
 # Django Practice Assessment
 
-__Name:__
-
-__Computing ID:__
 
 **Roles:**
 - Anna Goco (aeg3dh): Requirments Manager
