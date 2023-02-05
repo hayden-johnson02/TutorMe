@@ -14,8 +14,6 @@
 
 **Heroku address:** https://project-a-03-tutorme.herokuapp.com/
 
-Git: https://git.heroku.com/project-a-03-tutorme.git
-
 
 ## How to run locally:
 1. Clone this repository `gh repo clone uva-cs3240-s23/project-a-03`
