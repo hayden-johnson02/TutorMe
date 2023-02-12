@@ -25,4 +25,4 @@
 7. Run development server: `python manage.py runserver`
 
 
-To test heroku locally run `heroku local --port 8000` in the heroku cli
+To run locally `heroku local --port 8000` in the heroku cli
