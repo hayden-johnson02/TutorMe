@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Tutor Me | Profile{% endblock %}
+{% block content %}
+<div class="container col-6 py-5">
+    <div class="card">
+        <div class="card-header">
+            Profile page
+        </div>
+        <div class="card-body">
+            {% load socialaccount %}
+            {% load account %}
+            {% user_display user %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

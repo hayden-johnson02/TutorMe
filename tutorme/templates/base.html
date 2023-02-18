@@ -32,6 +32,7 @@
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><span>Logout</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><span>Profile</span></a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><span>Login</span></a></li>
                 {% endif %}

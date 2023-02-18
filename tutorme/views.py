@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views import generic 
 
@@ -20,6 +21,13 @@ def logout_view(request):
 
 def login_view(request):
     return render(request, 'login.html', {})
+
+def profile_view(request):
+    return render(request, 'profile.html', {})
+
+@login_required(login_url='/login/')
+def profile_view(request):
+    return render(request, 'profile.html', {})
 
 class IndexView(generic.ListView):
     template_name = 'index.html'
