@@ -34,7 +34,7 @@ if 'SECRET_KEY' in os.environ:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['project-a-03-tutorme.herokuapp.com']
 
 
 # Application definition
