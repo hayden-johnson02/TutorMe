@@ -31,9 +31,10 @@ SECRET_KEY = "This should be changed"
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
 
-DEBUG = False
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-ALLOWED_HOSTS = ['project-a-03-tutorme.herokuapp.com']
+ALLOWED_HOSTS = ['project-a-03-tutorme.herokuapp.com', 'localhost', '0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -90,15 +91,19 @@ WSGI_APPLICATION = 'project_A03.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # use sqlite db when testing locally
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": os.path.join(BASE_DIR, "db.sqlite3")
-#     }
-# }
 DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+    }
 }
+
+if "DATABASE_URL" in os.environ:
+    # Configure Django for DATABASE_URL environment variable.
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=600, ssl_require=True)
+
+# DATABASES['default'].update(dj_database_url.config(conn_max_age=600))
 
 
 # Password validation
@@ -136,7 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Enable WhiteNoise's GZip compression of static assets.
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -151,7 +156,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Activate Django-Heroku.
-# Use this code to avoid the psycopg2 / django-heroku error!  
+# Use this code to avoid the psycopg2 / django-heroku error!
 # Do NOT import django-heroku above!
 try:
     if 'HEROKU' in os.environ:
@@ -175,7 +180,8 @@ ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 
-# use production client_id and secret
+
+# use test client_id and secret
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         # For each OAuth based provider, either add a ``SocialApp``
@@ -195,8 +201,3 @@ SOCIALACCOUNT_PROVIDERS = {
 #         }
     }
 }
-
-# Override production variables if DJANGO_DEVELOPMENT env variable is true
-
-if os.getenv('DJANGO_DEVELOPMENT') == 'true':
-    from settings_dev import *  # or specific overrides

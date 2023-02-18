@@ -14,6 +14,7 @@
 
 **Heroku address:** https://project-a-03-tutorme.herokuapp.com/
 
+For local development, run export DJANGO_DEVELOPMENT=true, or add export DJANGO_DEVELOPMENT=true to .bashrc file
 
 ## How to run locally:
 **On MAC:**
