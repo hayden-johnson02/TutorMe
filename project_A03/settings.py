@@ -197,6 +197,6 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Override production variables if DJANGO_DEVELOPMENT env variable is true
-
-if os.getenv('DJANGO_DEVELOPMENT') == 'true':
-    from settings_dev import *  # or specific overrides
+#
+# if os.getenv('DJANGO_DEVELOPMENT') == 'true':
+#     from settings_dev import *  # or specific overrides

@@ -16,25 +16,21 @@ import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-j4gkz))$psa$f99-$30(%%k=zy_@cxqvd%(mwt^#5%bw&m3np6'
 SECRET_KEY = "This should be changed"
 
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['project-a-03-tutorme.herokuapp.com', 'localhost', '0.0.0.0', '127.0.0.1']
+# DEBUG = False
+#
+# ALLOWED_HOSTS = ['project-a-03-tutorme.herokuapp.com']
 
 
 # Application definition
@@ -91,19 +87,15 @@ WSGI_APPLICATION = 'project_A03.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # use sqlite db when testing locally
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
-    }
-}
-
-if "DATABASE_URL" in os.environ:
-    # Configure Django for DATABASE_URL environment variable.
-    DATABASES["default"] = dj_database_url.config(
-        conn_max_age=600, ssl_require=True)
-
-# DATABASES['default'].update(dj_database_url.config(conn_max_age=600))
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+#     }
+# }
+# DATABASES = {
+#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+# }
 
 
 # Password validation
@@ -171,6 +163,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',     # Needed to login by username in Django admin, regardless of `allauth`
     'allauth.account.auth_backends.AuthenticationBackend',# `allauth` specific authentication methods, such as login by e-mail
 ]
+
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
@@ -180,24 +173,28 @@ ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 
-
-# use test client_id and secret
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '143334719618-ga4l9ghm05vo89ubp536b06rpoukutab.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        }
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
+# # use production client_id and secret
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         # For each OAuth based provider, either add a ``SocialApp``
+#         # (``socialaccount`` app) containing the required client
+#         # credentials, or list them here:
+#         'APP': {
+#             'client_id': '143334719618-ak4l0p3qm2fceo8m47chvq74gr3f5d7p.apps.googleusercontent.com',
+#             'secret': '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',
+#             'key': ''
 #         }
-    }
-}
+# #         'SCOPE': [
+# #             'profile',
+# #             'email',
+# #         ],
+# #         'AUTH_PARAMS': {
+# #             'access_type': 'online',
+# #         }
+#     }
+# }
+
+# Override production variables if DJANGO_DEVELOPMENT env variable is true
+
+# if os.getenv('DJANGO_DEVELOPMENT') == 'true':
+#     from settings_dev import *  # or specific overrides
