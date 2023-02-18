@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn tutorme.wsgi
+web: gunicorn project_A03.wsgi
