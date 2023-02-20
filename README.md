@@ -39,3 +39,18 @@ To run locally `heroku local --port 8000` in the heroku cli
 
 **Notes:**
 - `heroku git:remote -a project-a-03-tutorme` to set heroku remote
+
+
+**Documentation**
+- Created django project, `project_A03`
+- Created app within the project, `tutorme`
+  - This is where the majority of our work will be done. 
+- Deployed django app to heroku. 
+- Setup project in Google Cloud API to handle credentials. https://developers.google.com/identity/sign-in/web/sign-in
+  - The login info for google cloud is my uva email info (fpg2kv), so I can handle the credentials. 
+- Created basic html templates `tutorme/templates` for login and index page. 
+- Split up `settings.py` into `base.py`, `dev.py`, and `prod.py`. 
+  - `base.py` contains the bulk of the original `settings.py` content. 
+  - `dev.py` contains settings set for development (allowed localhosts, sqlite backend, debug mode, and the right google login api client_id and key for testing locally).
+  - `prod.py` contains those same settings set for deployment. 
+  - **IMPORTANT:** you must set `DJANGO_DEVELOPMENT=true` locally to ensure the correct `settings` file is used. 
