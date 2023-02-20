@@ -24,7 +24,9 @@ For local development, run export DJANGO_DEVELOPMENT=true, or add export DJANGO_
 4. Install packages: `pip3 install -r requirements.txt`
 5. Make migrations: `python3 manage.py makemigrations` and `python3 manage.py migrate`
 6. Set up superuser: `python3 manage.py createsuperuser` 
-7. Run heroku locally: `heroku local --port 8000`, may need to run `python manage.py collectstatic` first 
+7. Run `export DJANGO_DEVELOPMENT=true`
+8. To run server locally: `python manage.py runserver`
+(Run heroku locally: `heroku local --port 8000`, may need to run `python manage.py collectstatic` first) 
 
 **On Windows:**
 1. Clone this repository
@@ -32,7 +34,9 @@ For local development, run export DJANGO_DEVELOPMENT=true, or add export DJANGO_
 3. Activate env: `.\env\Scripts\activate`
 4. Install packages: `py -m pip install -r requirements.txt`
 5. Make migrations: `python manage.py makemigrations` and `python manage.py migrate`
-6. Run heroku locally: `heroku local -f Procfile.windows`, may need to run `python manage.py collectstatic` first  
+6. Run `set DJANGO_DEVELOPMENT=true`
+7. To run server locally: `python manage.py runserver`
+(To run heroku locally: `heroku local -f Procfile.windows`, may need to run `python manage.py collectstatic` first) 
 
 To run locally `heroku local --port 8000` in the heroku cli
 
