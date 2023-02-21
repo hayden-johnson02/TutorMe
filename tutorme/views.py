@@ -52,7 +52,12 @@ class CreateStudentView(generic.FormView):
     form_class = StudentSignUpForm
     success_url = '/profile'
 
+    def get_context_data(self, **kwargs):
+        kwargs['is_student'] = True
+        return super().get_context_data(**kwargs)
+
     def form_valid(self, form):
+        form.is_student = True
         form.save()
         return super().form_valid(form)
 

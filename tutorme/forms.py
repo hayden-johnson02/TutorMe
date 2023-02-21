@@ -14,6 +14,13 @@ class StudentSignUpForm(ModelForm):
         exclude = ('is_tutor', 'is_student')
         fields = {'first_name', 'last_name', 'email'}
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_student = True
+        if commit:
+            user.save()
+        return user
+
     widgets = {
         'first_name': forms.TextInput(attrs={'class': 'form-control'}),
         'last_name': forms.TextInput(attrs={'class': 'form-control'}),
