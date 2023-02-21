@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.contrib.auth import logout
 from django.views.generic import CreateView
 
-from .forms import StudentSignUpForm
+from .forms import StudentSignUpForm, TutorSignUpForm
 from .models import User
 from django import forms
 
@@ -52,8 +52,14 @@ class CreateStudentView(generic.FormView):
         return super().form_valid(form)
 
 
-def create_tutor_view(request):
-    return render(request, 'createTutor.html', {})
+class CreateTutorView(generic.FormView):
+    template_name = 'createTutor.html'
+    form_class = TutorSignUpForm
+    success_url = '/profile'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 
 class IndexView(generic.ListView):

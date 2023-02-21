@@ -27,3 +27,24 @@ class StudentSignUpForm(ModelForm):
         'email': forms.TextInput(attrs={'class': 'form-control'}),
     }
 
+
+class TutorSignUpForm(ModelForm):
+
+    class Meta:
+        model = User
+        exclude = ('is_tutor', 'is_student')
+        fields = {'first_name', 'last_name', 'email'}
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_tutor = True
+        if commit:
+            user.save()
+        return user
+
+    widgets = {
+        'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+        'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        'email': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
