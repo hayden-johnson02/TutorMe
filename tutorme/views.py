@@ -47,6 +47,10 @@ class CreateStudentView(generic.FormView):
     form_class = StudentSignUpForm
     success_url = '/profile'
 
+    def get_context_data(self, **kwargs):
+        kwargs['is_student'] = True
+        return super().get_context_data(**kwargs)
+
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
@@ -56,6 +60,10 @@ class CreateTutorView(generic.FormView):
     template_name = 'createTutor.html'
     form_class = TutorSignUpForm
     success_url = '/profile'
+
+    def get_context_data(self, **kwargs):
+        kwargs['is_tutor'] = True
+        return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
         form.save()
