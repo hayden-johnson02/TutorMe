@@ -41,23 +41,13 @@ def profile_view(request):
 def create_account_view(request):
     return render(request, 'createAccount.html', {})
 
-#class create_student_view(CreateView):
-#    model = User
-#    form_class = createStudentForm
-#    template_name = 'createStudent.html'
-
 
 class CreateStudentView(generic.FormView):
     template_name = 'createStudent.html'
     form_class = StudentSignUpForm
     success_url = '/profile'
 
-    def get_context_data(self, **kwargs):
-        kwargs['is_student'] = True
-        return super().get_context_data(**kwargs)
-
     def form_valid(self, form):
-        form.is_student = True
         form.save()
         return super().form_valid(form)
 
