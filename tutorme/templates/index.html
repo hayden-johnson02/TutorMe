@@ -13,7 +13,8 @@
 
             {% else %}
             <h1>My Google Login Project</h1>
-            <a href="{% provider_login_url 'google' %}">Login with Google</a>
+            <a class="btn btn-primary" href="{% provider_login_url 'google' %}">Login with Google</a>
+            <a class="btn btn-primary" href="/createAccount">Create Account</a>
             {% endif %}
 
         </div>

@@ -6,7 +6,9 @@ from django.views import generic
 from django.shortcuts import render
 
 from django.contrib.auth import logout
-
+from django.views.generic import CreateView
+from .models import User
+from django import forms
 
 app_name = 'tutorme'
 
@@ -28,6 +30,20 @@ def profile_view(request):
 @login_required(login_url='/login/')
 def profile_view(request):
     return render(request, 'profile.html', {})
+
+def create_account_view(request):
+    return render(request, 'createAccount.html', {})
+
+#class create_student_view(CreateView):
+#    model = User
+#    form_class = createStudentForm
+#    template_name = 'createStudent.html'
+
+def create_student_view(request):
+    return render(request, 'createStudent.html', {})
+
+def create_tutor_view(request):
+    return render(request, 'createTutor.html', {})
 
 class IndexView(generic.ListView):
     template_name = 'index.html'
