@@ -6,6 +6,7 @@ from django.views import generic
 from django.shortcuts import render
 
 from django.contrib.auth import logout
+from .models import Profile
 
 
 app_name = 'tutorme'
@@ -40,3 +41,12 @@ class IndexView(generic.ListView):
     def get_queryset(self):
 
         return None
+
+def choose_view(request):
+    current = Profile.objects.get(email=request.user.email)
+    if(current.is_student == 0 and current.is_tutor == 0):
+        return render(request, 'practice.html', {})
+    elif(current.is_student == 1):
+        return render(request, 'studentBase.html', {})
+    else:
+        return render(request, 'tutorBase.html', {})

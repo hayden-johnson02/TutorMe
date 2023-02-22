@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    {# Load the tag library #}
+    {% load bootstrap5 %}
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+{% load static %}
+{#<link rel="stylesheet" href="{% static 'polls/style.css' %}">#}
+</head>
+
+{#source: https://getbootstrap.com/docs/4.0/components/navbar/ #}
+
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container">
+         <a class="navbar-brand">
+{#            <img src="{% static 'polls/images/uvalogo.jpg' %}" alt="uvalogo" height="60">#}
+         </a>
+        <div>
+            <a class="navbar-brand" style="font-size: xx-large">Tutor Me</a>
+        </div>
+        <div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><span>Tutor Me</span></a></li>
+{#                Add Logout Button if logged in#}
+                {% load socialaccount %}
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><span>Logout</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><span>Profile</span></a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><span>Login</span></a></li>
+                {% endif %}
+{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:index' %}"><span>Polls</span></a></li>#}
+{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_form' %}"><span>Comment</span></a></li>#}
+{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_list' %}"><span>List</span></a></li>#}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body>
+{% block content %}
+{% endblock %}
+</body>
+<footer>
+{#    Source: https://getbootstrap.com/docs/5.2/examples/footers/ #}
+    <footer class="py-3 my-4 fixed-bottom">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><span>Tutor Me</span></a></li>
+
+{#        <li class="nav-item"><a href="{% url 'polls:index' %}" class="nav-link px-2 text-muted">Polls</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'polls:comments_form' %}" class="nav-link px-2 text-muted">Comment</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'polls:comments_list' %}" class="nav-link px-2 text-muted">List</a></li>#}
+    </ul>
+    <p class="text-center text-muted">Tutor (fpg2kv)</p>
+  </footer>
+</footer>
+</html>
