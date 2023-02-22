@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 # Create your models here.
 
 
@@ -12,15 +16,16 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
 
-    # https://docs.djangoproject.com/en/4.1/ref/models/instances/#:~:text=To%20create%20a%20new%20instance,you%20need%20to%20save()%20.
-    @classmethod
-    def create(cls, user, usertype):
-        profile = cls(user=user, email=user.email, first_name=user.first_name, last_name=user.last_name)
-        if usertype == "Student":
-            Student.create(profile=profile)
-        if usertype == "Tutor":
-            Tutor.create(profile=profile)
-        return profile
+    # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance, email=instance.email,)
+                                   # first_name=User.get_full_name(self), last_name=User.last_name)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
 
 
 class Student(models.Model):
