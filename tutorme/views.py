@@ -2,10 +2,12 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views import generic 
+from django.views.generic import CreateView
 
 from django.shortcuts import render
 
 from django.contrib.auth import logout
+from .models import Dummy
 
 
 app_name = 'tutorme'
@@ -35,3 +37,6 @@ class IndexView(generic.ListView):
     def get_queryset(self):
 
         return None
+
+def student_view(request):
+    return render(request, 'studentHomePage.html', {})
