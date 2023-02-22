@@ -198,3 +198,5 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # if os.getenv('DJANGO_DEVELOPMENT') == 'true':
 #     from settings_dev import *  # or specific overrides
+
+AUTH_USER_MODEL = 'tutorme.User'
