@@ -34,11 +34,8 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><span>Logout</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><span>Profile</span></a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><span>Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}"><span>Login</span></a></li>
                 {% endif %}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:index' %}"><span>Polls</span></a></li>#}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_form' %}"><span>Comment</span></a></li>#}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_list' %}"><span>List</span></a></li>#}
             </ul>
         </div>
     </div>
@@ -53,12 +50,8 @@
     <footer class="py-3 my-4 fixed-bottom">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
         <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><span>Tutor Me</span></a></li>
-
-{#        <li class="nav-item"><a href="{% url 'polls:index' %}" class="nav-link px-2 text-muted">Polls</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'polls:comments_form' %}" class="nav-link px-2 text-muted">Comment</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'polls:comments_list' %}" class="nav-link px-2 text-muted">List</a></li>#}
     </ul>
-    <p class="text-center text-muted">Franklin Glance (fpg2kv)</p>
+    <p class="text-center text-muted">Team A-03</p>
   </footer>
 </footer>
 </html>
