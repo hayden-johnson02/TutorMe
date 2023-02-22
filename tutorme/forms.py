@@ -2,10 +2,11 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from tutorme.models import Student, User
+from tutorme.models import Student, User, Tutor
 
 
-#class createStudentForm(UserCreationForm):
+# class createStudentForm(UserCreationForm):
+
 
 class StudentSignUpForm(ModelForm):
 
@@ -19,6 +20,7 @@ class StudentSignUpForm(ModelForm):
         user.is_student = True
         if commit:
             user.save()
+        Student.objects.create(user=user)
         return user
 
     widgets = {
@@ -40,6 +42,7 @@ class TutorSignUpForm(ModelForm):
         user.is_tutor = True
         if commit:
             user.save()
+        Tutor.objects.create(user=user)
         return user
 
     widgets = {
