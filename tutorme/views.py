@@ -12,6 +12,9 @@ app_name = 'tutorme'
 
 
 def index(request):
+    if request.user.is_authenticated:
+        if (request.user.profile.is_tutor == 0) & (request.user.profile.is_student == 0):
+            return render(request, 'createAccount.html', {})
     return render(request, 'index.html', {})
 
 
@@ -25,18 +28,22 @@ def login_view(request):
     return render(request, 'login.html', {})
 
 
-def profile_view(request):
-    return render(request, 'profile.html', {})
-
-
 @login_required(login_url='/login/')
 def profile_view(request):
     return render(request, 'profile.html', {})
 
 
-class IndexView(generic.ListView):
-    template_name = 'index.html'
+def create_account_view(request):
+    return render(request, 'createAccount.html', {})
 
-    def get_queryset(self):
 
-        return None
+def create_student_view(request):
+    request.user.profile.is_student = 1
+    request.user.profile.save()
+    return render(request, 'index.html', {})
+
+
+def create_tutor_view(request):
+    request.user.profile.is_tutor = 1
+    request.user.profile.save()
+    return render(request, 'index.html', {})

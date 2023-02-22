@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    {# Load the tag library #}
+    {% load bootstrap5 %}
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+{% load static %}
+{#<link rel="stylesheet" href="{% static 'polls/style.css' %}">#}
+</head>
+
+{% load socialaccount %}
+
+<div align="center">
+    What type account would you like to create?
+    <a class="btn btn-primary" href="/Student">Sign-Up as Student</a>
+    <a class="btn btn-primary" href="/Tutor">Sign-Up as Tutor</a>
+</div>

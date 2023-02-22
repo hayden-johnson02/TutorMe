@@ -8,9 +8,16 @@
         </div>
         <div class="card-body">
             {% load socialaccount %}
-            {% load account %}
-            {% user_display user %}
-
+            {% if user.is_authenticated %}
+            <p> {{ user.first_name }} {{ user.last_name }}</p>
+            <p>{{ user.email }}</p>
+            {% if user.profile.is_tutor %}
+                <p>You are a tutor!</p>
+            {% endif %}
+            {% if user.profile.is_student %}
+                <p>You are a student!</p>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
