@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+{% block content %}
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} {% endblock %}</title>
+  <!--  <title>{% block title %} {% endblock %}</title>-->
     <!--
     source: https://uiverse.io/cssbuttons-io/calm-tiger-42
     -->
@@ -18,6 +19,7 @@
              font-size: 19px;
              color: black;
              z-index: 1;
+             text-decoration: none;
         }
 
         .button:before {
@@ -72,16 +74,26 @@
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    {# Display django.contrib.messages as Bootstrap alerts #}
-    {% bootstrap_messages %}
 {% load static %}
 {#<link rel="stylesheet" href="{% static 'polls/style.css' %}">#}
 </head>
 
 {% load socialaccount %}
+<div class = "container col-6 py-5" style = "max-width: 18rem;">
+     <div class = "card justify-content-center border-dark mb-3" align="center">
+          <div class = "card-header" >
+               What type account would you like to create?
+         
+          </div>
+          <div class = "card-body">
 
-<div align="center">
-    What type account would you like to create?
-    <a class="button" href="/Student">Sign-Up as Student</a>
-    <a class="button" href="/Tutor">Sign-Up as Tutor</a>
+               <a class="button" href="/Student">Sign-Up as Student</a>
+               <a class="button" href="/Tutor">Sign-Up as Tutor</a>
+          </div>
+
+     </div>
+
 </div>
+{% endblock %}
+
+
