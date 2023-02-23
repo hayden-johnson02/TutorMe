@@ -42,11 +42,13 @@ def create_account_view(request):
 
 def create_student_view(request):
     request.user.profile.is_student = 1
+    request.user.profile.is_tutor = 0
     request.user.profile.save()
     return render(request, 'index.html', {})
 
 
 def create_tutor_view(request):
     request.user.profile.is_tutor = 1
+    request.user.profile.is_student = 0
     request.user.profile.save()
     return render(request, 'index.html', {})
