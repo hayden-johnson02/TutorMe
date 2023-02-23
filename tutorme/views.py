@@ -34,6 +34,9 @@ def profile_view(request):
 
 
 def create_account_view(request):
+    if request.user.is_authenticated:
+        if (request.user.profile.is_tutor == 1) or (request.user.profile.is_student == 1):
+            return render(request, 'index.html', {})
     return render(request, 'createAccount.html', {})
 
 
