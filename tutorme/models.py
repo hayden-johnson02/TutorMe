@@ -26,11 +26,3 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
-
-
-class Student(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, primary_key=True)
-
-
-class Tutor(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, primary_key=True)
