@@ -4,13 +4,18 @@
 <div class="container col-6 py-5">
     <div class="card">
         <div class="card-header">
-            Index page
+            Home Page
         </div>
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-            <p>Welcome, {{ user.username }} !</p>
-
+            <p>Welcome, {{ user.first_name }}!</p>
+            {% if user.profile.is_tutor %}
+                <p>You are a tutor!</p>
+            {% endif %}
+            {% if user.profile.is_student %}
+                <p>You are a student!</p>
+            {% endif %}
             {% else %}
             <h1>My Google Login Project</h1>
             <a href="{% provider_login_url 'google' %}">Login with Google</a>

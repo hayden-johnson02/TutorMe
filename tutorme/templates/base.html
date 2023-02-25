@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>{% block title %} {% endblock %}</title>
     {# Load the tag library #}
     {% load bootstrap5 %}
@@ -16,29 +17,23 @@
 
 {#source: https://getbootstrap.com/docs/4.0/components/navbar/ #}
 
-
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container">
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #BAE4D6;">
+    <div class="container-fluid">
          <a class="navbar-brand">
 {#            <img src="{% static 'polls/images/uvalogo.jpg' %}" alt="uvalogo" height="60">#}
          </a>
-        <div>
-            <a class="navbar-brand" style="font-size: xx-large">Tutor Me</a>
-        </div>
+        <span class="navbar-brand position-absolute mx-0" style="font-size: xx-large; color: #1D634D">Tutor Me</span>
         <div>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><span>Tutor Me</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" style="color: #2F846A;"><span>Home Page</span></a></li>
 {#                Add Logout Button if logged in#}
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><span>Logout</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: #2F846A;"><span>Logout</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" style="color: #2F846A;"><span>Profile</span></a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><span>Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}" style="color: #2F846A;"><span>Login</span></a></li>
                 {% endif %}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:index' %}"><span>Polls</span></a></li>#}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_form' %}"><span>Comment</span></a></li>#}
-{#                <li class="nav-item"><a class="nav-link" href="{% url 'polls:comments_list' %}"><span>List</span></a></li>#}
             </ul>
         </div>
     </div>
@@ -51,14 +46,8 @@
 <footer>
 {#    Source: https://getbootstrap.com/docs/5.2/examples/footers/ #}
     <footer class="py-3 my-4 fixed-bottom">
-    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}"><span>Tutor Me</span></a></li>
-
-{#        <li class="nav-item"><a href="{% url 'polls:index' %}" class="nav-link px-2 text-muted">Polls</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'polls:comments_form' %}" class="nav-link px-2 text-muted">Comment</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'polls:comments_list' %}" class="nav-link px-2 text-muted">List</a></li>#}
-    </ul>
-    <p class="text-center text-muted">Franklin Glance (fpg2kv)</p>
+    <div class="border-bottom pb-3 mb-3"></div>
+    <p class="text-center text-muted">Team A-03</p>
   </footer>
 </footer>
 </html>
