@@ -1,14 +1,10 @@
 {% extends 'base.html' %}
+{% block title %}Tutor Me | Create Account{% endblock %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-  <!--  <title>{% block title %} {% endblock %}</title>-->
-    <!--
-    source: https://uiverse.io/cssbuttons-io/calm-tiger-42
-    -->
-
-    
+    <!-- source: https://uiverse.io/cssbuttons-io/calm-tiger-42 ! -->
     {# Load the tag library #}
     {% load bootstrap5 %}
     {# Load CSS and JavaScript #}
@@ -19,6 +15,7 @@
 {% load static %}
 {#<link rel="stylesheet" href="{% static 'polls/style.css' %}">#}
 </head>
+
 {% load socialaccount %}
 {% block content %}
 <style>
@@ -82,22 +79,17 @@
           background-color: #39bda7;
           transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
      }
- </style>
+</style>
+
 <div class = "container col-6 py-5" style = "max-width: 18rem;">
      <div class = "card justify-content-center border-dark mb-3" align="center">
           <div class = "card-header" >
-               What type account would you like to create?
-         
+               Would you like to create a student or tutor account?
           </div>
           <div class = "card-body">
-
                <a class="button" href="/Student">Sign-Up as Student</a>
                <a class="button" href="/Tutor">Sign-Up as Tutor</a>
           </div>
-
      </div>
-
 </div>
 {% endblock %}
-
-

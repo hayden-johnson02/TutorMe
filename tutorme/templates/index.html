@@ -9,7 +9,7 @@
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-            <p>Welcome, {{ user.first_name }}!</p>
+                <p>Welcome, {{ user.first_name }}!</p>
             {% if user.profile.is_tutor %}
                 <p>You are a tutor!</p>
             {% endif %}
@@ -17,10 +17,9 @@
                 <p>You are a student!</p>
             {% endif %}
             {% else %}
-            <h1>My Google Login Project</h1>
-            <a href="{% provider_login_url 'google' %}">Login with Google</a>
+                <h1>My Google Login Project</h1>
+                <a href="{% provider_login_url 'google' %}">Login with Google</a>
             {% endif %}
-
         </div>
     </div>
 </div>
