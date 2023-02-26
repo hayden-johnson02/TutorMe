@@ -26,8 +26,8 @@
                 <p>{{ user.profile.bio }}</p>
                 {% endif %}
                 <hr>
-{#                <a class="btn btn-outline-primary" href="{% url 'edit_profile' %}">Edit Profile</a>#}
-            <td><a class="btn btn-outline-danger" href="delete/">Delete Account</a></td>
+                <a class="btn btn-outline-primary" href="{% url 'edit_profile:save_changes' %}">Save Changes</a>
+                <a class="btn btn-outline-danger" href="{% url 'edit_profile:discard_changes' %}">Discard Changes</a>
             {% endif %}
         </div>
     </div>

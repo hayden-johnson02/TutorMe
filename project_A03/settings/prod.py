@@ -16,11 +16,11 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': '143334719618-ak4l0p3qm2fceo8m47chvq74gr3f5d7p.apps.googleusercontent.com',
             'secret': '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',
             'key': ''
-        }
-        #         'SCOPE': [
-        #             'profile',
-        #             'email',
-        #         ],
+        },
+                'SCOPE': [
+                    'profile',
+                    'email',
+                ],
         #         'AUTH_PARAMS': {
         #             'access_type': 'online',
         #         }

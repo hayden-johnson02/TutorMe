@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
 {% block title %}Tutor Me | Home{% endblock %}
 {% block content %}
 <div class="container col-6 py-5">
@@ -17,8 +18,8 @@
                 <p>You are a student!</p>
             {% endif %}
             {% else %}
-            <h1>My Google Login Project</h1>
-            <a href="{% provider_login_url 'google' %}">Login with Google</a>
+            <h1>Welcome to TutorMe</h1>
+            <a class="btn btn-outline-primary" href="{% provider_login_url 'google' %}">Login with Google</a>
             {% endif %}
 
         </div>

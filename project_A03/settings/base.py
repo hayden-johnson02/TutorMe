@@ -15,6 +15,9 @@ import dj_database_url
 
 from pathlib import Path
 
+# https://stackoverflow.com/questions/70873098/login-with-google-redairecting-on-conformation-page-to-continue-django
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -172,29 +175,3 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-
-# # use production client_id and secret
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '143334719618-ak4l0p3qm2fceo8m47chvq74gr3f5d7p.apps.googleusercontent.com',
-#             'secret': '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',
-#             'key': ''
-#         }
-# #         'SCOPE': [
-# #             'profile',
-# #             'email',
-# #         ],
-# #         'AUTH_PARAMS': {
-# #             'access_type': 'online',
-# #         }
-#     }
-# }
-
-# Override production variables if DJANGO_DEVELOPMENT env variable is true
-
-# if os.getenv('DJANGO_DEVELOPMENT') == 'true':
-#     from settings_dev import *  # or specific overrides
