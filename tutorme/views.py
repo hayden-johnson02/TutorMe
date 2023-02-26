@@ -33,6 +33,11 @@ def profile_view(request):
     return render(request, 'profile.html', {})
 
 
+@login_required(login_url='/login/')
+def edit_profile_view(request):
+    return render(request, 'editProfile.html', {})
+
+
 def create_account_view(request):
     if request.user.is_authenticated:
         if (request.user.profile.is_tutor == 1) or (request.user.profile.is_student == 1):
