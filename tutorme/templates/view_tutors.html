@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Tutor Me | Profile{% endblock %}
+{% block content %}
+<div class="container col-6 py-5">
+<div class="list-group">
+{% for tutor in tutor_list%}
+  <a class="list-group-item">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ tutor.last_name }}, {{ tutor.first_name }}</h5>
+        <small>{{ tutor.email}}</small>
+    </div>
+    <small>{{ tutor.bio}}</small>
+  </a>
+{% endfor %}
+{% endblock %}
