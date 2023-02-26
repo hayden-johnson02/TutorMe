@@ -32,7 +32,6 @@ def login_view(request):
 def profile_view(request):
     return render(request, 'profile.html', {})
 
-
 def create_account_view(request):
     if request.user.is_authenticated:
         if (request.user.profile.is_tutor == 1) or (request.user.profile.is_student == 1):
@@ -51,4 +50,10 @@ def create_tutor_view(request):
     request.user.profile.is_tutor = 1
     request.user.profile.is_student = 0
     request.user.profile.save()
+    return render(request, 'index.html', {})
+
+@login_required(login_url='/login/')
+def delete_profile_view(request):
+    request.user.delete()
+    logout(request)
     return render(request, 'index.html', {})

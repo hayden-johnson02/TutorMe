@@ -28,4 +28,5 @@ urlpatterns = [
     path('createAccount/', views.create_account_view, name='createAccount'),
     path('Student/', views.create_student_view, name='Student'),
     path('Tutor/', views.create_tutor_view, name='Tutor'),
+    path('profile/delete/', views.delete_profile_view , name='delete'),
 ]
