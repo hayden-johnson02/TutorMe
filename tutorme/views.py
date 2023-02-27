@@ -49,8 +49,10 @@ def account_type_choice(request):
     if 'options' in request.POST:
         if request.POST['options'] == 'tutor_choice':
             request.user.profile.is_tutor = 1
+            request.user.profile.is_student = 0
         else:
             request.user.profile.is_student = 1
+            request.user.profile.is_tutor = 0
         request.user.profile.save()
         return redirect('profile')
     else:
