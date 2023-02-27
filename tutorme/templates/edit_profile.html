@@ -18,16 +18,16 @@
             {% if user.profile.is_student %}
                 <p>You are a student!</p>
             {% endif %}
-                <hr>
-                Bio:
-                {% if user.profile.bio is None %}
+            <hr>
+            Bio:
+            {% if user.profile.bio is None %}
                 <p>You have not added a bio yet!</p>
-                {% else %}
+            {% else %}
                 <p>{{ user.profile.bio }}</p>
-                {% endif %}
-                <hr>
-                <a class="btn btn-outline-primary" href="{% url 'edit_profile:save_changes' %}">Save Changes</a>
-                <a class="btn btn-outline-danger" href="{% url 'edit_profile:discard_changes' %}">Discard Changes</a>
+            {% endif %}
+            <hr>
+            <!-- <a class="btn btn-outline-primary" href="{#% url 'edit_profile:save_changes' %#}">Save Changes</a>
+            <a class="btn btn-outline-danger" href="{#% url 'edit_profile:discard_changes' %#}">Discard Changes</a> -->
             {% endif %}
         </div>
     </div>

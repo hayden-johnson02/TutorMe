@@ -27,9 +27,3 @@ class Profile(models.Model):
     
     def __delete__(self):
         self.user.delete()
-
-#
-# class Student(models.Model):
-#     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, primary_key=True)
-# class Tutor(models.Model):
-#     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, primary_key=True)

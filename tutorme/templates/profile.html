@@ -10,20 +10,20 @@
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-            <p>{{ user.email }}</p>
-            {% if user.profile.is_tutor %}
-                <p>You are a tutor!</p>
-{#                add field displaying bio and edit bio button#}
-            {% endif %}
-            {% if user.profile.is_student %}
-                <p>You are a student!</p>
-            {% endif %}
+                <p>{{ user.email }}</p>
+                {% if user.profile.is_tutor %}
+                    <p>You are a tutor!</p>
+{#                  add field displaying bio and edit bio button#}
+                {% endif %}
+                {% if user.profile.is_student %}
+                    <p>You are a student!</p>
+                {% endif %}
                 <hr>
                 Bio:
                 {% if user.profile.bio is None %}
-                <p>You have not added a bio yet!</p>
+                    <p>You have not added a bio yet!</p>
                 {% else %}
-                <p>{{ user.profile.bio }}</p>
+                    <p>{{ user.profile.bio }}</p>
                 {% endif %}
                 <hr>
 {#                <a class="btn btn-outline-primary" href="{% url 'edit_profile' %}">Edit Profile</a>#}
