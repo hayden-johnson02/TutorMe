@@ -3,9 +3,9 @@ import logging
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
-from tutorme.models import Profile
+from .models import Profile
 
 app_name = 'tutorme'
 
@@ -77,4 +77,12 @@ def tutor_list(request):
     else:
         return redirect('index')
 
+
+@login_required(login_url='/login/')
+def tutor_page(request, tutor_id):
+    if request.user.profile.is_student:
+        context = {
+            'current_tutor': Profile.objects.get(pk=tutor_id)
+        }
+        return render(request, 'view_tutor_profile.html', context)
 
