@@ -10,7 +10,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<nav class="navbar navbar-expand-lg bg-body-tertiary" >
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
          <a class="navbar-brand"></a>
         <span class="navbar-brand position-absolute mx-0 nav-title" >Tutor Me</span>
@@ -42,17 +42,18 @@
         </div>
     </div>
 </nav>
+<div class="pb-5"></div>
 
 <body>
 {% block content %}
 {% endblock %}
 </body>
 
-<footer>
+<div style="margin-top: 50px">
 {#    Source: https://getbootstrap.com/docs/5.2/examples/footers/ #}
-    <footer class="py-3 my-4 fixed-bottom">
-        <div class="border-bottom pb-3 mb-3"></div>
+    <footer class="pt-50 fixed-bottom" style="background-color: white">
+        <div class="border-bottom mb-3"></div>
         <p class="text-center" style="color: #1D634D;">Team A-03</p>
     </footer>
-</footer>
+</div>
 </html>
