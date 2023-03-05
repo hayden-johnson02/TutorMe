@@ -11,3 +11,11 @@ class UserTypeForm(forms.Form):
     options = forms.ChoiceField(widget=forms.RadioSelect,
                                 choices=CHOICES)
 
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = {'email', 'is_tutor', 'is_student'}
+        fields = {'first_name', 'last_name', 'bio'}
+
+

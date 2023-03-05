@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 
+from .forms import EditProfileForm
 from .models import Profile
 
 app_name = 'tutorme'
@@ -33,9 +34,18 @@ def profile_view(request):
     return render(request, 'profile.html', {})
 
 
+# https://dev.to/earthcomfy/django-update-user-profile-33ho
 @login_required(login_url='/login/')
 def edit_profile_view(request):
-    return render(request, 'edit_profile.html', {})
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=request.user.profile)
+    return render(request, 'edit_profile.html', {'form': form})
 
 
 def create_account_view(request):
