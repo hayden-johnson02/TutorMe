@@ -14,19 +14,23 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col">
-                        <label>First Name</label>
-                        {{ form.first_name }}
+                        <div class="form-floating mb-3">
+                            {{ form.first_name }}
+                            <label for="fname">First Name</label>
+                        </div>
                     </div>
                     <div class="col">
-                        <label>Last Name</label>
-                        {{ form.last_name }}
+                        <div class="form-floating mb-3">
+                            {{ form.last_name }}
+                            <label for="lname">Last Name</label>
+                        </div>
                     </div>
                 </div>
-                <div class="form-inline">
-                    <label style="margin-top: 10px; margin-bottom: 2px;">Email</label>
+                <div class="form-floating mb-3">
                     {{ form.email }}
+                    <label for="email">Email</label>
                 </div>
-                <label style="margin-top: 10px; margin-bottom: 2px;">Biography</label>
+                <label style="margin-bottom: 5px;">Biography</label>
                 {{ form.bio }}
             <button type="submit" class="btn btn-success" style="margin-top: 20px">Edit Profile</button>
             </form>
