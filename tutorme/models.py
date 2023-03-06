@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -27,3 +28,10 @@ class Profile(models.Model):
     
     def __delete__(self):
         self.user.delete()
+
+
+class Course(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=4)
+    catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
+    instructor = models.CharField(max_length=256)

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 
 from .forms import EditProfileForm
-from .models import Profile
+from .models import Profile, Course
 
 app_name = 'tutorme'
 
@@ -31,21 +31,29 @@ def login_view(request):
 
 @login_required(login_url='/login/')
 def profile_view(request):
-    return render(request, 'profile.html', {})
+    courses = Course.objects.filter(profile=request.user.profile)
+    return render(request, 'profile.html', {'courses': courses})
 
 
 # https://dev.to/earthcomfy/django-update-user-profile-33ho
+# https://stackoverflow.com/questions/54438473/how-to-execute-file-py-on-html-button-press-using-django/54451774#54451774
 @login_required(login_url='/login/')
 def edit_profile_view(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and 'editProfile' in request.POST:
         form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
         if form.is_valid():
             form.save()
             return redirect('profile')
-    else:
-        form = EditProfileForm(instance=request.user.profile)
-    return render(request, 'edit_profile.html', {'form': form})
+    if request.method == 'POST' and 'addCourses' in request.POST:
+        # add courses based on sis api search call
+        pass
+    if request.method == 'POST' and 'removeCourses' in request.POST:
+        # delete courses that are selected
+        pass
+    form = EditProfileForm(instance=request.user.profile)
+    courses = Course.objects.filter(profile=request.user.profile)
+    return render(request, 'edit_profile.html', {'form': form, 'courses': courses})
 
 
 def create_account_view(request):
