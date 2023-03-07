@@ -62,6 +62,8 @@ def edit_profile_view(request):
                 clist.append(c['subject'] + " " + c['catalog_nbr'])
     if request.method == 'POST' and 'addCourses' in request.POST:
         # add courses based on sis api search call
+        # use dynamic form maybe?
+        print(request.POST)
         pass
     if request.method == 'POST' and 'removeCourses' in request.POST:
         # delete courses that are selected
