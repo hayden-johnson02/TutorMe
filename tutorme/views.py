@@ -1,6 +1,7 @@
 # Create your views here.
 import logging
 
+import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
@@ -45,6 +46,20 @@ def edit_profile_view(request):
         if form.is_valid():
             form.save()
             return redirect('profile')
+    clist = None
+    if request.method == 'GET' and 'searchCourses' in request.GET: #https://learndjango.com/tutorials/django-search-tutorial
+        subject = request.GET.get("subject")
+        number = request.GET.get("number")
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
+        if subject is not None:
+            url = url + '&subject=' + subject
+        if number is not None:
+            url = url + '&catalog_nbr=' + number
+        r = requests.get(url)
+        clist = []
+        for c in r.json():
+            if (c['subject'] + " " + c['catalog_nbr']) not in clist:
+                clist.append(c['subject'] + " " + c['catalog_nbr'])
     if request.method == 'POST' and 'addCourses' in request.POST:
         # add courses based on sis api search call
         pass
@@ -53,7 +68,7 @@ def edit_profile_view(request):
         pass
     form = EditProfileForm(instance=request.user.profile)
     courses = Course.objects.filter(profile=request.user.profile)
-    return render(request, 'edit_profile.html', {'form': form, 'courses': courses})
+    return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist})
 
 
 def create_account_view(request):
