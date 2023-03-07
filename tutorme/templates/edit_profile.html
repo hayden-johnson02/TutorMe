@@ -44,7 +44,7 @@
                 <h3>Add/Remove Courses</h3>
             </div>
             <div class="card-body" id="searchC">
-                <form method="get">
+                <form action="#searchC" method="get">
                     {% csrf_token %}
                     <div class="row align-items-center">
                         <div class="col">
@@ -54,7 +54,7 @@
                             <input name="number" type="text" placeholder="ex. 3240">
                         </div>
                         <div class="col">
-                            <button type="submit" name="searchCourses" class="btn btn-success" href="#searchC">Search Courses</button>
+                            <button type="submit" name="searchCourses" class="btn btn-success">Search Courses</button>
                         </div>
                     </div>
                 </form>
@@ -62,7 +62,7 @@
                     <label style="margin-bottom: 20px">Search for courses you would like to add to your profile!</label>
                 {% else %}
                     <div style="margin-bottom: 20px"></div>
-                    <form method="post">
+                    <form action="#searchC" method="post">
                         {% csrf_token %}
                         {% for c in clist %}
                             <div class="form-check">
@@ -73,12 +73,13 @@
                         <button type="submit" name="addCourses" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
                     </form>
                 {% endif %}
-                <form method="post">
+                <div id="removeC"></div>
+                <form action="#removeC" method="post">
                     {% csrf_token %}
-                <label>Remove courses from your profile: </label>
                     {% if courses is None %}
                         <label>You have no courses on your profile to remove.</label>
                     {% else %}
+                    <label>Remove courses from your profile: </label>
                     {% for c in courses %}
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input">
