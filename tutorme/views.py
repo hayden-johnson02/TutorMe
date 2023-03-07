@@ -70,6 +70,8 @@ def edit_profile_view(request):
         pass
     form = EditProfileForm(instance=request.user.profile)
     courses = Course.objects.filter(profile=request.user.profile)
+    if not courses:
+        courses = None
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist})
 
 
