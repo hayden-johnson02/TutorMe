@@ -4,7 +4,7 @@ import logging
 import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm
 from .models import Profile, Course
@@ -45,12 +45,15 @@ def edit_profile_view(request):
         if form.is_valid():
             form.save()
             return redirect('profile')
+
     clist = None
     search_course_form = None
-    if request.method == 'GET' and 'searchCourses' in request.GET: #https://learndjango.com/tutorials/django-search-tutorial
+    # https://learndjango.com/tutorials/django-search-tutorial
+    if request.method == 'GET' and 'searchCourses' in request.GET:
         subject = request.GET.get("subject")
         number = request.GET.get("number")
-        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.' \
+              'FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
         if subject is not None:
             url = url + '&subject=' + subject
         if number is not None:
@@ -61,11 +64,10 @@ def edit_profile_view(request):
             if (c['subject'] + " " + c['catalog_nbr']) not in clist:
                 clist.append(c['subject'] + " " + c['catalog_nbr'])
         if clist:
-            print(clist)
             search_course_form = DynamicCourseForm(course_list=clist)
+
     if request.method == 'POST' and 'addCourses' in request.POST:
         clist = request.POST['addCourses'].replace('\'', '').replace('[', '').replace(']', '').split(', ')
-        print(clist)
         search_course_form = DynamicCourseForm(request.POST or None, course_list=clist)
         if search_course_form.is_valid():
             courses_to_add = search_course_form.cleaned_data.get('Select_Courses')
@@ -75,33 +77,32 @@ def edit_profile_view(request):
                 course_num = data[1]
                 Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
             clist = None
+
     courses = Course.objects.filter(profile=request.user.profile)
     delete_course_form = None
+    course_list = []
     if not courses:
         courses = None
     if courses:
-        course_list = []
         for c in courses:
             course_list.append(c.subject + " " + str(c.catalog_number))
         delete_course_form = DynamicCourseForm(course_list=course_list)
+
     if request.method == 'POST' and 'removeCourses' in request.POST:
         delete_course_form = DynamicCourseForm(request.POST or None, course_list=course_list)
         if delete_course_form.is_valid():
             courses_to_delete = delete_course_form.cleaned_data.get('Select_Courses')
             for c in courses_to_delete:
+                course_list.remove(c)
                 data = c.split(" ")
                 subj = data[0]
                 course_num = data[1]
                 Course.objects.filter(subject=subj, catalog_number=course_num, profile=request.user.profile).delete()
-            courses = Course.objects.filter(profile=request.user.profile)
-            delete_course_form = None
-            if not courses:
-                courses = None
-            if courses:
-                course_list = []
-                for c in courses:
-                    course_list.append(c.subject + " " + str(c.catalog_number))
+            if course_list:
                 delete_course_form = DynamicCourseForm(course_list=course_list)
+            else:
+                delete_course_form = None
+
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
@@ -155,4 +156,3 @@ def tutor_page(request, tutor_id):
             'current_tutor': Profile.objects.get(pk=tutor_id)
         }
         return render(request, 'view_tutor_profile.html', context)
-
