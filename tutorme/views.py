@@ -84,15 +84,38 @@ def edit_profile_view(request):
                 subj = data[0]
                 course_num = data[1]
                 Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
-    if request.method == 'POST' and 'removeCourses' in request.POST:
-        # delete courses that are selected
-        pass
-    form = EditProfileForm(instance=request.user.profile)
+            clist = None
     courses = Course.objects.filter(profile=request.user.profile)
+    delete_course_form = None
     if not courses:
         courses = None
+    if courses:
+        course_list = []
+        for c in courses:
+            course_list.append(c.subject + " " + str(c.catalog_number))
+        delete_course_form = DynamicCourseForm(course_list=course_list)
+    if request.method == 'POST' and 'removeCourses' in request.POST:
+        delete_course_form = DynamicCourseForm(request.POST or None, course_list=course_list)
+        if delete_course_form.is_valid():
+            courses_to_delete = delete_course_form.cleaned_data.get('Select_Courses')
+            for c in courses_to_delete:
+                data = c.split(" ")
+                subj = data[0]
+                course_num = data[1]
+                Course.objects.filter(subject=subj, catalog_number=course_num, profile=request.user.profile).delete()
+            courses = Course.objects.filter(profile=request.user.profile)
+            delete_course_form = None
+            if not courses:
+                courses = None
+            if courses:
+                course_list = []
+                for c in courses:
+                    course_list.append(c.subject + " " + str(c.catalog_number))
+                delete_course_form = DynamicCourseForm(course_list=course_list)
+    form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
-                                                 'search_course_form': search_course_form})
+                                                 'search_course_form': search_course_form,
+                                                 'delete_course_form': delete_course_form})
 
 
 def save_course(request, course_name, info):
