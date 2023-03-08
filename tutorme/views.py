@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .forms import EditProfileForm
+from .forms import EditProfileForm, DynamicCourseForm
 from .models import Profile, Course
 
 app_name = 'tutorme'
@@ -47,6 +47,7 @@ def edit_profile_view(request):
             form.save()
             return redirect('profile')
     clist = None
+    search_course_form = None
     if request.method == 'GET' and 'searchCourses' in request.GET: #https://learndjango.com/tutorials/django-search-tutorial
         subject = request.GET.get("subject")
         number = request.GET.get("number")
@@ -60,11 +61,29 @@ def edit_profile_view(request):
         for c in r.json():
             if (c['subject'] + " " + c['catalog_nbr']) not in clist:
                 clist.append(c['subject'] + " " + c['catalog_nbr'])
+        if clist:
+            search_course_form = DynamicCourseForm(course_list=clist)
     if request.method == 'POST' and 'addCourses' in request.POST:
-        # add courses based on sis api search call
-        # use dynamic form maybe?
-        print(request.POST)
-        pass
+        subject = request.GET.get("subject")
+        number = request.GET.get("number")
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
+        if subject is not None:
+            url = url + '&subject=' + subject
+        if number is not None:
+            url = url + '&catalog_nbr=' + number
+        r = requests.get(url)
+        clist = []
+        for c in r.json():
+            if (c['subject'] + " " + c['catalog_nbr']) not in clist:
+                clist.append(c['subject'] + " " + c['catalog_nbr'])
+        search_course_form = DynamicCourseForm(request.POST or None, course_list=clist)
+        if search_course_form.is_valid():
+            courses_to_add = search_course_form.cleaned_data.get('Select_Courses')
+            for c in courses_to_add:
+                data = c.split(" ")
+                subj = data[0]
+                course_num = data[1]
+                Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
     if request.method == 'POST' and 'removeCourses' in request.POST:
         # delete courses that are selected
         pass
@@ -72,7 +91,12 @@ def edit_profile_view(request):
     courses = Course.objects.filter(profile=request.user.profile)
     if not courses:
         courses = None
-    return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist})
+    return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
+                                                 'search_course_form': search_course_form})
+
+
+def save_course(request, course_name, info):
+    pass
 
 
 def create_account_view(request):

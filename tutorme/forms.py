@@ -26,3 +26,18 @@ class EditProfileForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class': 'form-control', 'style': 'max-height: 300px;',
                                          'placeholder': 'Write some information about yourself!'}),
         }
+
+
+# https://jacobian.org/2010/feb/28/dynamic-form-generation/
+class DynamicCourseForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        extra = kwargs.pop('course_list')
+        super(DynamicCourseForm, self).__init__(*args, **kwargs)
+
+        choices = []
+        for i, course_name in enumerate(extra):
+            choices.append((course_name, course_name))
+        self.fields['Select_Courses'] = forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple,
+            choices=choices,
+        )

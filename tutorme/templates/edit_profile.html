@@ -51,7 +51,7 @@
                             <input name="subject" type="text" placeholder="ex. CS">
                         </div>
                         <div class="col">
-                            <input name="number" type="text" placeholder="ex. 3240">
+                            <input name="number" type="number" placeholder="ex. 3240">
                         </div>
                         <div class="col">
                             <button type="submit" name="searchCourses" class="btn btn-success">Search Courses</button>
@@ -64,17 +64,16 @@
                     <div style="margin-bottom: 20px"></div>
                     <form action="#searchC" method="post">
                         {% csrf_token %}
-                        {% for c in clist %}
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input">
-                                <label class="form-check-label"> {{ c }} </label>
-                            </div>
-                        {% endfor %}
-                        <button type="submit" name="addCourses" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
+                        {% if search_course_form is None %}
+                            <label style="margin-bottom: 20px">Search for a valid course!</label>
+                        {% else %}
+                            {{ search_course_form }}
+                            <button type="submit" name="addCourses" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
+                        {% endif %}
                     </form>
                 {% endif %}
                 <div id="removeC"></div>
-                <form action="#removeC" method="post">
+                <form action="#removeC" method="post" id="addCourseForm">
                     {% csrf_token %}
                     {% if courses is None %}
                         <label>You have no courses on your profile to remove.</label>
