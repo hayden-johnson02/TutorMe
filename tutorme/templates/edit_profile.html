@@ -68,7 +68,7 @@
                             <label style="margin-bottom: 20px">Search for a valid course!</label>
                         {% else %}
                             {{ search_course_form }}
-                            <button type="submit" name="addCourses" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
+                            <button type="submit" name="addCourses" value ="{{ clist }}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
                         {% endif %}
                     </form>
                 {% endif %}

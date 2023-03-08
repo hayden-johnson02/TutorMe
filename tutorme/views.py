@@ -42,7 +42,6 @@ def profile_view(request):
 def edit_profile_view(request):
     if request.method == 'POST' and 'editProfile' in request.POST:
         form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
-
         if form.is_valid():
             form.save()
             return redirect('profile')
@@ -62,20 +61,11 @@ def edit_profile_view(request):
             if (c['subject'] + " " + c['catalog_nbr']) not in clist:
                 clist.append(c['subject'] + " " + c['catalog_nbr'])
         if clist:
+            print(clist)
             search_course_form = DynamicCourseForm(course_list=clist)
     if request.method == 'POST' and 'addCourses' in request.POST:
-        subject = request.GET.get("subject")
-        number = request.GET.get("number")
-        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
-        if subject is not None:
-            url = url + '&subject=' + subject
-        if number is not None:
-            url = url + '&catalog_nbr=' + number
-        r = requests.get(url)
-        clist = []
-        for c in r.json():
-            if (c['subject'] + " " + c['catalog_nbr']) not in clist:
-                clist.append(c['subject'] + " " + c['catalog_nbr'])
+        clist = request.POST['addCourses'].replace('\'', '').replace('[', '').replace(']', '').split(', ')
+        print(clist)
         search_course_form = DynamicCourseForm(request.POST or None, course_list=clist)
         if search_course_form.is_valid():
             courses_to_add = search_course_form.cleaned_data.get('Select_Courses')
@@ -116,10 +106,6 @@ def edit_profile_view(request):
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
                                                  'delete_course_form': delete_course_form})
-
-
-def save_course(request, course_name, info):
-    pass
 
 
 def create_account_view(request):
