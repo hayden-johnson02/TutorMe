@@ -52,9 +52,10 @@ def edit_profile_view(request):
     if request.method == 'GET' and 'searchCourses' in request.GET:
         subject = request.GET.get("subject")
         number = request.GET.get("number")
+        instructor = request.GET.get("instructor")
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.' \
               'FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
-        url = url + '&subject=' + subject + '&catalog_nbr=' + number
+        url = url + '&subject=' + subject + '&catalog_nbr=' + number + '&instructor_name=' + instructor
         r = requests.get(url)
         clist = []
         for c in r.json():

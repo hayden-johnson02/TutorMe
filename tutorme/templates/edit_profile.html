@@ -48,10 +48,13 @@
                     {% csrf_token %}
                     <div class="row align-items-center">
                         <div class="col">
-                            <input name="subject" type="text" placeholder="ex. CS">
+                            <input name="subject" type="text" placeholder="ex. CS" maxlength="4">
                         </div>
                         <div class="col">
-                            <input name="number" type="number" placeholder="ex. 3240">
+                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                        </div>
+                        <div class="col">
+                            <input name="instructor" type="text" placeholder="ex. Horton" maxlength="30">
                         </div>
                         <div class="col">
                             <button type="submit" name="searchCourses" class="btn btn-success">Search Courses</button>
