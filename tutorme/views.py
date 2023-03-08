@@ -54,10 +54,7 @@ def edit_profile_view(request):
         number = request.GET.get("number")
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.' \
               'FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
-        if subject is not None:
-            url = url + '&subject=' + subject
-        if number is not None:
-            url = url + '&catalog_nbr=' + number
+        url = url + '&subject=' + subject + '&catalog_nbr=' + number
         r = requests.get(url)
         clist = []
         for c in r.json():
@@ -75,7 +72,9 @@ def edit_profile_view(request):
                 data = c.split(" ")
                 subj = data[0]
                 course_num = data[1]
-                Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
+                user_already_has_course = Course.objects.filter(subject=subj, catalog_number=course_num, profile=request.user.profile)
+                if not user_already_has_course:
+                    Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
             clist = None
 
     courses = Course.objects.filter(profile=request.user.profile)
