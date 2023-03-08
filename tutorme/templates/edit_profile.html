@@ -67,6 +67,8 @@
                         {% if search_course_form is None %}
                             <label style="margin-bottom: 20px">Search for a valid course!</label>
                         {% else %}
+                            <label>Add courses to your profile: </label>
+                            <div></div>
                             {{ search_course_form }}
                             <button type="submit" name="addCourses" value ="{{ clist }}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
                         {% endif %}
@@ -79,9 +81,10 @@
                         <label>You have no courses on your profile to remove.</label>
                     {% else %}
                         <label>Remove courses from your profile: </label>
+                        <div></div>
                         {{ delete_course_form }}
                         <div>
-                            <button type="submit" name="removeCourses" class="btn btn-success" style="margin-top: 20px">Remove Courses</button>
+                            <button type="submit" name="removeCourses" class="btn btn-outline-danger" style="margin-top: 20px">Remove Courses</button>
                         </div>
                     {% endif %}
                 </form>

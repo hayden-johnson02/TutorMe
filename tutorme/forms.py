@@ -38,6 +38,8 @@ class DynamicCourseForm(forms.Form):
         for i, course_name in enumerate(extra):
             choices.append((course_name, course_name))
         self.fields['Select_Courses'] = forms.MultipleChoiceField(
+            label="",
+            required=False,
             widget=forms.CheckboxSelectMultiple,
             choices=choices,
         )
