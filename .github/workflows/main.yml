@@ -1,3 +1,5 @@
+# Used https://www.honeybadger.io/blog/django-test-github-actions/
+
 name: test_Tutorme
 on: [pull_request, push] # activates the workflow when there is a push or pull request in the repo
 jobs:
@@ -6,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: pip install -r requirements.txt # install all our dependencies for the project
+      - run: pip3 install -r requirements.txt # install all our dependencies for the project
       - run: export DJANGO_DEVELOPMENT=true
+      - run: python3 manage.py makemigrations
+      - run: python3 manage.py migrate
       - run: python3 manage.py test # run test file
