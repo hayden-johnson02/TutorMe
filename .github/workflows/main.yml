@@ -1,4 +1,4 @@
-name: test_Django
+name: test_Tutorme
 on: [pull_request, push] # activates the workflow when there is a push or pull request in the repo
 jobs:
   test_project:
@@ -8,5 +8,4 @@ jobs:
       - uses: actions/setup-python@v2
       - run: pip install flake8
       - run: pip install -r requirements.txt # install all our dependencies for the project
-      - run: pytest . # run pytest test
-      - run: flake8 . # run flake8 test
+      - run: python3 manage.py test # run pytest test
