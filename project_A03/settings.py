@@ -96,13 +96,9 @@ WSGI_APPLICATION = 'project_A03.wsgi.application'
 #         "NAME": os.path.join(BASE_DIR, "db.sqlite3")
 #     }
 # }
-if 'test' in sys.argv:
-    for db_test in ['default']: # Add other DBs if needed
-        DATABASES[db_test]['ENGINE'] = 'django.db.backends.sqlite3'
-else :
-    DATABASES = {
-        "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-    }
+DATABASES = {
+    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+}
 
 
 # Password validation

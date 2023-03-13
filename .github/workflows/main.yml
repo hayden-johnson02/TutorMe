@@ -9,4 +9,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: pip3 install -r requirements.txt # install all our dependencies for the project
+      - run: python3 manage.py makemigrations
+      - run: python3 manage.py migrate
       - run: python3 manage.py test # run test file
