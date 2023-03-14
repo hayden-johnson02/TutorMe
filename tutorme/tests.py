@@ -1,9 +1,35 @@
 from django.test import TestCase
+from tutorme.models import Profile, Course
+from django.contrib.auth import get_user_model
 
 # Model Tests
-class UserModelTests(TestCase):
-    def test_dummy(self):
-        self.assertTrue(True)
+# Used https://testdriven.io/blog/django-custom-user-model/
+
+def create_student():
+    User = get_user_model()
+    testUser = User.objects.create_user(username="TestStudent", email="mst4k@virginia.edu", password="password123")
+    testStudentProfile = Profile.objects.create(user=testUser, email="mst4k@virginia.edu", first_name="John",
+                                                last_name="Doe", is_student=True, is_tutor=False,
+                                                bio="Test Student")
+    return testStudentProfile
+
+def create_tutor():
+    User = get_user_model()
+    testUser = User.objects.create_user(username= "TestTutor", email="mst3k@virginia.edu", password="password123")
+    testTutorProfile = Profile.objects.create(user=testUser, email="mst3k@virginia.edu", first_name="Jane",
+                                              last_name="Doe", is_student=False, is_tutor=True,
+                                              bio="Test Tutor")
+    return testTutorProfile
+class ProfileModelTests(TestCase):
+
+    def test_Student_Model(self):
+        testStudent = create_student()
+        self.assertIs(testStudent.is_student, True)
+    def test_Tutor_Model(self):
+        testTutor = create_tutor()
+        self.assertIs(testTutor.is_tutor, True)
+
+#class CourseModelTests(TestCase):
 
 
 # View Tests
