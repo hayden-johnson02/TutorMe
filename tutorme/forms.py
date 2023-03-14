@@ -1,6 +1,6 @@
 from django import forms
 
-from tutorme.models import Profile
+from tutorme.models import Profile, Course
 
 
 class UserTypeForm(forms.Form):
@@ -43,3 +43,10 @@ class DynamicCourseForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=choices,
         )
+
+class SearchTutorsForm(forms.Form):
+    subject = forms.CharField(label='Course Pneumonic', max_length=16)
+    courseNumber = forms.CharField(label='Course Number', max_length=16)
+
+
+

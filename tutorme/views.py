@@ -4,9 +4,10 @@ import logging
 import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from .forms import EditProfileForm, DynamicCourseForm
+from .forms import EditProfileForm, DynamicCourseForm, SearchTutorsForm
 from .models import Profile, Course
 
 app_name = 'tutorme'
@@ -140,14 +141,20 @@ def delete_profile_view(request):
 
 @login_required(login_url='/login/')
 def tutor_list(request):
-    if request.user.profile.is_student:
-        context = {
-            'tutor_list': Profile.objects.filter(is_tutor=True)
-        }
-        return render(request, 'view_tutors.html', context)
+    if request.user.profile.is_student and request.method=='POST':
+        form = SearchTutorsForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data.get('subject')
+            courseNumber = form.cleaned_data.get('courseNumber')
+            tutorsFound = []
+            for course in Course.objects.all():
+                if str(course.subject) == str(subject) and str(course.catalog_number) == str(courseNumber):
+                    tutor_id = course.profile.id
+                    tutorsFound.append(Profile.objects.get(pk=tutor_id))
+            return render(request, 'view_tutors.html', {'tutor_list': tutorsFound, 'form': form})
     else:
-        return redirect('index')
-
+        form = SearchTutorsForm()
+    return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True), 'form': form})
 
 @login_required(login_url='/login/')
 def tutor_page(request, tutor_id):
