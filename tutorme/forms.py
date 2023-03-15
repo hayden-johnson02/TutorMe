@@ -44,9 +44,5 @@ class DynamicCourseForm(forms.Form):
             choices=choices,
         )
 
-class SearchTutorsForm(forms.Form):
-    subject = forms.CharField(label='Course Pneumonic', max_length=16)
-    courseNumber = forms.CharField(label='Course Number', max_length=16)
-
 
 

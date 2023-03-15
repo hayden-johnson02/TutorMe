@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from .forms import EditProfileForm, DynamicCourseForm, SearchTutorsForm
+from .forms import EditProfileForm, DynamicCourseForm
 from .models import Profile, Course
 
 app_name = 'tutorme'
@@ -141,25 +141,43 @@ def delete_profile_view(request):
 
 @login_required(login_url='/login/')
 def tutor_list(request):
-    if request.user.profile.is_student and request.method=='POST':
-        form = SearchTutorsForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data.get('subject')
-            courseNumber = form.cleaned_data.get('courseNumber')
-            tutorsFound = []
-            for course in Course.objects.all():
-                if str(course.subject) == str(subject) and str(course.catalog_number) == str(courseNumber):
-                    tutor_id = course.profile.id
-                    tutorsFound.append(Profile.objects.get(pk=tutor_id))
-            return render(request, 'view_tutors.html', {'tutor_list': tutorsFound, 'form': form})
-    else:
-        form = SearchTutorsForm()
-    return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True), 'form': form})
+    if request.user.profile.is_student and request.method=='GET' and 'searchTutors' in request.GET:
+        subject = request.GET.get('subject')
+        course = request.GET.get('number')
+        first_name = request.GET.get('first_name')
+        last_name = request.GET.get('last_name')
+        possible_tutors = list(Profile.objects.filter(is_tutor=True))
+        if subject != '':
+            for current_course in Course.objects.all():
+                if str(current_course.subject) != str(subject):
+                    tutor_id = current_course.profile_id
+                    possible_tutors.remove(Profile.objects.get(pk=tutor_id))
+        if course != '':
+            for current_course in Course.objects.all():
+                if str(current_course.catalog_number) != str(course):
+                    tutor_id = current_course.profile_id
+                    possible_tutors.remove(Profile.objects.get(pk=tutor_id))
+        if first_name != '':
+            for tutor in possible_tutors:
+                if str(tutor.first_name) != str(first_name):
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+        if last_name != '':
+            for tutor in possible_tutors:
+                if str(tutor.last_name) != str(last_name):
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors})
+    return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
 
 @login_required(login_url='/login/')
 def tutor_page(request, tutor_id):
     if request.user.profile.is_student:
+        tutor_courses = []
+        for course in list(Course.objects.all()):
+            if course.profile.id == tutor_id:
+                course_string = course.subject + ' ' + str(course.catalog_number)
+                tutor_courses.append(course_string)
         context = {
-            'current_tutor': Profile.objects.get(pk=tutor_id)
+            'current_tutor': Profile.objects.get(pk=tutor_id),
+            'tutor_courses': tutor_courses
         }
         return render(request, 'view_tutor_profile.html', context)
