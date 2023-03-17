@@ -21,12 +21,13 @@
         <hr> Courses I Tutor For: </hr>
     </div>
 
-    <div>
+    <div >
         {% for course in tutor_courses %}
         <div>
             {{course}}
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
 {% endblock %}
 </div>
