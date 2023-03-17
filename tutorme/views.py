@@ -151,20 +151,26 @@ def tutor_list(request):
             for current_course in Course.objects.all():
                 if str(current_course.subject) != str(subject):
                     tutor_id = current_course.profile_id
-                    possible_tutors.remove(Profile.objects.get(pk=tutor_id))
+                    if len(possible_tutors) != 0:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor_id))
         if course != '':
             for current_course in Course.objects.all():
                 if str(current_course.catalog_number) != str(course):
                     tutor_id = current_course.profile_id
-                    possible_tutors.remove(Profile.objects.get(pk=tutor_id))
+                    if len(possible_tutors) != 0:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor_id))
         if first_name != '':
             for tutor in possible_tutors:
                 if str(tutor.first_name) != str(first_name):
-                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+                    if len(possible_tutors) != 0:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
         if last_name != '':
             for tutor in possible_tutors:
                 if str(tutor.last_name) != str(last_name):
-                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+                    if len(possible_tutors) != 0:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+        if len(possible_tutors) == 0:
+            possible_tutors = None
         return render(request, 'view_tutors.html', {'tutor_list': possible_tutors})
     return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
 

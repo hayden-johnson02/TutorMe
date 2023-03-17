@@ -7,7 +7,7 @@
 
 <div class="card">
             <div class="card-header">
-                <h3>Search for a specific Tutor</h3>
+                <h3>Search for a Specific Tutor</h3>
             </div>
 
     <div class="card-body" id="searchC">
@@ -23,11 +23,11 @@
                             <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
                         </div>
                         <div class="col">
-                            <label for="first_name">First Name</label>
+                            <label for="first_name">Tutor First Name</label>
                             <input name="first_name" type="text" placeholder="ex. Mark" maxlength="32">
                         </div>
                         <div class="col">
-                            <label for="last_name">Last Name</label>
+                            <label for="last_name">Tutor Last Name</label>
                             <input name="last_name" type="text" placeholder="ex. Sherriff" maxlength="32">
                         </div>
                         <div class="col">
@@ -44,8 +44,11 @@
       <h5 class="mb-1"> <a href='/view_tutors/{{tutor.id}}'class="list-group-item">{{ tutor.last_name }}, {{ tutor.first_name }} </a> </h5>
     </div>
   </a>
-</div>
-
-
 {% endfor %}
+
+    {% if tutor_list is None %}
+    <div align="center">
+        <h5>No tutor matches your specifications</h5>
+    </div>
+    {% endif %}
 {% endblock %}
