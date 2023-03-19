@@ -2,35 +2,105 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Profile{% endblock %}
 {% block content %}
+
+{% load socialaccount %}
+{% if user.is_authenticated %}
+
 <div class="container col-6 py-5">
     <div class="card">
         <div class="card-header">
-            <h3> {{ user.first_name }} {{ user.last_name }}</h3>
+            <h3>Edit Profile</h3>
         </div>
         <div class="card-body">
-            {% load socialaccount %}
-            {% if user.is_authenticated %}
-            <p>{{ user.email }}</p>
-            {% if user.profile.is_tutor %}
-                <p>You are a tutor!</p>
-{#                add field displaying bio and edit bio button#}
-            {% endif %}
-            {% if user.profile.is_student %}
-                <p>You are a student!</p>
-            {% endif %}
-                <hr>
-                Bio:
-                {% if user.profile.bio is None %}
-                <p>You have not added a bio yet!</p>
-                {% else %}
-                <p>{{ user.profile.bio }}</p>
-                {% endif %}
-                <hr>
-                <a class="btn btn-outline-primary" href="{% url 'edit_profile:save_changes' %}">Save Changes</a>
-                <a class="btn btn-outline-danger" href="{% url 'edit_profile:discard_changes' %}">Discard Changes</a>
-            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            {{ form.first_name }}
+                            <label for="fname">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            {{ form.last_name }}
+                            <label for="lname">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.email }}
+                    <label for="email">Email</label>
+                </div>
+                <label style="margin-bottom: 5px;">Biography</label>
+                {{ form.bio }}
+            <button type="submit" name="editProfile" class="btn btn-success" style="margin-top: 20px">Edit Profile</button>
+            </form>
         </div>
     </div>
+    {% if user.profile.is_tutor %}
+        <div class="card">
+            <div class="card-header">
+                <h3>Add/Remove Courses</h3>
+            </div>
+            <div class="card-body" id="searchC">
+                <form action="#searchC" method="get">
+                    {% csrf_token %}
+                    <label>Search for Courses to Add:</label>
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="subject">Subject</label>
+                            <input name="subject" type="text" placeholder="ex. CS" maxlength="4">
+                        </div>
+                        <div class="col">
+                            <label for="number">Course Number</label>
+                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                        </div>
+                        <div class="col">
+                            <label for="instructor">Instructor Name</label>
+                            <input name="instructor" type="text" placeholder="ex. Horton" maxlength="30">
+                        </div>
+                        <div class="col">
+                            <div style="margin-top: 20px"></div>
+                            <button type="submit" name="searchCourses" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                </form>
+                {% if clist is None %}
+                    <label style="margin-bottom: 20px">Search for courses you would like to add to your profile!</label>
+                {% else %}
+                    <div style="margin-bottom: 20px"></div>
+                    <form action="#searchC" method="post">
+                        {% csrf_token %}
+                        {% if search_course_form is None %}
+                            <label style="margin-bottom: 20px">Search for a valid course!</label>
+                        {% else %}
+                            <label>Add courses to your profile: </label>
+                            <div></div>
+                            {{ search_course_form }}
+                            <button type="submit" name="addCourses" value ="{{ clist }}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+                <div id="removeC"></div>
+                <form action="#removeC" method="post" id="addCourseForm">
+                    {% csrf_token %}
+                    {% if delete_course_form is None %}
+                        <label>You have no courses on your profile to remove.</label>
+                    {% else %}
+                        <label>Remove courses from your profile: </label>
+                        <div></div>
+                        {{ delete_course_form }}
+                        <div>
+                            <button type="submit" name="removeCourses" class="btn btn-outline-danger" style="margin-top: 20px">Remove Courses</button>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    {% endif %}
 </div>
+
+{% endif %}
 
 {% endblock %}

@@ -5,25 +5,34 @@
 <div class="container col-6 py-5">
     <div class="card">
         <div class="card-header">
-            <h3> {{ user.first_name }} {{ user.last_name }}</h3>
+            <h3> {{ user.profile.first_name }} {{ user.profile.last_name }}</h3>
         </div>
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-            <p>{{ user.email }}</p>
-            {% if user.profile.is_tutor %}
-                <p>You are a tutor!</p>
-{#                add field displaying bio and edit bio button#}
-            {% endif %}
-            {% if user.profile.is_student %}
-                <p>You are a student!</p>
-            {% endif %}
+                <p>{{ user.email }}</p>
+                {% if user.profile.is_tutor %}
+                    <p>You are a tutor!</p>
+                {% endif %}
+                {% if user.profile.is_student %}
+                    <p>You are a student!</p>
+                {% endif %}
                 <hr>
-                Bio:
+                <label>Bio: </label>
                 {% if user.profile.bio is None %}
-                <p>You have not added a bio yet!</p>
+                    <p>You have not added a bio yet!</p>
                 {% else %}
-                <p>{{ user.profile.bio }}</p>
+                    <p>{{ user.profile.bio }}</p>
+                {% endif %}
+                {% if user.profile.is_tutor %}
+                    <label>Courses:</label>
+                    {% if courses is None %}
+                    <p>You have not added any courses yet!</p>
+                    {% else %}
+                        {% for c in courses %}
+                            {{ c.subject }} {{ c.catalog_number }}
+                        {% endfor %}
+                    {% endif %}
                 {% endif %}
                 <hr>
 {#                <a class="btn btn-outline-primary" href="{% url 'edit_profile' %}">Edit Profile</a>#}

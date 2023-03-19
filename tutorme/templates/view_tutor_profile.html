@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Tutor Me | Profile{% endblock %}
+{% block content %}
+
+<div class="container col-6 py-5">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ current_tutor.first_name }} {{current_tutor.last_name}}</h5>
+    </div>
+    <div>
+        {{ current_tutor.email }}
+    </div>
+    <div>
+        <hr> Bio: </hr>
+    </div>
+    <div>
+        {{ current_tutor.bio}}
+    </div>
+
+    <div>
+        <hr> Courses I Tutor For: </hr>
+    </div>
+
+    <div >
+        {% for course in tutor_courses %}
+        <div>
+            {{course}}
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+</div>

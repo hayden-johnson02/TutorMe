@@ -10,21 +10,31 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<nav class="navbar navbar-expand-lg bg-body-tertiary" >
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
-         <a class="navbar-brand">
-         </a>
+         <a class="navbar-brand"></a>
         <span class="navbar-brand position-absolute mx-0 nav-title" >Tutor Me</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" ><span class="nav-text">Home</span></a></li>
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><span class="nav-text">Logout</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><span class="nav-text">Profile</span></a></li>
                     {% if user.profile.is_student %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'view_tutors' %}"><span class="nav-text">View Tutors</span></a></li>
                     {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #2F846A;">
+                        Settings </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" style="color: #2F846A;"><span>View Profile</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}" style="color: #2F846A;"><span>Edit Profile</span></a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: #2F846A;"><span>Logout</span></a></li>
+                        </ul>
+                    </li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}"><span class="nav-text">Login</span></a></li>
                 {% endif %}
@@ -32,15 +42,18 @@
         </div>
     </div>
 </nav>
+<div class="pb-5"></div>
 
 <body>
 {% block content %}
 {% endblock %}
 </body>
-<footer>
-    <footer class="py-3 my-4 fixed-bottom">
-    <div class="border-bottom pb-3 mb-3"></div>
-    <p class="text-center text-muted">Team A-03</p>
-  </footer>
-</footer>
+
+<div style="margin-top: 50px">
+{#    Source: https://getbootstrap.com/docs/5.2/examples/footers/ #}
+    <footer class="pt-50 fixed-bottom" style="background-color: white">
+        <div class="border-bottom mb-3"></div>
+        <p class="text-center" style="color: #1D634D;">Team A-03</p>
+    </footer>
+</div>
 </html>
