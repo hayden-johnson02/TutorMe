@@ -143,22 +143,30 @@ def delete_profile_view(request):
 def tutor_list(request):
     if request.user.profile.is_student and request.method=='GET' and 'searchTutors' in request.GET:
         subject = request.GET.get('subject')
-        course = request.GET.get('number')
+        course_num = request.GET.get('number')
         first_name = request.GET.get('first_name')
         last_name = request.GET.get('last_name')
         possible_tutors = list(Profile.objects.filter(is_tutor=True))
+        possible_ids = []
+
         if subject != '':
             for current_course in Course.objects.all():
-                if str(current_course.subject) != str(subject):
-                    tutor_id = current_course.profile_id
-                    if len(possible_tutors) != 0:
-                        possible_tutors.remove(Profile.objects.get(pk=tutor_id))
-        if course != '':
+                possible_ids.append(current_course.subject)
+                if str(current_course.subject) == str(subject):
+                    possible_ids.append(str(current_course.profile.id))
+            for tutor in possible_tutors:
+                if str(tutor.id) not in possible_ids:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
+        possible_ids = []
+        if course_num != '':
             for current_course in Course.objects.all():
-                if str(current_course.catalog_number) != str(course):
-                    tutor_id = current_course.profile_id
-                    if len(possible_tutors) != 0:
-                        possible_tutors.remove(Profile.objects.get(pk=tutor_id))
+                if str(current_course.catalog_number) == str(course_num):
+                    possible_ids.append(current_course.profile.id)
+            for tutor in possible_tutors:
+                if tutor.id not in possible_ids:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
         if first_name != '':
             for tutor in possible_tutors:
                 if str(tutor.first_name) != str(first_name):
@@ -171,7 +179,7 @@ def tutor_list(request):
                         possible_tutors.remove(Profile.objects.get(pk=tutor.id))
         if len(possible_tutors) == 0:
             possible_tutors = None
-        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors})
+        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors, 'possible_ids': possible_ids})
     return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
 
 @login_required(login_url='/login/')

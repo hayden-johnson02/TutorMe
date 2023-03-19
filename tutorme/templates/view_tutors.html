@@ -11,7 +11,7 @@
             </div>
 
     <div class="card-body" id="searchC">
-                <form action="#searchC" method="get">
+                <form action="#searchC" method="GET">
                     {% csrf_token %}
                     <div class="row align-items-center">
                         <div class="col">
@@ -21,6 +21,10 @@
                         <div class="col">
                             <label for="number">Course Number</label>
                             <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                        </div>
+                        <div class="col">
+                            <label for="course_name">Course Name</label>
+                            <input name="course_name_name" type="text" placeholder="ex. Discrete Math" maxlength="32">
                         </div>
                         <div class="col">
                             <label for="first_name">Tutor First Name</label>
