@@ -34,4 +34,4 @@ class Course(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     subject = models.CharField(max_length=4)
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
-    instructor = models.CharField(max_length=256)
+    course_name = models.CharField(max_length=256)
