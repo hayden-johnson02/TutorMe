@@ -156,7 +156,7 @@ def delete_profile_view(request):
 
 @login_required(login_url='/login/')
 def tutor_list(request):
-    if request.user.profile.is_student and request.method=='GET' and 'searchTutors' in request.GET:
+    if request.user.profile.is_student and request.method == 'GET' and 'searchTutors' in request.GET:
         subject = request.GET.get('subject')
         course_num = request.GET.get('number')
         first_name = request.GET.get('first_name')
@@ -203,7 +203,7 @@ def tutor_page(request, tutor_id):
         tutor_courses = []
         for course in list(Course.objects.all()):
             if course.profile.id == tutor_id:
-                course_string = course.subject + ' ' + str(course.catalog_number)
+                course_string = course.subject + ' ' + str(course.catalog_number) + ' ' + course.course_name
                 tutor_courses.append(course_string)
         context = {
             'current_tutor': Profile.objects.get(pk=tutor_id),
