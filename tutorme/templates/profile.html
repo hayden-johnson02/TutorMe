@@ -30,7 +30,9 @@
                     <p>You have not added any courses yet!</p>
                     {% else %}
                         {% for c in courses %}
-                            {{ c.subject }} {{ c.catalog_number }}
+                            <div>
+                                {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
+                            </div>
                         {% endfor %}
                     {% endif %}
                 {% endif %}

@@ -53,15 +53,19 @@ def edit_profile_view(request):
     if request.method == 'GET' and 'searchCourses' in request.GET:
         subject = request.GET.get("subject")
         number = request.GET.get("number")
-        instructor = request.GET.get("instructor")
+        cn = request.GET.get("courseName")
+        cn = cn.split(" ")
+        course_name = ""
+        for word in cn:
+            course_name = course_name + word + "_"
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.' \
               'FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
-        url = url + '&subject=' + subject + '&catalog_nbr=' + number + '&instructor_name=' + instructor
+        url = url + '&subject=' + subject + '&catalog_nbr=' + number + '&keyword=' + course_name
         r = requests.get(url)
         clist = []
         for c in r.json():
-            if (c['subject'] + " " + c['catalog_nbr']) not in clist:
-                clist.append(c['subject'] + " " + c['catalog_nbr'])
+            if (c['subject'] + " " + c['catalog_nbr'] + " " + c['descr']) not in clist:
+                clist.append(c['subject'] + " " + c['catalog_nbr'] + " " + c['descr'])
         if clist:
             search_course_form = DynamicCourseForm(course_list=clist)
 
@@ -74,9 +78,15 @@ def edit_profile_view(request):
                 data = c.split(" ")
                 subj = data[0]
                 course_num = data[1]
-                user_already_has_course = Course.objects.filter(subject=subj, catalog_number=course_num, profile=request.user.profile)
+                course_name = ""
+                for i in range(2, len(data)):
+                    course_name = course_name + data[i] + " "
+                course_name = course_name.rstrip(" ")
+                user_already_has_course = Course.objects.filter(subject=subj, catalog_number=course_num,
+                                                                course_name=course_name, profile=request.user.profile)
                 if not user_already_has_course:
-                    Course.objects.create(subject=subj, catalog_number=course_num, profile=request.user.profile)
+                    Course.objects.create(subject=subj, catalog_number=course_num,
+                                          course_name=course_name, profile=request.user.profile)
             clist = None
 
     courses = Course.objects.filter(profile=request.user.profile)
@@ -86,7 +96,7 @@ def edit_profile_view(request):
         courses = None
     if courses:
         for c in courses:
-            course_list.append(c.subject + " " + str(c.catalog_number))
+            course_list.append(c.subject + " " + str(c.catalog_number) + " " + c.course_name)
         delete_course_form = DynamicCourseForm(course_list=course_list)
 
     if request.method == 'POST' and 'removeCourses' in request.POST:
@@ -98,7 +108,12 @@ def edit_profile_view(request):
                 data = c.split(" ")
                 subj = data[0]
                 course_num = data[1]
-                Course.objects.filter(subject=subj, catalog_number=course_num, profile=request.user.profile).delete()
+                course_name = ""
+                for i in range(2, len(data)):
+                    course_name = course_name + data[i] + " "
+                course_name = course_name.rstrip(" ")
+                Course.objects.filter(subject=subj, catalog_number=course_num, course_name=course_name,
+                                      profile=request.user.profile).delete()
             if course_list:
                 delete_course_form = DynamicCourseForm(course_list=course_list)
             else:
