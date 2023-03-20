@@ -161,13 +161,14 @@ def tutor_list(request):
         course_num = request.GET.get('number')
         first_name = request.GET.get('first_name')
         last_name = request.GET.get('last_name')
+        course_name = request.GET.get('course_name')
         possible_tutors = list(Profile.objects.filter(is_tutor=True))
         possible_ids = []
 
         if subject != '':
             for current_course in Course.objects.all():
                 possible_ids.append(current_course.subject)
-                if str(current_course.subject) == str(subject):
+                if str(current_course.subject).lower() == str(subject).lower():
                     possible_ids.append(str(current_course.profile.id))
             for tutor in possible_tutors:
                 if str(tutor.id) not in possible_ids:
@@ -182,14 +183,23 @@ def tutor_list(request):
                 if tutor.id not in possible_ids:
                     possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
+        possible_ids = []
+        if course_name != '':
+            for current_course in Course.objects.all():
+                if str(course_name).lower() in str(current_course.course_name).lower():
+                    possible_ids.append(current_course.profile.id)
+            for tutor in possible_tutors:
+                if tutor.id not in possible_ids:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
         if first_name != '':
             for tutor in possible_tutors:
-                if str(tutor.first_name) != str(first_name):
+                if str(tutor.first_name).lower() != str(first_name).lower():
                     if len(possible_tutors) != 0:
                         possible_tutors.remove(Profile.objects.get(pk=tutor.id))
         if last_name != '':
             for tutor in possible_tutors:
-                if str(tutor.last_name) != str(last_name):
+                if str(tutor.last_name).lower() != str(last_name).lower():
                     if len(possible_tutors) != 0:
                         possible_tutors.remove(Profile.objects.get(pk=tutor.id))
         if len(possible_tutors) == 0:
