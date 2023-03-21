@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from .forms import EditProfileForm, DynamicCourseForm
+from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
 from .models import Profile, Course
 
 app_name = 'tutorme'
@@ -118,11 +118,18 @@ def edit_profile_view(request):
                 delete_course_form = DynamicCourseForm(course_list=course_list)
             else:
                 delete_course_form = None
+    if request.method == 'POST' and 'createTutorSession' in request.POST:
+        form = CreateSessionForm(request.POST)
+        if form.is_valid():
+            form.tutor = request.user.profile
+            form.save()
 
+    createSessionForm = CreateSessionForm()
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
-                                                 'delete_course_form': delete_course_form})
+                                                 'delete_course_form': delete_course_form,
+                                                 'create_session_form': createSessionForm})
 
 
 def create_account_view(request):

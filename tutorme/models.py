@@ -53,5 +53,7 @@ class TutorSession(models.Model):
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    description = models.TextField(max_length=600)
+    description = models.TextField(max_length=600) #Student should put course they want help for in this description
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
+    date = models.DateField()
+    is_accepted = models.BooleanField(default=None)

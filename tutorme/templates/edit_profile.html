@@ -99,6 +99,39 @@
             </div>
         </div>
     {% endif %}
+    {% if user.profile.is_tutor %}
+        <div class="card">
+        <div class="card-header">
+            <h3>Add Sessions</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <label for="day">Day</label>
+                            {{ create_session_form.day }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>
+                            <label for="start_time">Start Time</label>
+                            {{ create_session_form.start_time }}
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>
+                            <label for="end_time">End Time</label>
+                            {{ create_session_form.end_time }}
+                        </div>
+                    </div>
+                </div>
+            <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 20px">Create Session</button>
+            </form>
+        </div>
+    {% endif %}
 </div>
 
 {% endif %}

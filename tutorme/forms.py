@@ -1,6 +1,6 @@
 from django import forms
 
-from tutorme.models import Profile, Course
+from .models import Profile, Course, TutorSession
 
 
 class UserTypeForm(forms.Form):
@@ -43,6 +43,17 @@ class DynamicCourseForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=choices,
         )
+
+class CreateSessionForm(forms.ModelForm):
+    class Meta:
+        model = TutorSession
+        exclude = {'student', 'tutor'}
+        fields = {'start_time', 'end_time', 'day'}
+        widgets = {
+            'start_time': forms.TimeInput(),
+            'end_time': forms.TimeInput()
+        }
+
 
 
 
