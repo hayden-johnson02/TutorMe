@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import datetime
 
 
 # Create your models here.
@@ -35,3 +36,22 @@ class Course(models.Model):
     subject = models.CharField(max_length=4)
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
     course_name = models.CharField(max_length=256)
+
+class TutorSession(models.Model):
+    DAYS_OF_WEEK = ( (0, 'Monday'),
+                     (1, 'Tuesday'),
+                     (2, 'Wednesday'),
+                     (3, 'Thursday'),
+                     (4, 'Friday'),
+                     (5, 'Saturday'),
+                     (6, 'Sunday'))
+    day = models.CharField(max_length=1, choices=DAYS_OF_WEEK)
+    start_time = models.TimeField(auto_now=False, auto_now_add=False)
+    end_time = models.TimeField(auto_now=False, auto_now_add=False)
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None, related_name='TutorSession_student')
+
+class TutorRequest(models.Model):
+    tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
+    description = models.TextField(max_length=600)
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
