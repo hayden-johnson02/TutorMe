@@ -14,7 +14,12 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=256)
     is_student = models.BooleanField(default=False)
     is_tutor = models.BooleanField(default=False)
-    bio = models.TextField(max_length=1200, blank=True, default="")
+    bio = models.TextField(max_length=1200, blank=True, null=True, default=None)
+
+    # tutor specific
+    hourly_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)],
+                                      blank=True, null=True, default=None)
+    venmo = models.CharField(max_length=256, blank=True, null=True, default=None)
 
     # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
     @receiver(post_save, sender=User)
@@ -37,23 +42,24 @@ class Course(models.Model):
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
     course_name = models.CharField(max_length=256)
 
+
 class TutorSession(models.Model):
-    DAYS_OF_WEEK = [ ('Monday', 'Monday'),
-                     ('Tuesday', 'Tuesday'),
-                     ('Wednesday', 'Wednesday'),
-                     ('Thursday', 'Thursday'),
-                     ('Friday', 'Friday'),
-                     ('Saturday', 'Saturday'),
-                     ('Sunday', 'Sunday')]
+    DAYS_OF_WEEK = [('Monday', 'Monday'),
+                    ('Tuesday', 'Tuesday'),
+                    ('Wednesday', 'Wednesday'),
+                    ('Thursday', 'Thursday'),
+                    ('Friday', 'Friday'),
+                    ('Saturday', 'Saturday'),
+                    ('Sunday', 'Sunday')]
     day = models.CharField(max_length=10, choices=DAYS_OF_WEEK)
     start_time = models.TimeField(auto_now=False, auto_now_add=False)
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
-    #student = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, allow_null=True, related_name='TutorSession_student')
+
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    description = models.TextField(max_length=600) #Student should put course they want help for in this description
+    description = models.TextField(max_length=600) # Student should put course they want help for in this description
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
     date = models.DateField(auto_now=False, auto_now_add=False, default=None)
     is_accepted = models.BooleanField(default=None)

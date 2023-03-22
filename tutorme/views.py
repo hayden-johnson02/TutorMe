@@ -34,6 +34,8 @@ def login_view(request):
 @login_required(login_url='/login/')
 def profile_view(request):
     courses = Course.objects.filter(profile=request.user.profile)
+    if not courses:
+        courses = None
     return render(request, 'profile.html', {'courses': courses})
 
 
@@ -225,6 +227,7 @@ def tutor_list(request):
             possible_tutors = None
         return render(request, 'view_tutors.html', {'tutor_list': possible_tutors, 'possible_ids': possible_ids})
     return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
+
 
 @login_required(login_url='/login/')
 def tutor_page(request, tutor_id):

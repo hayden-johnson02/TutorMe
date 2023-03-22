@@ -16,7 +16,7 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = {'is_tutor', 'is_student'}
-        fields = {'first_name', 'last_name', 'email', 'bio'}
+        fields = {'first_name', 'last_name', 'email', 'bio', 'hourly_rate', 'venmo'}
 
         # https://www.youtube.com/watch?v=6-XXvUENY_8 Styling
         widgets = {
@@ -25,6 +25,11 @@ class EditProfileForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'readonly class': 'form-control', 'id': 'email'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'style': 'max-height: 300px;',
                                          'placeholder': 'Write some information about yourself!'}),
+            'hourly_rate': forms.NumberInput(attrs={'type': 'number', 'class': 'form-control',
+                                                    'min': '0', 'max': '1000',
+                                                    'id': 'hr', 'style': 'max-width: 110px;',
+                                                    'placeholder': '25'}),
+            'venmo': forms.TextInput(attrs={'class': 'form-control', 'id': 'venmo', 'placeholder': 'venmo_tag'}),
         }
 
 

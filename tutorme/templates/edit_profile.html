@@ -32,7 +32,25 @@
                     {{ form.email }}
                     <label for="email">Email</label>
                 </div>
-                <label style="margin-bottom: 5px;">Biography</label>
+                {% if user.profile.is_tutor %}
+                    <div class="row">
+                        <div class="col" style="max-width: 300px">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Hourly Rate</span>
+                                <span class="input-group-text">$</span>
+                                {{ form.hourly_rate }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Venmo</span>
+                                <span class="input-group-text">@</span>
+                                {{ form.venmo }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                 <span class="input-group-text">Biography</span>
                 {{ form.bio }}
             <button type="submit" name="editProfile" class="btn btn-success" style="margin-top: 20px">Edit Profile</button>
             </form>
