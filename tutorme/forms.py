@@ -44,6 +44,7 @@ class DynamicCourseForm(forms.Form):
             choices=choices,
         )
 
+
 class CreateSessionForm(forms.ModelForm):
 
     class Meta:
