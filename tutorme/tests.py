@@ -1,5 +1,5 @@
 from django.test import TestCase, SimpleTestCase
-from tutorme.models import Profile, Course
+from tutorme.models import Profile, Course, TutorSession, TutorRequest
 from django.urls import reverse, resolve
 from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, tutor_page, account_type_choice
 from django.contrib.auth import get_user_model
@@ -18,6 +18,15 @@ def create_student():
                                  bio="Test Student")
     return testStudentProfile
 
+def create_second_student():
+    User = get_user_model()
+    testStudentUser = User.objects.create_user(username="TestStudent2", email="mst2k@virginia.edu",
+                                               password="password456")
+    testStudentProfile = Profile(user=testStudentUser, email=testStudentUser.email, first_name="John2",
+                                 last_name="Dough2", is_student=True, is_tutor=False,
+                                 bio="Test Student 2")
+    return testStudentProfile
+
 
 def create_tutor():
     User = get_user_model()
@@ -27,16 +36,50 @@ def create_tutor():
                                bio="Test Tutor")
     return testTutorProfile
 
+def create_second_tutor():
+    User = get_user_model()
+    testTutorUser = User.objects.create_user(username="TestTutor2", email="mst5k@virginia.edu", password="password123")
+    testTutorProfile = Profile(user=testTutorUser, email=testTutorUser.email, first_name="Jane2",
+                               last_name="Doe2", is_student=False, is_tutor=True,
+                               bio="Test Tutor 2")
+    return testTutorProfile
+
 
 class ProfileModelTests(TestCase):
 
-    def test_Student_Model(self):
+    def test_Student_is_student(self):
         testStudent = create_student()
         self.assertIs(testStudent.is_student, True)
 
-    def test_Tutor_Model(self):
+    def test_Student_Name(self):
+        testStudent = create_student()
+        self.assertEquals("John", testStudent.first_name)
+        self.assertEquals("Dough", testStudent.last_name)
+
+    def test_Student_Email(self):
+        testStudent = create_student()
+        self.assertEquals("mst4k@virginia.edu", testStudent.email)
+
+    def test_Student_Bio(self):
+        testStudent = create_student()
+        self.assertEquals("Test Student", testStudent.bio)
+
+    def test_Tutor_is_tutor(self):
         testTutor = create_tutor()
         self.assertIs(testTutor.is_tutor, True)
+
+    def test_Tutor_Name(self):
+        testTutor = create_tutor()
+        self.assertEquals("Jane", testTutor.first_name)
+        self.assertEquals("Doe", testTutor.last_name)
+
+    def test_Tutor_Email(self):
+        testTutor = create_tutor()
+        self.assertEquals("mst3k@virginia.edu", testTutor.email)
+
+    def test_Tutor_Bio(self):
+        testTutor = create_tutor()
+        self.assertEquals("Test Tutor", testTutor.bio)
 
 # class CourseModelTests(TestCase):
         
