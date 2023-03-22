@@ -45,15 +45,23 @@ class DynamicCourseForm(forms.Form):
         )
 
 class CreateSessionForm(forms.ModelForm):
+
     class Meta:
+
         model = TutorSession
-        exclude = {'student', 'tutor'}
+        exclude = {}
         fields = {'start_time', 'end_time', 'day'}
+        DAYS_OF_WEEK = [('Monday', 'Monday'),
+                        ('Tuesday', 'Tuesday'),
+                        ('Wednesday', 'Wednesday'),
+                        ('Thursday', 'Thursday'),
+                        ('Friday', 'Friday'),
+                        ('Saturday', 'Saturday'),
+                        ('Sunday', 'Sunday')]
         widgets = {
-            'start_time': forms.TimeInput(),
-            'end_time': forms.TimeInput()
+            'day': forms.Select(choices=DAYS_OF_WEEK),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'type': 'time'})
         }
-
-
 
 

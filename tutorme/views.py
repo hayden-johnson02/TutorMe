@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
-from .models import Profile, Course
+from .models import Profile, Course, TutorSession
 
 app_name = 'tutorme'
 
@@ -119,17 +119,17 @@ def edit_profile_view(request):
             else:
                 delete_course_form = None
     if request.method == 'POST' and 'createTutorSession' in request.POST:
-        form = CreateSessionForm(request.POST)
-        if form.is_valid():
-            form.tutor = request.user.profile
-            form.save()
+        create_session_form = CreateSessionForm(request.POST)
+        if create_session_form.is_valid():
+            TutorSession.objects.create( day=request.POST.get('day'), start_time=request.POST.get('start_time'),
+                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
 
-    createSessionForm = CreateSessionForm()
+    create_session_form = CreateSessionForm()
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
                                                  'delete_course_form': delete_course_form,
-                                                 'create_session_form': createSessionForm})
+                                                 'create_session_form': create_session_form})
 
 
 def create_account_view(request):
