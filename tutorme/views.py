@@ -187,10 +187,10 @@ def tutor_list(request):
 
         tutors_with_courses = []
         for course in Course.objects.all():
-            tutors_with_courses.append(course.profile.id)
+            tutors_with_courses.append(str(course.profile.id))
 
         for tutor in possible_tutors:
-            if tutor.id not in tutors_with_courses:
+            if str(tutor.id) not in tutors_with_courses:
                 if subject != '' or course_name != '' or course_num != '':
                     possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
@@ -200,6 +200,7 @@ def tutor_list(request):
                 possible_ids.append(current_course.subject)
                 if str(current_course.subject).lower() == str(subject).lower():
                     possible_ids.append(str(current_course.profile.id))
+
             for tutor in possible_tutors:
                 if str(tutor.id) not in possible_ids:
                     possible_tutors.remove(Profile.objects.get(pk=tutor.id))
@@ -208,18 +209,18 @@ def tutor_list(request):
         if course_num != '':
             for current_course in Course.objects.all():
                 if str(current_course.catalog_number) == str(course_num):
-                    possible_ids.append(current_course.profile.id)
+                    possible_ids.append(str(current_course.profile.id))
             for tutor in possible_tutors:
-                if tutor.id not in possible_ids:
+                if str(tutor.id) not in possible_ids:
                     possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
         possible_ids = []
         if course_name != '':
             for current_course in Course.objects.all():
                 if str(course_name).lower() in str(current_course.course_name).lower():
-                    possible_ids.append(current_course.profile.id)
+                    possible_ids.append(str(current_course.profile.id))
             for tutor in possible_tutors:
-                if tutor.id not in possible_ids:
+                if str(tutor.id) not in possible_ids:
                     possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
         if first_name != '':
@@ -227,6 +228,7 @@ def tutor_list(request):
                 if str(tutor.first_name).lower() != str(first_name).lower():
                     if len(possible_tutors) != 0:
                         possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
         if last_name != '':
             for tutor in possible_tutors:
                 if str(tutor.last_name).lower() != str(last_name).lower():
