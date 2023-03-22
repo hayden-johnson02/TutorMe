@@ -8,7 +8,13 @@
       <h5 class="mb-1">{{ current_tutor.first_name }} {{current_tutor.last_name}}</h5>
     </div>
     <div>
-        {{ current_tutor.email }}
+        Email: {{ current_tutor.email }}
+    </div>
+    <div>
+        Hourly Rate: ${{ current_tutor.hourly_rate }}
+    </div>
+    <div>
+        Venmo: @{{ current_tutor.venmo }}
     </div>
     <div>
         <hr> Bio: </hr>

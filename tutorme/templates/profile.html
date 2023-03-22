@@ -10,9 +10,24 @@
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-                <p>{{ user.email }}</p>
+                <p>Email: {{ user.email }}</p>
                 {% if user.profile.is_tutor %}
                     <p>You are a tutor!</p>
+                    <p>Hourly Rate:
+                        {% if user.profile.hourly_rate is None %}
+                            Not set yet!
+                        {% else %}
+                            ${{ user.profile.hourly_rate }}
+                        {% endif %}
+
+                    </p>
+                    <p>Venmo:
+                        {% if user.profile.venmo is None %}
+                            Not set yet!
+                        {% else %}
+                            @{{ user.profile.venmo }}
+                        {% endif %}
+                    </p>
                 {% endif %}
                 {% if user.profile.is_student %}
                     <p>You are a student!</p>
