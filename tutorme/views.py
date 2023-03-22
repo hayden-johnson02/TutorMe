@@ -184,8 +184,17 @@ def tutor_list(request):
         last_name = request.GET.get('last_name')
         course_name = request.GET.get('course_name')
         possible_tutors = list(Profile.objects.filter(is_tutor=True))
-        possible_ids = []
 
+        tutors_with_courses = []
+        for course in Course.objects.all():
+            tutors_with_courses.append(course.profile.id)
+
+        for tutor in possible_tutors:
+            if tutor.id not in tutors_with_courses:
+                if subject != '' or course_name != '' or course_num != '':
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
+        possible_ids = []
         if subject != '':
             for current_course in Course.objects.all():
                 possible_ids.append(current_course.subject)
