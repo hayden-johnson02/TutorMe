@@ -123,19 +123,15 @@ def edit_profile_view(request):
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
         if create_session_form.is_valid():
-            TutorSession.objects.create( day=request.POST.get('day'), start_time=request.POST.get('start_time'),
-                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
+            TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
+                                        end_time=request.POST.get('end_time'), tutor=request.user.profile)
     create_session_form = CreateSessionForm()
 
     tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
     if request.method == 'POST' and 'deleteTutorSessions' in request.POST:
-        # TODO: delete the sessions selected
-        print("TESTING")
-        print(request.POST)
         for sess in tutor_sessions_list:
             if str(sess.id) in request.POST:
-                print("TESTING2")
-                pass
+                TutorSession.objects.get(id=sess.id).delete()
 
     if not tutor_sessions_list:
         tutor_sessions_list = None

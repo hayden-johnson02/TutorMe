@@ -143,7 +143,7 @@
                      <label>Select sessions you would like to remove from your profile:</label>
                     <div></div>
                     {% for session in tutor_sessions_list %}
-                        <input type="checkbox" value="{{ session.id }}" name="{{ sessions.id }}">
+                        <input type="checkbox" value="{{ session.id }}" name="{{ session.id }}">
                         {{ session.day }}, {{ session.start_time }} to {{ session.end_time }}
                         <div></div>
                     {% endfor %}
