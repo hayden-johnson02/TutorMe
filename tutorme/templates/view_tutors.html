@@ -3,56 +3,82 @@
 {% block title %}Tutor Me | Profile{% endblock %}
 {% block content %}
 
-<div class="container col-6 py-5">
-
-<div class="card">
-            <div class="card-header">
-                <h3>Search for a Specific Tutor</h3>
-            </div>
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 1500px; padding-left: 50px; padding-right: 50px">
+    <div class="card">
+        <div class="card-header">
+            <h3 style="margin-top: 10px">Search for a Specific Tutor</h3>
+        </div>
 
     <div class="card-body" id="searchC">
-                <form action="#searchC" method="GET">
-                    {% csrf_token %}
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <label for="subject">Course Mnemonic</label>
-                            <input name="subject" type="text" placeholder="ex. CS" maxlength="4">
-                        </div>
-                        <div class="col">
-                            <label for="number">Course Number</label>
-                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
-                        </div>
-                        <div class="col">
-                            <label for="course_name">Course Name</label>
-                            <input name="course_name" type="text" placeholder="ex. Discrete Math" maxlength="32">
-                        </div>
-                        <div class="col">
-                            <label for="first_name">Tutor First Name</label>
-                            <input name="first_name" type="text" placeholder="ex. Mark" maxlength="32">
-                        </div>
-                        <div class="col">
-                            <label for="last_name">Tutor Last Name</label>
-                            <input name="last_name" type="text" placeholder="ex. Sherriff" maxlength="32">
-                        </div>
-                        <div class="col">
-                            <div style="margin-top: 20px"></div>
-                            <button type="submit" name="searchTutors" class="btn btn-success">Search</button>
-                        </div>
+        <form action="#searchC" method="GET">
+            {% csrf_token %}
+                <div class="row align-items-center">
+                    <div class="col">
+                        <label for="subject">Course Subject</label>
+                        <div></div>
+                        <input name="subject" type="text" style="max-width: 100px" placeholder="ex. CS" maxlength="4">
                     </div>
-                </form>
+                    <div class="col">
+                        <label for="number">Course Number</label>
+                        <div></div>
+                        <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                    </div>
+                    <div class="col">
+                        <label for="course_name">Course Name</label>
+                        <div></div>
+                        <input name="course_name" type="text" placeholder="ex. Discrete Math" maxlength="32">
+                    </div>
+                </div>
+                <div style="margin-top: 10px"></div>
+                <div class="row align-items-center">
+                    <div class="col">
+                        <label for="first_name">Tutor First Name</label>
+                        <div></div>
+                        <input name="first_name" type="text" placeholder="ex. Mark" maxlength="32">
+                    </div>
+                    <div class="col">
+                        <label for="last_name">Tutor Last Name</label>
+                        <div></div>
+                        <input name="last_name" type="text" placeholder="ex. Sherriff" maxlength="32">
+                    </div>
+                    <div class="col">
+                        <div style="margin-top: 20px"></div>
+                        <button type="submit" name="searchTutors" class="btn btn-success">Search</button>
+                    </div>
+                </div>
+        </form>
     </div>
-<div>
-{% for tutor in tutor_list %}
-  <a class="list-group-item-active" align="center">
-    <div id="box">
-      <h5 class="mb-1"> <a href='/view_tutors/{{tutor.id}}'class="list-group-item">{{ tutor.last_name }}, {{ tutor.first_name }} </a> </h5>
+    <hr>
+    <div class="container">
+        {% if tutor_list is None %}
+            <div align="center" style="padding: 30px">
+                <h5>No tutor matches your specifications</h5>
+            </div>
+        {% else %}
+            <div class="row row-cols-3" style="padding: 30px;">
+                {% for tutor in tutor_list %}
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-1" style="margin-top: 5px">
+                                    <a href='/view_tutors/{{tutor.id}}' class="list-group-item" style="background-color: transparent; text-align: center">
+                                        {{ tutor.first_name }} {{ tutor.last_name }}
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Ideally I'd want to put their respective courses here as a list!-->
+                                {{ tutor.email }}
+                                {{ tutor.bio }}
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
-  </a>
-{% endfor %}
 
-    {% if tutor_list is None %}
-    <div align="center">
-        <h5>No tutor matches your specifications</h5>
     </div>
-    {% endif %}
+</div>
 {% endblock %}
