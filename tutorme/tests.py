@@ -33,15 +33,16 @@ def create_tutor():
     testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu", password="password123")
     testTutorProfile = Profile(user=testTutorUser, email=testTutorUser.email, first_name="Jane",
                                last_name="Doe", is_student=False, is_tutor=True,
-                               bio="Test Tutor")
+                               bio="Test Tutor", hourly_rate=10, venmo="Jane.Doe25")
     return testTutorProfile
 
 def create_second_tutor():
     User = get_user_model()
+    User.save()
     testTutorUser = User.objects.create_user(username="TestTutor2", email="mst5k@virginia.edu", password="password123")
     testTutorProfile = Profile(user=testTutorUser, email=testTutorUser.email, first_name="Jane2",
                                last_name="Doe2", is_student=False, is_tutor=True,
-                               bio="Test Tutor 2")
+                               bio="Test Tutor 2", hourly_rate=15, venmo="Jane.Doe26")
     return testTutorProfile
 
 
@@ -80,8 +81,23 @@ class ProfileModelTests(TestCase):
     def test_Tutor_Bio(self):
         testTutor = create_tutor()
         self.assertEquals("Test Tutor", testTutor.bio)
+    def test_Tutor_Hourly_Rate(self):
+        testTutor = create_tutor()
+        self.assertEquals(10, testTutor.hourly_rate)
+    def test_Tutor_Venmo(self):
+        testTutor = create_tutor()
+        self.assertEquals("Jane.Doe25", testTutor.venmo)
 
-# class CourseModelTests(TestCase):
+
+def create_course(tutor_profile, subject, catalog_number, course_name) :
+    testCourse = Course(tutor_profile, subject, catalog_number, course_name)
+    return testCourse
+class CourseModelTests(TestCase):
+    def test_Valid_Course(self):
+        tutor = create_tutor()
+        testCourse = create_course(tutor, "APMA", 3100, "Probability")
+        # self.assertEquals("Probability", testCourse.course_name)
+
         
 
 # View Tests
