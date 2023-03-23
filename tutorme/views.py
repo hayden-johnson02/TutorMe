@@ -36,7 +36,10 @@ def profile_view(request):
     courses = Course.objects.filter(profile=request.user.profile)
     if not courses:
         courses = None
-    return render(request, 'profile.html', {'courses': courses})
+    tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+    if not tutor_sessions:
+        tutor_sessions = None
+    return render(request, 'profile.html', {'courses': courses, 'tutor_sessions': tutor_sessions})
 
 
 # https://dev.to/earthcomfy/django-update-user-profile-33ho
@@ -243,13 +246,13 @@ def tutor_list(request):
 @login_required(login_url='/login/')
 def tutor_page(request, tutor_id):
     if request.user.profile.is_student:
-        tutor_courses = []
-        for course in list(Course.objects.all()):
-            if course.profile.id == tutor_id:
-                course_string = course.subject + ' ' + str(course.catalog_number) + ' ' + course.course_name
-                tutor_courses.append(course_string)
-        context = {
-            'current_tutor': Profile.objects.get(pk=tutor_id),
-            'tutor_courses': tutor_courses
-        }
-        return render(request, 'view_tutor_profile.html', context)
+        current_tutor = Profile.objects.get(pk=tutor_id)
+        tutor_courses = Course.objects.filter(profile=current_tutor)
+        if not tutor_courses:
+            tutor_courses = None
+        tutor_sessions = TutorSession.objects.filter(tutor=current_tutor)
+        if not tutor_sessions:
+            tutor_sessions = None
+        return render(request, 'view_tutor_profile.html', {'current_tutor': current_tutor,
+                                                           'tutor_courses': tutor_courses,
+                                                           'tutor_sessions': tutor_sessions})

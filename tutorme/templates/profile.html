@@ -10,27 +10,31 @@
         <div class="card-body">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-                <p>Email: {{ user.email }}</p>
+                <label>Email: {{ user.email }}</label>
                 {% if user.profile.is_tutor %}
-                    <p>You are a tutor!</p>
-                    <p>Hourly Rate:
-                        {% if user.profile.hourly_rate is None %}
-                            Not set yet!
-                        {% else %}
-                            ${{ user.profile.hourly_rate }}
-                        {% endif %}
-
-                    </p>
-                    <p>Venmo:
-                        {% if user.profile.venmo is None %}
-                            Not set yet!
-                        {% else %}
-                            @{{ user.profile.venmo }}
-                        {% endif %}
-                    </p>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col">
+                            <label>Hourly Rate:
+                            {% if user.profile.hourly_rate is None %}
+                                Not set yet!
+                            {% else %}
+                                ${{ user.profile.hourly_rate }}
+                            {% endif %}
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label>Venmo:
+                            {% if user.profile.venmo is None %}
+                                Not set yet!
+                            {% else %}
+                                @{{ user.profile.venmo }}
+                            {% endif %}
+                            </label>
+                        </div>
+                    </div>
                 {% endif %}
                 {% if user.profile.is_student %}
-                    <p>You are a student!</p>
+                    <!-- Do we have anything specific to students? !-->
                 {% endif %}
                 <hr>
                 <label>Bio: </label>
@@ -39,19 +43,39 @@
                 {% else %}
                     <p>{{ user.profile.bio }}</p>
                 {% endif %}
-                {% if user.profile.is_tutor %}
-                    <label>Courses:</label>
-                    {% if courses is None %}
-                    <p>You have not added any courses yet!</p>
-                    {% else %}
-                        {% for c in courses %}
-                            <div>
-                                {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
                 <hr>
+                {% if user.profile.is_tutor %}
+                    <div class="row">
+                        <div class="col" style="border-right: 1px solid gainsboro">
+                            <label>Courses:</label>
+                            {% if courses is None %}
+                                <div></div>
+                                <label>You have not added any courses yet!</label>
+                            {% else %}
+                                {% for c in courses %}
+                                    <div>
+                                        {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <label>Available Times:</label>
+                            {% if tutor_sessions is None %}
+                                <div></div>
+                                <label>You have not added any available tutoring times yet!</label>
+                            {% else %}
+                                {% for s in tutor_sessions %}
+                                    <div>
+                                        {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                <hr>
+                {% endif %}
+
 {#                <a class="btn btn-outline-primary" href="{% url 'edit_profile' %}">Edit Profile</a>#}
             <td><a class="btn btn-outline-danger" href="delete/">Delete Account</a></td>
             {% endif %}
