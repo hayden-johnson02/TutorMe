@@ -180,57 +180,63 @@ def tutor_list(request):
     if request.user.profile.is_student and request.method == 'GET' and 'searchTutors' in request.GET:
         subject = request.GET.get('subject')
         course_num = request.GET.get('number')
-        course_name = request.GET.get('course_name')
         first_name = request.GET.get('first_name')
         last_name = request.GET.get('last_name')
+        course_name = request.GET.get('course_name')
+        all_tutors = list(Profile.objects.filter(is_tutor=True))
+        possible_tutors = all_tutors.copy()
 
-        tutor_list_initialized = False
-        course_list_initialized = False
-        possible_tutors = []
-        course_list = []
+        tutors_with_courses = []
+        for course in Course.objects.all():
+            tutors_with_courses.append(str(course.profile.id))
+        for tutor in all_tutors:
+            if str(tutor.id) not in tutors_with_courses:
+                    if subject != '' or course_name != '' or course_num != '':
+                        if Profile.objects.get(pk=tutor.id) in possible_tutors:
+                            possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
-        if subject != "":
-            course_list = Course.objects.all().filter(subject=subject)
-            course_list_initialized = True
-        if course_num != "":
-            if course_list_initialized:
-                course_list.filter(catalog_number=course_num)
-            else:
-                course_list = Course.objects.all().filter(catalog_number=course_num)
-                course_list_initialized = True
-        if course_name != "":
-            if course_list_initialized:
-                course_list.filter(course_name=course_name)
-            else:
-                course_list = Course.objects.all().filter(course_name=course_name)
-                course_list_initialized = True
+        possible_ids1 = []
+        if subject != '':
+            for current_course in Course.objects.all():
+                if str(current_course.subject).lower() == str(subject).lower():
+                    possible_ids1.append(str(current_course.profile.id))
+            for tutor in all_tutors:
+                if str(tutor.id) not in possible_ids1 and Profile.objects.get(pk=tutor.id) in possible_tutors:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
-        if course_list_initialized:
-            for course in course_list:
-                if course.profile not in possible_tutors:
-                    possible_tutors.append(course.profile)
-            if first_name != "":
-                possible_tutors.filter(first_name=first_name)
-            if last_name != "":
-                possible_tutors.filter(last_name=last_name)
-        else:
-            if first_name != "":
-                possible_tutors = Profile.objects.all().filter(is_tutor=True, first_name=first_name)
-                tutor_list_initialized = True
-            if last_name != "":
-                if tutor_list_initialized:
-                    possible_tutors.filter(last_name=last_name)
-                else:
-                    possible_tutors = Profile.objects.all().filter(is_tutor=True, last_name=last_name)
-                    tutor_list_initialized = True
+        possible_ids2 = []
+        if course_num != '':
+            for current_course in Course.objects.all():
+                if str(current_course.catalog_number) == str(course_num):
+                    possible_ids2.append(str(current_course.profile.id))
+            for tutor in all_tutors:
+                if str(tutor.id) not in possible_ids2 and Profile.objects.get(pk=tutor.id) in possible_tutors:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
+        possible_ids3 = []
+        if course_name != '':
+            for current_course in Course.objects.all():
+                if str(course_name).lower() in str(current_course.course_name).lower():
+                    possible_ids3.append(str(current_course.profile.id))
+            for tutor in all_tutors:
+                if str(tutor.id) not in possible_ids3 and Profile.objects.get(pk=tutor.id) in possible_tutors:
+                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
+        if first_name != '':
+            for tutor in all_tutors:
+                if str(tutor.first_name).lower() != str(first_name).lower():
+                    if len(possible_tutors) != 0 and Profile.objects.get(pk=tutor.id) in possible_tutors:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+
+        if last_name != '':
+            for tutor in all_tutors:
+                if tutor.last_name.lower() != last_name.lower():
+                    if len(possible_tutors) != 0 and Profile.objects.get(pk=tutor.id) in possible_tutors:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
         if len(possible_tutors) == 0:
             possible_tutors = None
-
-        if (course_list_initialized is False) and (tutor_list_initialized is False):
-            possible_tutors = Profile.objects.filter(is_tutor=True)   # aka they did not put any search queries
-
-        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors})
+        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors, 'possible_ids': possible_ids1})
     return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
 
 
