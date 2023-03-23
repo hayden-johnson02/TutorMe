@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import Profile, Course, TutorSession
 
@@ -51,6 +52,17 @@ class DynamicCourseForm(forms.Form):
 
 
 class CreateSessionForm(forms.ModelForm):
+
+    def clean(self):
+        cleaned_data = super(CreateSessionForm, self).clean()
+        start_time = cleaned_data.get('start_time')
+        end_time = cleaned_data.get('end_time')
+
+        if start_time.hour > end_time.hour:
+            raise ValidationError("End time must be after start time")
+        if end_time.hour == start_time.hour and start_time.minute > end_time.minute:
+                raise ValidationError("End time must be after start time")
+        return cleaned_data
 
     class Meta:
 

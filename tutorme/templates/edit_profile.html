@@ -128,6 +128,7 @@
         <div class="card-body" id="Sessions">
             <form method="post" action="#Sessions">
                 {% csrf_token %}
+                {{ create_session_form.non_field_errors }}
                 <div class="row">
                     <div class="col">
                         <div>
@@ -173,5 +174,5 @@
 </div>
 
 {% endif %}
-
+{{start}}
 {% endblock %}

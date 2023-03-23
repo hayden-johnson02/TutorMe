@@ -125,13 +125,14 @@ def edit_profile_view(request):
                 delete_course_form = None
 
     # https://stackoverflow.com/questions/50547018/delete-object-with-form-in-django
+    start = ''
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
         if create_session_form.is_valid():
+
             TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
     create_session_form = CreateSessionForm()
-
     tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
     if request.method == 'POST' and 'deleteTutorSessions' in request.POST:
         for sess in tutor_sessions_list:
