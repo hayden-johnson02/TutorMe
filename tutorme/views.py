@@ -126,20 +126,23 @@ def edit_profile_view(request):
 
     # https://stackoverflow.com/questions/50547018/delete-object-with-form-in-django
     start = ''
+    invalid_session_time = False
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
         if create_session_form.is_valid():
             TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
         else:
-            messages.error(request, "End time must be later than start time.")
-            create_session_form = CreateSessionForm()
+            # messages.error(request, "End time must be later than start time.")
+            invalid_session_time = True
     create_session_form = CreateSessionForm()
+
     tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
     if request.method == 'POST' and 'deleteTutorSessions' in request.POST:
         for sess in tutor_sessions_list:
             if str(sess.id) in request.POST:
                 TutorSession.objects.get(id=sess.id).delete()
+        tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
 
     if not tutor_sessions_list:
         tutor_sessions_list = None
@@ -149,7 +152,8 @@ def edit_profile_view(request):
                                                  'search_course_form': search_course_form,
                                                  'delete_course_form': delete_course_form,
                                                  'create_session_form': create_session_form,
-                                                 'tutor_sessions_list': tutor_sessions_list,})
+                                                 'tutor_sessions_list': tutor_sessions_list,
+                                                 'invalid_session_time': invalid_session_time})
 
 
 def create_account_view(request):
