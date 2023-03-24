@@ -2,7 +2,7 @@ from django.test import TestCase, SimpleTestCase
 from tutorme.models import Profile, Course, TutorSession, TutorRequest
 from django.urls import reverse, resolve
 from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, tutor_page, account_type_choice
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 # Model Tests
@@ -10,7 +10,6 @@ from django.contrib.auth import get_user_model
 
 
 def create_student():
-    User = get_user_model()
     testStudentUser = User.objects.create_user(username="TestStudent", email="mst4k@virginia.edu",
                                                password="password456")
     testStudentProfile = Profile(user=testStudentUser, email=testStudentUser.email, first_name="John",
@@ -19,7 +18,6 @@ def create_student():
     return testStudentProfile
 
 def create_second_student():
-    User = get_user_model()
     testStudentUser = User.objects.create_user(username="TestStudent2", email="mst2k@virginia.edu",
                                                password="password456")
     testStudentProfile = Profile(user=testStudentUser, email=testStudentUser.email, first_name="John2",
@@ -29,7 +27,6 @@ def create_second_student():
 
 
 def create_tutor():
-    User = get_user_model()
     testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu", password="password123")
     testTutorProfile = Profile(user=testTutorUser, email=testTutorUser.email, first_name="Jane",
                                last_name="Doe", is_student=False, is_tutor=True,
@@ -37,8 +34,6 @@ def create_tutor():
     return testTutorProfile
 
 def create_second_tutor():
-    User = get_user_model()
-    User.save()
     testTutorUser = User.objects.create_user(username="TestTutor2", email="mst5k@virginia.edu", password="password123")
     testTutorProfile = Profile(user=testTutorUser, email=testTutorUser.email, first_name="Jane2",
                                last_name="Doe2", is_student=False, is_tutor=True,
@@ -90,13 +85,14 @@ class ProfileModelTests(TestCase):
 
 
 def create_course(tutor_profile, subject, catalog_number, course_name) :
-    testCourse = Course(tutor_profile, subject, catalog_number, course_name)
+    testCourse = Course(profile=tutor_profile, subject=subject, catalog_number=catalog_number, course_name=course_name)
     return testCourse
+
 class CourseModelTests(TestCase):
     def test_Valid_Course(self):
         tutor = create_tutor()
         testCourse = create_course(tutor, "APMA", 3100, "Probability")
-        # self.assertEquals("Probability", testCourse.course_name)
+        self.assertEquals("Probability", testCourse.course_name)
 
         
 
