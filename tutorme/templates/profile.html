@@ -47,27 +47,27 @@
                 {% if user.profile.is_tutor %}
                     <div class="row">
                         <div class="col" style="border-right: 1px solid gainsboro">
-                            <label>Courses:</label>
+                            <label style="margin-bottom: 10px">Courses:</label>
                             {% if courses is None %}
                                 <div></div>
                                 <label>You have not added any courses yet!</label>
                             {% else %}
                                 {% for c in courses %}
                                     <div>
-                                        {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
+                                        - {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
                                     </div>
                                 {% endfor %}
                             {% endif %}
                         </div>
                         <div class="col">
-                            <label>Available Times:</label>
+                            <label style="margin-bottom: 10px">Available Times:</label>
                             {% if tutor_sessions is None %}
                                 <div></div>
                                 <label>You have not added any available tutoring times yet!</label>
                             {% else %}
                                 {% for s in tutor_sessions %}
                                     <div>
-                                        {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
+                                        - {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
                                     </div>
                                 {% endfor %}
                             {% endif %}
