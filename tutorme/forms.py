@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Profile, Course, TutorSession
+from .models import Profile, TutorSession
 
 
 class UserTypeForm(forms.Form):
@@ -82,5 +82,3 @@ class CreateSessionForm(forms.ModelForm):
             'start_time': forms.TimeInput(attrs={'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'type': 'time'})
         }
-
-

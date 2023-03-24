@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import datetime
 
 
 # Create your models here.
@@ -59,7 +58,7 @@ class TutorSession(models.Model):
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    description = models.TextField(max_length=600) # Student should put course they want help for in this description
+    description = models.TextField(max_length=600)  # Student should put course they want help for in this description
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
     date = models.DateField(auto_now=False, auto_now_add=False, default=None)
     is_accepted = models.BooleanField(default=None)

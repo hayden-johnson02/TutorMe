@@ -4,12 +4,10 @@ import logging
 import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
 from .models import Profile, Course, TutorSession
-from django.contrib import messages
 app_name = 'tutorme'
 
 
@@ -125,7 +123,6 @@ def edit_profile_view(request):
                 delete_course_form = None
 
     # https://stackoverflow.com/questions/50547018/delete-object-with-form-in-django
-    start = ''
     invalid_session_time = False
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
@@ -133,7 +130,6 @@ def edit_profile_view(request):
             TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
         else:
-            # messages.error(request, "End time must be later than start time.")
             invalid_session_time = True
     create_session_form = CreateSessionForm()
 
@@ -201,9 +197,9 @@ def tutor_list(request):
             tutors_with_courses.append(str(course.profile.id))
         for tutor in all_tutors:
             if str(tutor.id) not in tutors_with_courses:
-                    if subject != '' or course_name != '' or course_num != '':
-                        if Profile.objects.get(pk=tutor.id) in possible_tutors:
-                            possible_tutors.remove(Profile.objects.get(pk=tutor.id))
+                if subject != '' or course_name != '' or course_num != '':
+                    if Profile.objects.get(pk=tutor.id) in possible_tutors:
+                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
 
         possible_ids1 = []
         if subject != '':
