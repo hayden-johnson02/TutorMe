@@ -151,7 +151,11 @@
                         </div>
                     </div>
                 </div>
-            <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 20px">Create Session</button>
+                {% if invalid_session_time %}
+                    <label style="color: darkred; margin-top: 10px"> Make sure your ending time is after your start time!</label>
+                    <div></div>
+                {% endif %}
+                <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 10px">Create Session</button>
             </form>
             <div style="margin-top: 20px"></div>
             {% if tutor_sessions_list is None %}
