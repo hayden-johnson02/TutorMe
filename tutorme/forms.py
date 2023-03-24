@@ -61,8 +61,11 @@ class CreateSessionForm(forms.ModelForm):
         if start_time.hour > end_time.hour:
             raise ValidationError("End time must be after start time")
         if end_time.hour == start_time.hour and start_time.minute > end_time.minute:
-                raise ValidationError("End time must be after start time")
-        return cleaned_data
+            self._errors['end_time'] = self.error_class([
+                'Post Should Contain a minimum of 10 characters'])
+            raise ValidationError("End time must be after start time")
+
+        return self.cleaned_data
 
     class Meta:
 

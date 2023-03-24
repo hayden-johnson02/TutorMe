@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
 from .models import Profile, Course, TutorSession
-
+from django.contrib import messages
 app_name = 'tutorme'
 
 
@@ -129,9 +129,11 @@ def edit_profile_view(request):
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
         if create_session_form.is_valid():
-
             TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
                                         end_time=request.POST.get('end_time'), tutor=request.user.profile)
+        else:
+            messages.error(request, "End time must be later than start time.")
+            create_session_form = CreateSessionForm()
     create_session_form = CreateSessionForm()
     tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
     if request.method == 'POST' and 'deleteTutorSessions' in request.POST:
