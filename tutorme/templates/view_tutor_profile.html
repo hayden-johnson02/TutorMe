@@ -41,27 +41,29 @@
 
     <div class="row">
         <div class="col" style="border-right: 1px solid gainsboro">
-            <label>Courses I can tutor for:</label>
+            <label style="margin-bottom: 10px">Courses I can tutor for:</label>
             {% if tutor_courses is None %}
                 <div></div>
                 <label>This tutor has not added any courses yet!</label>
             {% else %}
                 {% for c in tutor_courses %}
                     <div>
-                        {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
+                        - {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
                     </div>
                 {% endfor %}
             {% endif %}
         </div>
         <div class="col">
-            <label>Times I am available:</label>
+            <label style="margin-bottom: 10px">Times I am available:</label>
             {% if tutor_sessions is None %}
                 <div></div>
                 <label>This tutor has not added any times yet!</label>
             {% else %}
                 {% for s in tutor_sessions %}
                     <div>
-                        {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
+                        <a href='[INSERT LINK TO A PAGE THAT ALLOWS YOU TO MAKE REQUEST (?) OR POPUP FORM FOR IT]' class="list-group-item" style="background-color: transparent; text-align: center">
+                            {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
+                        </a>
                     </div>
                 {% endfor %}
             {% endif %}
