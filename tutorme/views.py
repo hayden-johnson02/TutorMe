@@ -304,6 +304,12 @@ def tutor_list(request):
         'filter_min_rating': min_rating,
     })
 
+@login_required(login_url='/login/')
+def delete_review(request, review_id):
+    review = Review.objects.get(pk=review_id)
+    if request.user == review.reviewer:
+        review.delete()
+    return redirect('/view_tutors/' + str(review.tutor.profile.id))
 
 
 @login_required(login_url='/login/')
@@ -314,8 +320,8 @@ def view_tutor(request, tutor_id):
             form = ReviewForm(request.POST)
             if form.is_valid():
                 review = form.save(commit=False)
-                review.tutor = tutor
-                review.reviewer = request.user.profile
+                review.tutor = tutor.user
+                review.reviewer = request.user
                 review.save()
                 return redirect('/view_tutors/' + str(tutor_id))
         else:
@@ -323,7 +329,7 @@ def view_tutor(request, tutor_id):
 
         tutor_courses = Course.objects.filter(profile=tutor)
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
-        reviews = Review.objects.filter(tutor=tutor)
+        reviews = Review.objects.filter(tutor=tutor.user)
 
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,

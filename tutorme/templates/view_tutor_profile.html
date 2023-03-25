@@ -10,7 +10,7 @@
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h5>
                 </div>
-                <div style="margin-top: 10px">Email: {{ current_tutor.email }}</div>
+                <div>Email: {{ current_tutor.email }}</div>
                 <div class="row" style="margin-top: 10px">
                     <div class="col">
                         <label>
@@ -60,23 +60,31 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <h2>Add a Review</h2>
-        <form method="post" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Submit Review</button>
-        </form>
-        <hr>
-        {% for review in reviews %}
-            <div class="review">
-                <div class="reviewer">{{ review.reviewer.username }}</div>
-                <div class="rating">Rating: {{ review.rating }} stars</div>
-                <div class="comment">{{ review.comment }}</div>
-                <div class="created_at">{{ review.created_at }}</div>
+            <div class="col-md-4">
+                <h2>Add a Review</h2>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Submit Review</button>
+                </form>
+                <hr>
+                {% for review in reviews %}
+                    <div class="review">
+                        <div class="reviewer">Reviewer: {{ review.reviewer.username }}</div>
+                        <div class="rating">Rating: {{ review.rating }} stars</div>
+                        <div class="comment">{{ review.comment }}</div>
+                        <div class="created_at">{{ review.created_at }}</div>
+                        {% if review.reviewer == user %}
+                            <div >
+                                <a href="{% url 'delete_review' review.id %}">Delete Review</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr>
+                {% endfor %}
             </div>
-            <hr>
-        {% endfor %}
+        </div>
+    </div>
     {% endblock %}
-</div>
+
+

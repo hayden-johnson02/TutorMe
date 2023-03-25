@@ -31,4 +31,5 @@ urlpatterns = [
     path('account_type_choice/', views.account_type_choice, name='account_type_choice'),
     path('view_tutors/', views.tutor_list, name='view_tutors'),
     path('view_tutors/<int:tutor_id>/', views.view_tutor, name='view_tutor'),
+    path('delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
 ]

@@ -32,7 +32,7 @@ class Profile(models.Model):
         instance.profile.save()
 
     def average_rating(self):
-        reviews = Review.objects.filter(tutor=self)
+        reviews = Review.objects.filter(tutor=self.user)
         if len(reviews) == 0:
             return 0
         else:
@@ -53,8 +53,8 @@ class Course(models.Model):
 
 
 class Review(models.Model):
-    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_reviews')
-    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviewer_reviews')
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutor_reviews')
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviewer_reviews')
     rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)], default=5)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
