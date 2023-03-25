@@ -38,12 +38,9 @@ class Profile(models.Model):
         else:
             return round(sum([review.rating for review in reviews]) / len(reviews),1)
 
-    def tutor_sessions(self):
-        return TutorSession.objects.filter(tutor=self)
-
     def courses(self):
         return Course.objects.filter(profile=self)
-    
+
     def __delete__(self):
         self.user.delete()
 
@@ -81,10 +78,23 @@ class TutorSession(models.Model):
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
 
+    def __str__(self):
+        return f'{self.tutor} {self.day} {self.start_time} - {self.end_time}'
+
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    description = models.TextField(max_length=600) # Student should put course they want help for in this description
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
-    date = models.DateField(auto_now=False, auto_now_add=False, default=None)
     is_accepted = models.BooleanField(default=None)
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_tutor')
+    description = models.TextField(max_length=1200, blank=True, null=True, default=None)
+
+    def accept(self):
+        self.is_accepted = True
+        self.save()
+        return self.is_accepted
+
+    def reject(self):
+        self.is_accepted = False
+        self.delete()

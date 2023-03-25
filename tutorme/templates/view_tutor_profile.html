@@ -2,11 +2,13 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Profile{% endblock %}
 {% block content %}
-    <div class="container mt-3">
-        <h2 class="text-center mb-3">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h2>
-        <div class="row">
-            <div class="col-md-8">
+    <div class="container">
+{#        <h2 class="text-center mb-3">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h2>#}
+        <div class="row px-5 py-5">
+        <div class="col-md-8">
+            <div class="border rounded bg-light px-5 py-3">
                 <h5 class="text-center mb-3 mt-2">Profile</h5>
+            <hr>
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h5>
                 </div>
@@ -52,16 +54,18 @@
                     <div class="col">
                         <label>Times I am available:</label>
                         {% if tutor_sessions is None %}
-                            <div></div>
                             <label>This tutor has not added any times yet!</label>
                         {% else %}
-                            {% for s in tutor_sessions %}<div>{{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>{% endfor %}
+                            {% for s in tutor_sessions %}
+                                <div>{{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <h2>Add a Review</h2>
+        </div>
+            <div class="col-md-4 border rounded bg-light ">
+                <h5 class="text-center mb-3 mt-2">Add a Review</h5>
                 <form method="post" action="">
                     {% csrf_token %}
                     {{ form.comment }}
