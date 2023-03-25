@@ -20,7 +20,6 @@ class Profile(models.Model):
     hourly_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)],
                                       blank=True, null=True, default=None)
     venmo = models.CharField(max_length=256, blank=True, null=True, default=None)
-
     # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -31,9 +30,19 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
+
+    def average_rating(self):
+        reviews = Review.objects.filter(tutor=self)
+        if len(reviews) == 0:
+            return 0
+        else:
+            return round(sum([review.rating for review in reviews]) / len(reviews),1)
     
     def __delete__(self):
         self.user.delete()
+
+    def __str__(self):
+        return f'Name: {self.first_name} {self.last_name}; Email: {self.email}; Is Tutor: {self.is_tutor}; Is Student: {self.is_student}; Bio: {self.bio}; Hourly Rate: {self.hourly_rate}; Venmo: {self.venmo}'
 
 
 class Course(models.Model):
@@ -42,6 +51,16 @@ class Course(models.Model):
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
     course_name = models.CharField(max_length=256)
 
+
+class Review(models.Model):
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_reviews')
+    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviewer_reviews')
+    rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)], default=5)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review by {self.reviewer}'
 
 class TutorSession(models.Model):
     DAYS_OF_WEEK = [('Monday', 'Monday'),

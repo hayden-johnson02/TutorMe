@@ -42,6 +42,15 @@
                             <input name="last_name" type="text" class="form-control" placeholder="ex. Sherriff" maxlength="32" value="{{ filter_last_name }}" {% if filter_last_name %}readonly{% endif %}>
                         </div>
                     </div>
+                    <div class="form-group row mb-2">
+                        <label for="min_rating" class="col-sm-3 col-form-label">Min Rating:</label>
+                        <div class="col-sm-1 mt-2">
+                            <span id="min_rating_value" class="ml-2">{{ filter_min_rating }}</span>
+                        </div>
+                        <div class="col-sm-8 align-items-center mt-2 ">
+                            <input type="range" class="form-range" min="0" max="5" step="1" id="min_rating" name="min_rating" value="{{ filter_min_rating }}">
+                        </div>
+                    </div>
                     <div class="form-group row mt-3 mb-3">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="submit" name="clearSearch" class="btn btn-secondary">Clear</button>
@@ -67,7 +76,7 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ current_tutor.id }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ current_tutor.id }}" aria-expanded="false" aria-controls="collapse{{ current_tutor.id }}">
-                                        {{ current_tutor.first_name }} {{ current_tutor.last_name }} - {{ current_tutor.email }}
+                                        {{ current_tutor.first_name }} {{ current_tutor.last_name }} - {{ current_tutor.email }} - Rating: {{ current_tutor.average_rating }}
                                     </button>
                                 </h2>
                                 <div id="collapse{{ current_tutor.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ current_tutor.id }}" data-bs-parent="#tutorAccordion">
@@ -122,6 +131,9 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
+                                            <div class="btn-group mt-2" role="group">
+                                                <a type="button" class="btn btn-success" href="/view_tutors/{{ current_tutor.id }}">View Profile</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -149,6 +161,10 @@
             }
         });
     });
+
+  document.getElementById("min_rating").addEventListener("input", function() {
+      document.getElementById("min_rating_value").innerHTML = this.value;
+  });
 </script>
 
 {% endblock %}

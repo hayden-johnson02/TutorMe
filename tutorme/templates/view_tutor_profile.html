@@ -2,72 +2,81 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Profile{% endblock %}
 {% block content %}
-
-<div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 900px">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ current_tutor.first_name }} {{current_tutor.last_name}}</h5>
-    </div>
-    <div style="margin-top: 10px">
-        Email: {{ current_tutor.email }}
-    </div>
-        <div class="row" style="margin-top: 10px">
-        <div class="col">
-            <label>Hourly Rate:
-            {% if current_tutor.profile.hourly_rate is None %}
-                Not set yet!
-            {% else %}
-                ${{ current_tutor.profile.hourly_rate }}
-            {% endif %}
-            </label>
+    <div class="container mt-3">
+        <h2 class="text-center mb-3">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="text-center mb-3 mt-2">Profile</h5>
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ current_tutor.first_name }} {{ current_tutor.last_name }}</h5>
+                </div>
+                <div style="margin-top: 10px">Email: {{ current_tutor.email }}</div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col">
+                        <label>
+                            Hourly Rate:
+                            {% if current_tutor.profile.hourly_rate is None %}
+                                Not set yet!
+                            {% else %}
+                                ${{ current_tutor.profile.hourly_rate }}
+                            {% endif %}
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label>
+                            Venmo:
+                            {% if current_tutor.profile.venmo is None %}
+                                Not set yet!
+                            {% else %}
+                                @{{ current_tutor.profile.venmo }}
+                            {% endif %}
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <hr>
+                    Bio:
+                </div>
+                <div>{{ current_tutor.bio }}</div>
+                <hr>
+                <div class="row">
+                    <div class="col" style="border-right: 1px solid gainsboro">
+                        <label>Courses I can tutor for:</label>
+                        {% if tutor_courses is None %}
+                            <div></div>
+                            <label>This tutor has not added any courses yet!</label>
+                        {% else %}
+                            {% for c in tutor_courses %}<div>{{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}</div>{% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        <label>Times I am available:</label>
+                        {% if tutor_sessions is None %}
+                            <div></div>
+                            <label>This tutor has not added any times yet!</label>
+                        {% else %}
+                            {% for s in tutor_sessions %}<div>{{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>{% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <label>Venmo:
-            {% if current_tutor.profile.venmo is None %}
-                Not set yet!
-            {% else %}
-                @{{ current_tutor.profile.venmo }}
-            {% endif %}
-            </label>
-        </div>
-    </div>
-    <div>
         <hr>
-        Bio:
-    </div>
-    <div>
-        {{ current_tutor.bio }}
-    </div>
-
-    <hr>
-
-    <div class="row">
-        <div class="col" style="border-right: 1px solid gainsboro">
-            <label>Courses I can tutor for:</label>
-            {% if tutor_courses is None %}
-                <div></div>
-                <label>This tutor has not added any courses yet!</label>
-            {% else %}
-                {% for c in tutor_courses %}
-                    <div>
-                        {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-        <div class="col">
-            <label>Times I am available:</label>
-            {% if tutor_sessions is None %}
-                <div></div>
-                <label>This tutor has not added any times yet!</label>
-            {% else %}
-                {% for s in tutor_sessions %}
-                    <div>
-                        {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </div>
-
-{% endblock %}
+        <h2>Add a Review</h2>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Review</button>
+        </form>
+        <hr>
+        {% for review in reviews %}
+            <div class="review">
+                <div class="reviewer">{{ review.reviewer.username }}</div>
+                <div class="rating">Rating: {{ review.rating }} stars</div>
+                <div class="comment">{{ review.comment }}</div>
+                <div class="created_at">{{ review.created_at }}</div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endblock %}
 </div>

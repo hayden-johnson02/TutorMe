@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
-from .models import Profile, Course, TutorSession
+from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm
+from .models import Profile, Course, TutorSession, Review
 
 from django.db.models import Q
 
@@ -250,7 +250,7 @@ def tutor_list_old(request):
 @login_required(login_url='/login/')
 def tutor_list(request):
     if 'clearSearch' in request.GET or 'searchTutors' not in request.GET:
-        keys = ['subject', 'course_number', 'first_name', 'last_name', 'course_name']
+        keys = ['subject', 'course_number', 'first_name', 'last_name', 'course_name', 'min_rating']
         for key in keys:
             if key in request.session:
                 del request.session[key]
@@ -260,6 +260,7 @@ def tutor_list(request):
         request.session['first_name'] = request.GET.get('first_name') if request.GET.get('first_name') else ''
         request.session['last_name'] = request.GET.get('last_name') if request.GET.get('last_name') else ''
         request.session['course_name'] = request.GET.get('course_name') if request.GET.get('course_name') else ''
+        request.session['min_rating'] = request.GET.get('min_rating') if request.GET.get('min_rating') else 0
 
     # Retrieve filter values from the session
     subject = request.session.get('subject', '')
@@ -267,6 +268,7 @@ def tutor_list(request):
     first_name = request.session.get('first_name', '')
     last_name = request.session.get('last_name', '')
     course_name = request.session.get('course_name', '')
+    min_rating = request.session.get('min_rating', 0)
 
     # Filter by subject, course number, and course name
     course_filters = Q()
@@ -285,7 +287,13 @@ def tutor_list(request):
 
     possible_tutors = Profile.objects.filter(profile_filters).filter(course_filters).distinct()
 
-    print(f'rendering with filters: Subject={subject}, Course Number={course_num}, First Name={first_name}, Last Name={last_name}, Course Name={course_name}')
+    # Filter by rating
+    for tutor in possible_tutors:
+        if tutor.average_rating() < float(min_rating):
+            possible_tutors = possible_tutors.exclude(pk=tutor.pk)
+
+
+    print(f'rendering with filters: Subject={subject}, Course Number={course_num}, First Name={first_name}, Last Name={last_name}, Course Name={course_name} and Min Rating={min_rating}')
     return render(request, 'view_tutors.html', {
         'tutor_list': possible_tutors,
         'filter_subject': subject,
@@ -293,21 +301,33 @@ def tutor_list(request):
         'filter_first_name': first_name,
         'filter_last_name': last_name,
         'filter_course_name': course_name,
+        'filter_min_rating': min_rating,
     })
 
 
 
 @login_required(login_url='/login/')
-def tutor_page(request, tutor_id):
+def view_tutor(request, tutor_id):
     if request.user.profile.is_student:
-        current_tutor = Profile.objects.get(pk=tutor_id)
-        tutor_courses = Course.objects.filter(profile=current_tutor)
-        if not tutor_courses:
-            tutor_courses = None
-        tutor_sessions = TutorSession.objects.filter(tutor=current_tutor)
-        if not tutor_sessions:
-            tutor_sessions = None
-        return render(request, 'view_tutor_profile.html', {'current_tutor': current_tutor,
+        tutor = Profile.objects.get(pk=tutor_id)
+        if request.method == 'POST':
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.tutor = tutor
+                review.reviewer = request.user.profile
+                review.save()
+                return redirect('/view_tutors/' + str(tutor_id))
+        else:
+            form = ReviewForm()
+
+        tutor_courses = Course.objects.filter(profile=tutor)
+        tutor_sessions = TutorSession.objects.filter(tutor=tutor)
+        reviews = Review.objects.filter(tutor=tutor)
+
+        return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
-                                                           'tutor_sessions': tutor_sessions})
+                                                           'tutor_sessions': tutor_sessions,
+                                                           'reviews': reviews,
+                                                           'form': form})
     return render(request, 'index.html', {})

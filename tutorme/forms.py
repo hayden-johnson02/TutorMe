@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Profile, Course, TutorSession
+from .models import Profile, Course, TutorSession, Review
 
 
 class UserTypeForm(forms.Form):
@@ -82,4 +82,11 @@ class CreateSessionForm(forms.ModelForm):
             'end_time': forms.TimeInput(attrs={'type': 'time'})
         }
 
-
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.Select(choices=[(i, i) for i in range(1, 6)]),
+            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Write your review here...'})
+        }
