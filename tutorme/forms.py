@@ -61,7 +61,7 @@ class CreateSessionForm(forms.ModelForm):
         if start_time.hour > end_time.hour:
             raise ValidationError("End time must be after start time")
         if end_time.hour == start_time.hour and start_time.minute > end_time.minute:
-                raise ValidationError("End time must be after start time")
+            raise ValidationError("End time must be after start time")
         return cleaned_data
 
     class Meta:
@@ -82,11 +82,15 @@ class CreateSessionForm(forms.ModelForm):
             'end_time': forms.TimeInput(attrs={'type': 'time'})
         }
 
+
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'comment']
         widgets = {
-            'rating': forms.Select(choices=[(i, i) for i in range(1, 6)]),
-            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Write your review here...'})
+            'rating': forms.NumberInput(attrs={'class': 'form-range', 'type': 'range', 'min': '1', 'max': '5', 'step': '1',
+                                          'id': 'rating'}),
+            'comment': forms.Textarea(
+                attrs={'class': 'form-control mt-3 mb-3', 'placeholder': 'Leave a review here!', 'height': '100px',
+                       'id': 'comment'})
         }

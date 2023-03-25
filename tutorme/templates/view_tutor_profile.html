@@ -64,9 +64,23 @@
                 <h2>Add a Review</h2>
                 <form method="post" action="">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Submit Review</button>
-                </form>
+                    {{ form.comment }}
+                     <div class="form-group row mb-2">
+                        <label for="rating" class="col-sm-2 col-form-label">Rating:</label>
+                         <div class="col-sm-1 mt-2">
+                            <span id="rating_value" class="ml-2">5</span>
+                        </div>
+                        <div class="col-sm-8 align-items-center mt-2 ">
+                            {{ form.rating }}
+                        </div>
+
+                    </div>
+                    <div class="form-group row mt-3 mb-3">
+                         <div class="btn-group" role="group">
+                            <button class="btn btn-secondary" type="submit">Submit Review</button>
+                        </div>
+                    </div>
+               </form>
                 <hr>
                 {% for review in reviews %}
                     <div class="review">
@@ -76,7 +90,7 @@
                         <div class="created_at">{{ review.created_at }}</div>
                         {% if review.reviewer == user %}
                             <div >
-                                <a href="{% url 'delete_review' review.id %}">Delete Review</a>
+                                <a class="btn btn-outline-danger" href="{% url 'delete_review' review.id %}">Delete Review</a>
                             </div>
                         {% endif %}
                     </div>
@@ -85,6 +99,13 @@
             </div>
         </div>
     </div>
+
+<script>
+  document.getElementById("rating").addEventListener("input", function() {
+      document.getElementById("rating_value").innerHTML = this.value;
+  });
+</script>
+
     {% endblock %}
 
 
