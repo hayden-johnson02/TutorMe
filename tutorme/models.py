@@ -37,6 +37,12 @@ class Profile(models.Model):
             return 0
         else:
             return round(sum([review.rating for review in reviews]) / len(reviews),1)
+
+    def tutor_sessions(self):
+        return TutorSession.objects.filter(tutor=self)
+
+    def courses(self):
+        return Course.objects.filter(profile=self)
     
     def __delete__(self):
         self.user.delete()

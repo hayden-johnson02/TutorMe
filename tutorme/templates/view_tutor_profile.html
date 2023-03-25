@@ -15,20 +15,20 @@
                     <div class="col">
                         <label>
                             Hourly Rate:
-                            {% if current_tutor.profile.hourly_rate is None %}
+                            {% if current_tutor.hourly_rate is None %}
                                 Not set yet!
                             {% else %}
-                                ${{ current_tutor.profile.hourly_rate }}
+                                ${{ current_tutor.hourly_rate }}
                             {% endif %}
                         </label>
                     </div>
                     <div class="col">
                         <label>
                             Venmo:
-                            {% if current_tutor.profile.venmo is None %}
+                            {% if current_tutor.venmo is None %}
                                 Not set yet!
                             {% else %}
-                                @{{ current_tutor.profile.venmo }}
+                                @{{ current_tutor.venmo }}
                             {% endif %}
                         </label>
                     </div>

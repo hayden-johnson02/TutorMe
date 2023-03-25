@@ -84,19 +84,19 @@
                                         <div class="row mt-2">
                                             <div class="col">
                                                 <label>Hourly Rate:
-                                                {% if current_tutor.profile.hourly_rate is None %}
+                                                {% if current_tutor.hourly_rate is None %}
                                                     Not set yet!
                                                 {% else %}
-                                                    ${{ current_tutor.profile.hourly_rate }}
+                                                    ${{ current_tutor.hourly_rate }}
                                                 {% endif %}
                                                 </label>
                                             </div>
                                             <div class="col">
                                                 <label>Venmo:
-                                                {% if current_tutor.profile.venmo is None %}
+                                                {% if current_tutor.venmo is None %}
                                                     Not set yet!
                                                 {% else %}
-                                                    @{{ current_tutor.profile.venmo }}
+                                                    @{{ current_tutor.venmo }}
                                                 {% endif %}
                                                 </label>
                                             </div>
@@ -112,11 +112,11 @@
                                         <div class="row">
                                             <div class="col" style="border-right: 1px solid gainsboro">
                                                 <label>Courses I can tutor for:</label>
-                                                {% if current_tutor.tutor_courses is None %}
+                                                {% if current_tutor.courses is None %}
                                                     <div></div>
                                                     <label>This tutor has not added any courses yet!</label>
                                                 {% else %}
-                                                    {% for c in current_tutor.tutor_courses %}
+                                                    {% for c in current_tutor.courses %}
                                                         <div>{{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}</div>
                                                     {% endfor %}
                                                 {% endif %}
