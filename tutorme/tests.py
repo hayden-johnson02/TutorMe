@@ -1,7 +1,7 @@
 from django.test import TestCase, SimpleTestCase
 from tutorme.models import Profile, Course, TutorSession, TutorRequest
 from django.urls import reverse, resolve
-from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, tutor_page, account_type_choice
+from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, account_type_choice
 from django.contrib.auth import get_user_model
 
 
