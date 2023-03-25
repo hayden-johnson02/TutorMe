@@ -10,6 +10,8 @@ from django.shortcuts import redirect, render
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm
 from .models import Profile, Course, TutorSession
 
+from django.db.models import Q
+
 app_name = 'tutorme'
 
 
@@ -180,7 +182,7 @@ def delete_profile_view(request):
 
 
 @login_required(login_url='/login/')
-def tutor_list(request):
+def tutor_list_old(request):
     if request.user.profile.is_student and request.method == 'GET' and 'searchTutors' in request.GET:
         subject = request.GET.get('subject')
         course_num = request.GET.get('number')
@@ -243,6 +245,55 @@ def tutor_list(request):
         return render(request, 'view_tutors.html', {'tutor_list': possible_tutors, 'possible_ids': possible_ids1})
     return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
 
+@login_required(login_url='/login/')
+def tutor_list(request):
+    if 'clearSearch' in request.GET or 'searchTutors' not in request.GET:
+        keys = ['subject', 'course_number', 'first_name', 'last_name', 'course_name']
+        for key in keys:
+            if key in request.session:
+                del request.session[key]
+    if request.user.profile.is_student and request.method == 'GET' and 'searchTutors' in request.GET:
+        request.session['subject'] = request.GET.get('subject') if request.GET.get('subject') else ''
+        request.session['course_number'] = request.GET.get('course_number') if request.GET.get('course_number') else ''
+        request.session['first_name'] = request.GET.get('first_name') if request.GET.get('first_name') else ''
+        request.session['last_name'] = request.GET.get('last_name') if request.GET.get('last_name') else ''
+        request.session['course_name'] = request.GET.get('course_name') if request.GET.get('course_name') else ''
+
+    # Retrieve filter values from the session
+    subject = request.session.get('subject', '')
+    course_num = request.session.get('course_number', '')
+    first_name = request.session.get('first_name', '')
+    last_name = request.session.get('last_name', '')
+    course_name = request.session.get('course_name', '')
+
+    # Filter by subject, course number, and course name
+    course_filters = Q()
+    if subject != '':
+        course_filters &= Q(course__subject__iexact=subject)
+    if course_num != '':
+        course_filters &= Q(course__catalog_number=course_num)
+    if course_name != '':
+        course_filters &= Q(course__course_name__icontains=course_name)
+
+    profile_filters = Q(is_tutor=True)
+    if first_name != '':
+        profile_filters &= Q(first_name__iexact=first_name)
+    if last_name != '':
+        profile_filters &= Q(last_name__iexact=last_name)
+
+    possible_tutors = Profile.objects.filter(profile_filters).filter(course_filters).distinct()
+
+    print(f'rendering with filters: Subject={subject}, Course Number={course_num}, First Name={first_name}, Last Name={last_name}, Course Name={course_name}')
+    return render(request, 'view_tutors.html', {
+        'tutor_list': possible_tutors,
+        'filter_subject': subject,
+        'filter_course_number': course_num,
+        'filter_first_name': first_name,
+        'filter_last_name': last_name,
+        'filter_course_name': course_name,
+    })
+
+
 
 @login_required(login_url='/login/')
 def tutor_page(request, tutor_id):
@@ -257,3 +308,4 @@ def tutor_page(request, tutor_id):
         return render(request, 'view_tutor_profile.html', {'current_tutor': current_tutor,
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions})
+    return render(request, 'index.html', {})
