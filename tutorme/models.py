@@ -84,10 +84,9 @@ class TutorSession(models.Model):
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
     is_accepted = models.BooleanField(default=None)
-    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_tutor')
     description = models.TextField(max_length=1200, blank=True, null=True, default=None)
 
     def accept(self):
