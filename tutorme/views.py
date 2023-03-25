@@ -44,6 +44,8 @@ def profile_view(request):
     return render(request, 'profile.html', {'courses': courses, 'tutor_sessions': tutor_sessions})
 
 
+
+
 # https://dev.to/earthcomfy/django-update-user-profile-33ho
 # https://stackoverflow.com/questions/54438473/how-to-execute-file-py-on-html-button-press-using-django/54451774#54451774
 @login_required(login_url='/login/')

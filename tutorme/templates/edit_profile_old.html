@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Tutor Me | Profile{% endblock %}
+{% block content %}
+
+{% load socialaccount %}
+{% if user.is_authenticated %}
+
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 900px">
+    <div class="card">
+        <div class="card-header">
+            <h3 style="margin-top: 10px">Edit Profile</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            {{ form.first_name }}
+                            <label for="fname">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            {{ form.last_name }}
+                            <label for="lname">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.email }}
+                    <label for="email">Email</label>
+                </div>
+                {% if user.profile.is_tutor %}
+                    <div class="row">
+                        <div class="col" style="max-width: 300px">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Hourly Rate</span>
+                                <span class="input-group-text">$</span>
+                                {{ form.hourly_rate }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Venmo</span>
+                                <span class="input-group-text">@</span>
+                                {{ form.venmo }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                 <span class="input-group-text">Biography</span>
+                {{ form.bio }}
+            <button type="submit" name="editProfile" class="btn btn-success" style="margin-top: 20px">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    {% if user.profile.is_tutor %}
+        <div class="card">
+            <div class="card-header">
+                <h3 style="margin-top: 10px">Add/Remove Courses</h3>
+            </div>
+            <div class="card-body" id="searchC">
+                <form action="#searchC" method="get">
+                    {% csrf_token %}
+                    <label>Search for Courses to Add:</label>
+                    <div class="row align-items-center">
+                        <div class="col" style="max-width: 150px">
+                            <label for="subject">Subject</label>
+                            <div></div>
+                            <input name="subject" type="text" style="max-width: 100px" placeholder="ex. CS" maxlength="4">
+                        </div>
+                        <div class="col" style="max-width: 150px">
+                            <label for="number">Course Number</label>
+                            <div></div>
+                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                        </div>
+                        <div class="col">
+                            <label for="courseName">Course Name</label>
+                            <div></div>
+                            <input name="courseName" type="text" style="min-width: 200px" placeholder="ex. Discrete Math" maxlength="50">
+                        </div>
+                        <div class="col">
+                            <div style="margin-top: 20px"></div>
+                            <button type="submit" name="searchCourses" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                </form>
+                {% if clist is None %}
+                    <label style="margin-bottom: 20px">Search for courses you would like to add to your profile!</label>
+                {% else %}
+                    <div style="margin-bottom: 20px"></div>
+                    <form action="#searchC" method="post">
+                        {% csrf_token %}
+                        {% if search_course_form is None %}
+                            <label style="margin-bottom: 20px">Search for a valid course!</label>
+                        {% else %}
+                            <label>Add courses to your profile: </label>
+                            <div></div>
+                            {{ search_course_form }}
+                            <button type="submit" name="addCourses" value ="{{ clist }}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+                <div id="removeC"></div>
+                <form action="#removeC" method="post" id="addCourseForm">
+                    {% csrf_token %}
+                    {% if delete_course_form is None %}
+                        <label>You have no courses on your profile to remove.</label>
+                    {% else %}
+                        <label>Remove courses from your profile: </label>
+                        <div></div>
+                        {{ delete_course_form }}
+                        <div>
+                            <button type="submit" name="removeCourses" class="btn btn-outline-danger" style="margin-top: 20px">Remove Courses</button>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    {% if user.profile.is_tutor %}
+        <div class="card">
+        <div class="card-header">
+            <h3 style="margin-top: 10px">Add/Remove Available Tutoring Times</h3>
+        </div>
+        <div class="card-body" id="Sessions">
+            <form method="post" action="#Sessions">
+                {% csrf_token %}
+                {{ create_session_form.non_field_errors }}
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <label for="day">Day</label>
+                            {{ create_session_form.day }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time !-->
+                        <!-- Possible other https://bootstrap-vue.org/docs/components/form-timepicker !-->
+                        <div>
+                            <label for="start_time">Start Time</label>
+                            {{ create_session_form.start_time }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>
+                            <label for="end_time">End Time</label>
+                            {{ create_session_form.end_time }}
+                        </div>
+                    </div>
+                </div>
+            <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 20px">Create Session</button>
+            </form>
+            <div style="margin-top: 20px"></div>
+            {% if tutor_sessions_list is None %}
+                <label>You have no sessions on your profile to remove.</label>
+            {% else %}
+                <form method="post" action="#Sessions" name="deleteSessionForm">
+                    {% csrf_token %}
+                     <label>Select sessions you would like to remove from your profile:</label>
+                    <div></div>
+                    {% for session in tutor_sessions_list %}
+                        <input type="checkbox" value="{{ session.id }}" name="{{ session.id }}">
+                        {{ session.day }}, {{ session.start_time }} to {{ session.end_time }}
+                        <div></div>
+                    {% endfor %}
+                    <button type="submit" name="deleteTutorSessions" class="btn btn-outline-danger" style="margin-top: 20px">Delete Sessions</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% endif %}
+{{start}}
+{% endblock %}
