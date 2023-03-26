@@ -285,13 +285,12 @@ def tutor_list(request):
     if last_name != '':
         profile_filters &= Q(last_name__iexact=last_name)
 
-    possible_tutors = Profile.objects.filter(profile_filters).filter(course_filters).distinct()
+    possible_tutors = Profile.objects.filter(profile_filters).filter(course_filters).order_by('first_name').distinct()
 
     # Filter by rating
     for tutor in possible_tutors:
         if tutor.average_rating() < float(min_rating):
             possible_tutors = possible_tutors.exclude(pk=tutor.pk)
-
 
     print(f'rendering with filters: Subject={subject}, Course Number={course_num}, First Name={first_name}, Last Name={last_name}, Course Name={course_name} and Min Rating={min_rating}')
     return render(request, 'view_tutors.html', {
