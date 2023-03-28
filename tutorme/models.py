@@ -39,6 +39,9 @@ class Profile(models.Model):
             return round(sum([review.rating for review in reviews]) / len(reviews),1)
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
+    
+    def get_sessions(self):
+        return TutorSession.objects.filter(tutor=self.user)
 
     def courses(self):
         return Course.objects.filter(profile=self)

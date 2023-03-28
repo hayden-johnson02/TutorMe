@@ -260,7 +260,7 @@ def view_tutor(request, tutor_id):
                     review.reviewer = request.user
                     review.save()
                     return redirect('/view_tutors/' + str(tutor_id))
-            if 'session_request' in request.POST:
+            if 'session_request' in request.POST and not TutorSession.objects.filter(pk=request.POST.get('session_request')).exists(): 
                 # session_request = session.id
                 # submitting a session request
                 comment = request.POST.get('comment')
@@ -314,12 +314,13 @@ def requests_page_update(request, request_id):
     except:
         print('error')
 
-    return requests_page(request ) 
+    return requests_page(request) 
 
 
 
 @login_required(login_url='/login/')
 def student_sessions(request):
+
     if request.user.profile.is_student:
 
         return render(request, 'student_sessions.html', {'student_sessions': TutorRequest.objects.filter(student=request.user.profile) }) 
@@ -341,4 +342,4 @@ def student_sessions_update(request, request_id):
     except:
         print('error')
 
-    return student_sessions(request ) 
+    return student_sessions(request) 
