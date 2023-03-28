@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Tutor Me | Requests{% endblock %}
+{% block content %}
+<div class="container border rounded py-3">
+    <h1 >My Requests</h1>
+    <hr>
+
+    {% for session in tutor_sessions %}
+        <h2>{{ session.day }}, {{ session.start_time }} to {{ session.end_time }}</h2>
+
+        {% if session.tutor_requests.all %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in session.tutor_requests.all %}
+                        <tr>
+                            <td>{{ request.student.user.get_full_name }}</td>
+                            <td>{{ request.description }}</td>
+                            <td>{{request.status }} </td>
+                            <td>
+                                <form method="POST" action="{% url 'requests_page_update' request.id %}">
+                                    {% csrf_token %}
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
+                                        <button type="submit" class="btn btn-danger" name="action" value="deny">Deny</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No requests for this day.</p>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

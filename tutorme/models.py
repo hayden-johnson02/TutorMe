@@ -37,6 +37,8 @@ class Profile(models.Model):
             return 0
         else:
             return round(sum([review.rating for review in reviews]) / len(reviews),1)
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
     def courses(self):
         return Course.objects.filter(profile=self)
@@ -78,22 +80,21 @@ class TutorSession(models.Model):
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
 
+    def tutor_requests(self):
+        return TutorRequest.objects.filter(tutor_session=self).exclude(status='Denied')
+    
+    def all_requests(self):
+        return TutorRequest.objects.filter(tutor_session=self)
+    
+
     def __str__(self):
         return f'{self.tutor} {self.day} {self.start_time} - {self.end_time}'
 
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
-    is_accepted = models.BooleanField(default=None)
-    description = models.TextField(max_length=1200, blank=True, null=True, default=None)
-
-    def accept(self):
-        self.is_accepted = True
-        self.save()
-        return self.is_accepted
-
-    def reject(self):
-        self.is_accepted = False
-        self.delete()
+    is_accepted = models.BooleanField(default=False)
+    description = models.TextField(max_length=1200, default='No description provided.')
+    status = models.CharField(max_length=256, default='Pending')

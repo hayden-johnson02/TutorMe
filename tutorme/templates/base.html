@@ -25,6 +25,13 @@
                     {% if user.profile.is_student %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'view_tutors' %}"><span class="nav-text">View Tutors</span></a></li>
                     {% endif %}
+                    {% if user.profile.is_tutor %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'requests_page' %}" style="color: #2F846A;"><span>View Requests</span></a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'student_sessions' %}" style="color: #2F846A;"><span>View Sessions</span></a></li>
+                    {% endif %}
+
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #2F846A;">
                         Settings </a>

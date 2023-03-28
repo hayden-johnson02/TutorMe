@@ -52,14 +52,57 @@
                         {% endif %}
                     </div>
                     <div class="col">
-                        <label>Times I am available:</label>
+                        <label>Available Sessions:</label>
                         {% if tutor_sessions is None %}
                             <label>This tutor has not added any times yet!</label>
                         {% else %}
-                            {% for s in tutor_sessions %}
-                                <div>{{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>
+                            {% for session in tutor_sessions %}
+                                {% comment %} from https://getbootstrap.com/docs/5.0/components/modal/#exampleModalLongTitle {% endcomment %}
+                                <div class="row border my-2 justify-content-center"> 
+                                    <div class="col-md-8"> {{ session.day }}, {{ session.start_time }} to {{ session.end_time }} </div> 
+                                    <div class="col-md-4">
+                                        {% if session in requested_sessions %}
+                                        <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal{{session.id}}" disabled>Requested</button>
+                                        {% elif session in approved_sessions %}
+                                        <button type="button" class="btn btn-sm btn-outline-primary " data-bs-toggle="modal" data-bs-target="#exampleModal{{session.id}}" disabled>Approved!</button>
+                                        {% elif session in denied_sessions %}
+                                        <button type="button" class="btn btn-sm btn-outline-danger " data-bs-toggle="modal" data-bs-target="#exampleModal{{session.id}}" disabled>Denied</button>
+                                        {% else %}
+                                        <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal{{session.id}}">Request</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal{{session.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <div class="col py-0">
+                                            <h5 class="modal-title" id="exampleModalLabel">Session Request</h5>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="post" action="">
+                                            {% csrf_token %}
+                                            <textarea class="form-control modal-body" name="comment" id="comment" rows="3" placeholder="Provide any details about your request.."></textarea>
+                                            <div class="modal-footer">
+                                            <p> {{ session.day }}, {{ session.start_time }} to {{ session.end_time }}</p>
+                                                <input type="hidden" id="session_request" name="session_request" value="{{session.id}}"> 
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                    </div>
+                                </div>
                             {% endfor %}
                         {% endif %}
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -68,19 +111,20 @@
                 <h5 class="text-center mb-3 mt-2">Add a Review</h5>
                 <form method="post" action="">
                     {% csrf_token %}
-                    {{ form.comment }}
+                    {{ review_form.comment }}
                      <div class="form-group row mb-2">
                         <label for="rating" class="col-sm-2 col-form-label">Rating:</label>
                          <div class="col-sm-1 mt-2">
                             <span id="rating_value" class="ml-2">5</span>
                         </div>
                         <div class="col-sm-8 align-items-center mt-2 ">
-                            {{ form.rating }}
+                            {{ review_form.rating }}
                         </div>
 
                     </div>
                     <div class="form-group row mt-3 mb-3">
                          <div class="btn-group" role="group">
+                            <input type="hidden" id="review" name="review" value="True"> 
                             <button class="btn btn-secondary" type="submit">Submit Review</button>
                         </div>
                     </div>

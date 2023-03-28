@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Tutor Me | Sessions{% endblock %}
+{% block content %}
+<div class="container border rounded py-3">
+    <h1 >My Sessions</h1>
+    <hr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tutor Name</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody>
+                {% for session in student_sessions %}
+                    <tr>
+                            <td>{{ session.tutor_session.tutor.get_full_name }}</td>
+                            <td>{{ session.description }}</td>
+                            <td>{{ session.tutor_session.day }}, {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'student_sessions_update' session.id %}">
+                                    {% csrf_token %}
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+</div>
+{% endblock %}

@@ -5,10 +5,10 @@ import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm
-from .models import Profile, Course, TutorSession, Review
+from .models import Profile, Course, TutorRequest, TutorSession, Review
 
 from django.db.models import Q
 
@@ -182,71 +182,6 @@ def delete_profile_view(request):
     logout(request)
     return redirect('index')
 
-
-@login_required(login_url='/login/')
-def tutor_list_old(request):
-    if request.user.profile.is_student and request.method == 'GET' and 'searchTutors' in request.GET:
-        subject = request.GET.get('subject')
-        course_num = request.GET.get('number')
-        first_name = request.GET.get('first_name')
-        last_name = request.GET.get('last_name')
-        course_name = request.GET.get('course_name')
-        all_tutors = list(Profile.objects.filter(is_tutor=True))
-        possible_tutors = all_tutors.copy()
-
-        tutors_with_courses = []
-        for course in Course.objects.all():
-            tutors_with_courses.append(str(course.profile.id))
-        for tutor in all_tutors:
-            if str(tutor.id) not in tutors_with_courses:
-                    if subject != '' or course_name != '' or course_num != '':
-                        if Profile.objects.get(pk=tutor.id) in possible_tutors:
-                            possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        possible_ids1 = []
-        if subject != '':
-            for current_course in Course.objects.all():
-                if str(current_course.subject).lower() == str(subject).lower():
-                    possible_ids1.append(str(current_course.profile.id))
-            for tutor in all_tutors:
-                if str(tutor.id) not in possible_ids1 and Profile.objects.get(pk=tutor.id) in possible_tutors:
-                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        possible_ids2 = []
-        if course_num != '':
-            for current_course in Course.objects.all():
-                if str(current_course.catalog_number) == str(course_num):
-                    possible_ids2.append(str(current_course.profile.id))
-            for tutor in all_tutors:
-                if str(tutor.id) not in possible_ids2 and Profile.objects.get(pk=tutor.id) in possible_tutors:
-                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        possible_ids3 = []
-        if course_name != '':
-            for current_course in Course.objects.all():
-                if str(course_name).lower() in str(current_course.course_name).lower():
-                    possible_ids3.append(str(current_course.profile.id))
-            for tutor in all_tutors:
-                if str(tutor.id) not in possible_ids3 and Profile.objects.get(pk=tutor.id) in possible_tutors:
-                    possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        if first_name != '':
-            for tutor in all_tutors:
-                if str(tutor.first_name).lower() != str(first_name).lower():
-                    if len(possible_tutors) != 0 and Profile.objects.get(pk=tutor.id) in possible_tutors:
-                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        if last_name != '':
-            for tutor in all_tutors:
-                if tutor.last_name.lower() != last_name.lower():
-                    if len(possible_tutors) != 0 and Profile.objects.get(pk=tutor.id) in possible_tutors:
-                        possible_tutors.remove(Profile.objects.get(pk=tutor.id))
-
-        if len(possible_tutors) == 0:
-            possible_tutors = None
-        return render(request, 'view_tutors.html', {'tutor_list': possible_tutors, 'possible_ids': possible_ids1})
-    return render(request, 'view_tutors.html', {'tutor_list': Profile.objects.filter(is_tutor=True)})
-
 @login_required(login_url='/login/')
 def tutor_list(request):
     if 'clearSearch' in request.GET or 'searchTutors' not in request.GET:
@@ -315,16 +250,28 @@ def delete_review(request, review_id):
 def view_tutor(request, tutor_id):
     if request.user.profile.is_student:
         tutor = Profile.objects.get(pk=tutor_id)
-        if request.method == 'POST':
-            form = ReviewForm(request.POST)
-            if form.is_valid():
-                review = form.save(commit=False)
-                review.tutor = tutor.user
-                review.reviewer = request.user
-                review.save()
-                return redirect('/view_tutors/' + str(tutor_id))
-        else:
-            form = ReviewForm()
+        if request.method == 'POST': 
+            if 'review' in request.POST:
+                # submitting a review
+                form = ReviewForm(request.POST)
+                if form.is_valid():
+                    review = form.save(commit=False)
+                    review.tutor = tutor.user
+                    review.reviewer = request.user
+                    review.save()
+                    return redirect('/view_tutors/' + str(tutor_id))
+            if 'session_request' in request.POST:
+                # session_request = session.id
+                # submitting a session request
+                comment = request.POST.get('comment')
+
+                session = TutorSession.objects.get(pk=request.POST.get('session_request'))
+                req = TutorRequest(tutor_session = session,
+                                      student = request.user.profile,
+                                      description = comment)
+                req.save()
+
+
 
         tutor_courses = Course.objects.filter(profile=tutor)
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
@@ -334,5 +281,64 @@ def view_tutor(request, tutor_id):
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions,
                                                            'reviews': reviews,
-                                                           'form': form})
+                                                           'review_form': ReviewForm(),
+                                                           'session_form': (TutorSession.objects.filter(tutor=tutor)),
+                                                           'requested_sessions' : [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile).exclude(status='Approved').exclude(status='Denied')],
+                                                           'approved_sessions' : [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Approved').exclude(status='Denied').exclude(status='Pending')],
+                                                           'denied_sessions' : [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Denied').exclude(status='Approved').exclude(status='Pending')],
+                                                           }) 
     return render(request, 'index.html', {})
+
+
+@login_required(login_url='/login/')
+def requests_page(request):
+    if request.user.profile.is_tutor:
+        return render(request, 'requests_page.html', {'tutor_sessions': TutorSession.objects.filter(tutor=request.user.profile)})
+
+    return render(request, 'index.html', {})
+
+
+
+@login_required(login_url='/login/')
+def requests_page_update(request, request_id):
+
+    try:
+        tutor_request = get_object_or_404(TutorRequest, id=request_id)
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'approve':
+                tutor_request.status = 'Approved'
+            elif action == 'deny':
+                tutor_request.status = 'Denied'
+            tutor_request.save()
+    except:
+        print('error')
+
+    return requests_page(request ) 
+
+
+
+@login_required(login_url='/login/')
+def student_sessions(request):
+    if request.user.profile.is_student:
+
+        return render(request, 'student_sessions.html', {'student_sessions': TutorRequest.objects.filter(student=request.user.profile) }) 
+
+
+    return render(request, 'index.html', {})
+
+
+
+@login_required(login_url='/login/')
+def student_sessions_update(request, request_id):
+    try:
+        tutor_request = get_object_or_404(TutorRequest, id=request_id)
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'cancel':
+                print('cancelling')
+                tutor_request.delete()
+    except:
+        print('error')
+
+    return student_sessions(request ) 
