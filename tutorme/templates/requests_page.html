@@ -29,7 +29,11 @@
                                 <form method="POST" action="{% url 'requests_page_update' request.id %}">
                                     {% csrf_token %}
                                     <div class="btn-group">
-                                        <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
+                                        {% if request.status == 'Approved' %}
+                                            <button type="submit" class="btn btn-success" name="action" value="approve" disabled>Approve</button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
+                                        {% endif %}
                                         <button type="submit" class="btn btn-danger" name="action" value="deny">Deny</button>
                                     </div>
                                 </form>
