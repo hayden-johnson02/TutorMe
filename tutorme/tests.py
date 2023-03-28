@@ -90,14 +90,29 @@ class ProfileModelTests(TestCase):
 
 
 def create_course(tutor_profile, subject, catalog_number, course_name) :
-    testCourse = Course(tutor_profile, subject, catalog_number, course_name)
+    testCourse = Course(profile=tutor_profile, subject=subject, catalog_number=catalog_number, course_name=course_name)
     return testCourse
 class CourseModelTests(TestCase):
-    def test_Valid_Course(self):
+    def test_Valid_Course_Tutor(self):
         tutor = create_tutor()
         testCourse = create_course(tutor, "APMA", 3100, "Probability")
-        # self.assertEquals("Probability", testCourse.course_name)
-
+        self.assertEquals(tutor, testCourse.profile)
+    def test_Valid_Course_Subject(self):
+        tutor = create_tutor()
+        testCourse = create_course(tutor, "APMA", 3100, "Probability")
+        self.assertEquals("APMA", testCourse.subject)
+    def test_Valid_Course_Catalog_Number(self):
+        tutor = create_tutor()
+        testCourse = create_course(tutor, "APMA", 3100, "Probability")
+        self.assertEquals(3100, testCourse.catalog_number)
+    def test_Valid_Course_Name(self):
+        tutor = create_tutor()
+        testCourse = create_course(tutor, "APMA", 3100, "Probability")
+        self.assertEquals("Probability", testCourse.course_name)
+    def test_Invalid_Course_Subject(self):
+        tutor = create_tutor()
+        testCourse = create_course(tutor, "APMAA", 31000, "Probability")
+        self.assertEquals("APMAA", testCourse.subject)
         
 
 # View Tests
