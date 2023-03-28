@@ -260,7 +260,7 @@ def view_tutor(request, tutor_id):
                     review.reviewer = request.user
                     review.save()
                     return redirect('/view_tutors/' + str(tutor_id))
-            if 'session_request' in request.POST and not TutorSession.objects.filter(pk=request.POST.get('session_request')).exists(): 
+            if 'session_request' in request.POST and not TutorRequest.objects.filter(pk=request.POST.get('session_request')).exists(): 
                 # session_request = session.id
                 # submitting a session request
                 comment = request.POST.get('comment')
