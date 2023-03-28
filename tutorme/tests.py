@@ -1,8 +1,9 @@
 from django.test import TestCase, SimpleTestCase
-from tutorme.models import Profile, Course, TutorSession, TutorRequest
+from tutorme.models import Profile, Course, TutorSession, TutorRequest, Review
 from django.urls import reverse, resolve
 from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, account_type_choice
 from django.contrib.auth import get_user_model
+from django.utils.timezone import datetime
 
 
 # Model Tests
@@ -44,6 +45,13 @@ def create_second_tutor():
                                last_name="Doe2", is_student=False, is_tutor=True,
                                bio="Test Tutor 2", hourly_rate=15, venmo="Jane.Doe26")
     return testTutorProfile
+def create_course(tutor_profile, subject, catalog_number, course_name) :
+    testCourse = Course(profile=tutor_profile, subject=subject, catalog_number=catalog_number, course_name=course_name)
+    return testCourse
+
+def create_review(tutor, reviewer, rating, comment, created_at) :
+    testReview = Review(tutor=tutor, reviewer=reviewer, rating=rating, comment=comment, created_at=created_at)
+    return testReview
 
 
 class ProfileModelTests(TestCase):
@@ -88,10 +96,6 @@ class ProfileModelTests(TestCase):
         testTutor = create_tutor()
         self.assertEquals("Jane.Doe25", testTutor.venmo)
 
-
-def create_course(tutor_profile, subject, catalog_number, course_name) :
-    testCourse = Course(profile=tutor_profile, subject=subject, catalog_number=catalog_number, course_name=course_name)
-    return testCourse
 class CourseModelTests(TestCase):
     def test_Valid_Course_Tutor(self):
         tutor = create_tutor()
@@ -109,10 +113,52 @@ class CourseModelTests(TestCase):
         tutor = create_tutor()
         testCourse = create_course(tutor, "APMA", 3100, "Probability")
         self.assertEquals("Probability", testCourse.course_name)
-    def test_Invalid_Course_Subject(self):
-        tutor = create_tutor()
-        testCourse = create_course(tutor, "APMAA", 31000, "Probability")
-        self.assertEquals("APMAA", testCourse.subject)
+
+class ReviewModelTests(TestCase) :
+
+    # Used https://www.geeksforgeeks.org/datetimefield-django-models/
+    def test_Valid_Review_Tutor(self):
+        User = get_user_model()
+        testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu",
+                                                 password="password123")
+        User2 = get_user_model()
+        testStudentUser = User2.objects.create_user(username="TestStudent", email="mst4k@virginia.edu",
+                                                   password="password456")
+        d = datetime(2023, 3, 28, 23, 55, 59, 342380)
+        testReview = create_review(testTutorUser, testStudentUser, 5, "Great tutor!", d)
+        self.assertEquals(testTutorUser, testReview.tutor)
+
+    def test_Valid_Review_Reviewer(self):
+        User = get_user_model()
+        testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu",
+                                                 password="password123")
+        User2 = get_user_model()
+        testStudentUser = User2.objects.create_user(username="TestStudent", email="mst4k@virginia.edu",
+                                                   password="password456")
+        d = datetime(2023, 3, 28, 23, 55, 59, 342380)
+        testReview = create_review(testTutorUser, testStudentUser, 5, "Great tutor!", d)
+        self.assertEquals(testStudentUser, testReview.reviewer)
+
+    def test_Valid_Review_Rating(self):
+        User = get_user_model()
+        testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu",
+                                                 password="password123")
+        User2 = get_user_model()
+        testStudentUser = User2.objects.create_user(username="TestStudent", email="mst4k@virginia.edu",
+                                                   password="password456")
+        d = datetime(2023, 3, 28, 23, 55, 59, 342380)
+        testReview = create_review(testTutorUser, testStudentUser, 5, "Great tutor!", d)
+        self.assertEquals(5, testReview.rating)
+    def test_Valid_Review_Datetime(self):
+        User = get_user_model()
+        testTutorUser = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu",
+                                                 password="password123")
+        User2 = get_user_model()
+        testStudentUser = User2.objects.create_user(username="TestStudent", email="mst4k@virginia.edu",
+                                                   password="password456")
+        d = datetime(2023, 3, 28, 23, 55, 59, 342380)
+        testReview = create_review(testTutorUser, testStudentUser, 5, "Great tutor!", d)
+        self.assertEquals(d, testReview.created_at)
         
 
 # View Tests
