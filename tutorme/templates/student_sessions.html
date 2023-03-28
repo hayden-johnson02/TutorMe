@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th>Tutor Name</th>
+                    <th>Email</th>
                     <th>Details</th>
                     <th>Time</th>
                     <th>Status</th>
@@ -19,6 +20,7 @@
                 {% for session in student_sessions %}
                     <tr>
                             <td>{{ session.tutor_session.tutor.get_full_name }}</td>
+                            <td> {{session.tutor_session.tutor.get_email }} </td>
                             <td>{{ session.description }}</td>
                             <td>{{ session.tutor_session.day }}, {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
                             <td>{{ session.status }}</td>

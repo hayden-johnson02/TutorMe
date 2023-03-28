@@ -14,6 +14,7 @@
                 <thead>
                     <tr>
                         <th>Student Name</th>
+                        <th>Email</th>
                         <th>Details</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -23,6 +24,7 @@
                     {% for request in session.tutor_requests.all %}
                         <tr>
                             <td>{{ request.student.user.get_full_name }}</td>
+                            <td> {{request.student.user.get_email }} </td>
                             <td>{{ request.description }}</td>
                             <td>{{request.status }} </td>
                             <td>
