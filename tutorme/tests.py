@@ -1,7 +1,7 @@
 from django.test import TestCase, SimpleTestCase
 from tutorme.models import Profile, Course, TutorSession, TutorRequest, Review
 from django.urls import reverse, resolve
-from tutorme.views import index, logout_view, login_view, profile_view, edit_profile_view, create_account_view, delete_profile_view, tutor_list, account_type_choice
+from tutorme.views import *
 from django.contrib.auth import get_user_model
 from django.utils.timezone import datetime
 
@@ -171,6 +171,8 @@ class ReviewModelTests(TestCase) :
 
 class TestUrls(SimpleTestCase):
 
+    
+
     def test_all_url_is_resolved(self):
 
         PASS_MESSAGE = " url matches with correct view..."
@@ -186,19 +188,28 @@ class TestUrls(SimpleTestCase):
             "createAccount" : create_account_view,
             "account_type_choice" : account_type_choice,
             "view_tutors" : tutor_list,
+            "requests_page" : requests_page,
+            "student_sessions" : student_sessions,
 
         }
+        
+        urlWithID = ["view_tutor"]
 
+    
         for urlName in urlDictionary:
-
+            
             url = reverse(urlName)
             try:
+                
                 self.assertEquals(resolve(url).func, urlDictionary[urlName])
+                #print(resolve(url))
                 
                 print("\n" + urlName + PASS_MESSAGE)
 
             except: 
                 print("\n" + urlName + FAIL_MESSAGE)
+
+        
     
     
 
