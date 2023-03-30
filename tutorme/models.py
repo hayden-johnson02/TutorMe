@@ -104,3 +104,4 @@ class TutorRequest(models.Model):
     is_accepted = models.BooleanField(default=False)
     description = models.TextField(max_length=1200, default='No description provided.')
     status = models.CharField(max_length=256, default='Pending')
+    request_date = models.DateField(default=datetime.date.today)

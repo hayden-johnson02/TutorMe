@@ -264,14 +264,13 @@ def view_tutor(request, tutor_id):
                 # session_request = session.id
                 # submitting a session request
                 comment = request.POST.get('comment')
-
+                date = request.POST.get('date')
                 session = TutorSession.objects.get(pk=request.POST.get('session_request'))
                 req = TutorRequest(tutor_session = session,
                                       student = request.user.profile,
-                                      description = comment)
+                                      description = comment,
+                                   request_date = date)
                 req.save()
-
-
 
         tutor_courses = Course.objects.filter(profile=tutor)
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
