@@ -208,11 +208,11 @@ class TestUrls(TestCase):
 
         }
         
-        urlWithID = ["view_tutor"]
+        urlWithID = ["view_tutor", 'delete_review', 'student_sessions_update', 'delete_review']
 
     
         for urlName in urlDictionary:
-            
+
             url = reverse(urlDictionary[urlName], args = (0,))
             try:
                 
