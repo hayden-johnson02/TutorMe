@@ -4,6 +4,8 @@ from django.urls import reverse, resolve
 from tutorme.views import *
 from django.contrib.auth import get_user_model
 from django.utils.timezone import datetime
+from django.http import HttpRequest
+
 
 
 # Model Tests
@@ -169,11 +171,22 @@ class ReviewModelTests(TestCase) :
 # URL Tests
 # Used: https://www.youtube.com/watch?v=0MrgsYswT1c
 
-class TestUrls(SimpleTestCase):
+class TestUrls(TestCase):
 
     
 
+
     def test_all_url_is_resolved(self):
+       # databases = '__all__'
+
+
+        newRequest = HttpRequest()
+        User = get_user_model()
+        user = User.objects.create_user(username="TestTutor", email="mst3k@virginia.edu", password="password123")
+        user.save()
+
+        newRequest.user = user
+        
 
         PASS_MESSAGE = " url matches with correct view..."
         FAIL_MESSAGE = " url does NOT match with correct view..."
@@ -190,6 +203,7 @@ class TestUrls(SimpleTestCase):
             "view_tutors" : tutor_list,
             "requests_page" : requests_page,
             "student_sessions" : student_sessions,
+            "requests_page_update" : requests_page_update(request = newRequest, request_id = 0),
 
         }
         
