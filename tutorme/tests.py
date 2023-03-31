@@ -203,26 +203,50 @@ class TestUrls(TestCase):
             "account_type_choice" : account_type_choice,
             "view_tutors" : tutor_list,
             "requests_page" : requests_page,
-            "student_sessions" : student_sessions,    
+            "student_sessions_update" : student_sessions_update,    
             "requests_page_update" : requests_page_update,
 
         }
         
-        urlWithID = ["view_tutor", 'delete_review', 'student_sessions_update', 'delete_review']
+        urlWithID = [ 'student_sessions_update', "requests_page_update"]
 
     
+        # without ID
+        print("Testing Url's without ID arguments...")
         for urlName in urlDictionary:
 
-            url = reverse(urlDictionary[urlName], args = (0,))
+            # differentiate between url with id and without id
+            url = None
+
+            if urlName not in urlWithID:
+                url = reverse(urlName)
+            else:
+                continue
+
+        
             try:
                 
-                #self.assertEquals(resolve(urlName).func, urlDictionary[urlName])
+                self.assertEquals(resolve(url).func, urlDictionary[urlName])
                 #print(resolve(url))
                 
                 print("\n" + urlName + PASS_MESSAGE)
 
             except: 
                 print("\n" + urlName + FAIL_MESSAGE)
+
+        print("Testing Url's with ID arguments")
+
+        for urlName in urlWithID:
+            url = reverse(urlDictionary[urlName], args = (0, ))
+
+            try:
+                self.assertEquals(resolve(url).func, urlDictionary[urlName])
+                print("\n" + urlName + PASS_MESSAGE)
+
+            except:
+                print("\n" + urlName + FAIL_MESSAGE)
+
+
 
 
 
