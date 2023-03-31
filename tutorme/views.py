@@ -11,6 +11,7 @@ from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, Review
 from .models import Profile, Course, TutorRequest, TutorSession, Review
 
 from django.db.models import Q
+import datetime
 
 app_name = 'tutorme'
 
@@ -264,18 +265,14 @@ def view_tutor(request, tutor_id):
                 # session_request = session.id
                 # submitting a session request
                 comment = request.POST.get('comment')
-                date = request.POST.get('date')
                 session = TutorSession.objects.get(pk=request.POST.get('session_request'))
                 req = TutorRequest(tutor_session = session,
                                       student = request.user.profile,
-                                      description = comment,
-                                   request_date = date)
+                                      description = comment)
                 req.save()
-
         tutor_courses = Course.objects.filter(profile=tutor)
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
         reviews = Review.objects.filter(tutor=tutor.user)
-
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions,

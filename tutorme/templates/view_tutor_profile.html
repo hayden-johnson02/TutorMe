@@ -84,7 +84,6 @@
                                         </div>
                                         <form method="post" action="">
                                             {% csrf_token %}
-                                            <input class="form-control modal-body" type="date" name="date" id="date">
                                             <textarea class="form-control modal-body" name="comment" id="comment" rows="3" placeholder="Provide any details about your request.."></textarea>
                                             <div class="modal-footer">
                                             <p> {{ session.day }}, {{ session.start_time }} to {{ session.end_time }}</p>

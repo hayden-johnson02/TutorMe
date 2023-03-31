@@ -85,6 +85,7 @@ class TutorSession(models.Model):
     start_time = models.TimeField(auto_now=False, auto_now_add=False)
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
+    date = models.DateField(default=datetime.date.today)
 
     def tutor_requests(self):
         return TutorRequest.objects.filter(tutor_session=self).exclude(status='Denied')
@@ -104,4 +105,3 @@ class TutorRequest(models.Model):
     is_accepted = models.BooleanField(default=False)
     description = models.TextField(max_length=1200, default='No description provided.')
     status = models.CharField(max_length=256, default='Pending')
-    request_date = models.DateField(default=datetime.date.today)
