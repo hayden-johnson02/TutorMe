@@ -193,9 +193,17 @@ class TestUrls(TestCase):
         FAIL_MESSAGE = " url does NOT match with correct view..."
 
         urlDictionary = {
-            
-            
-            
+            "index" : index,
+            "login" : login_view,
+            "logout" : logout_view,
+            "profile" : profile_view,
+            "edit_profile" : edit_profile_view,
+            "delete" : delete_profile_view,
+            "createAccount" : create_account_view,
+            "account_type_choice" : account_type_choice,
+            "view_tutors" : tutor_list,
+            "requests_page" : requests_page,
+            "student_sessions" : student_sessions,    
             "requests_page_update" : requests_page_update,
 
         }
@@ -217,20 +225,10 @@ class TestUrls(TestCase):
                 print("\n" + urlName + FAIL_MESSAGE)
 
 
-"""
-            "index" : index,
-            "login" : login_view,
-            "logout" : logout_view,
-            "profile" : profile_view,
-            "edit_profile" : edit_profile_view,
-            "delete" : delete_profile_view,
-            "createAccount" : create_account_view,
-            "account_type_choice" : account_type_choice,
-            "view_tutors" : tutor_list,
-            "requests_page" : requests_page,
-            "student_sessions" : student_sessions,
+
+           
         
-        """
+
     
     
 
