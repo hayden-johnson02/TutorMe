@@ -16,31 +16,31 @@
                     <div class="form-group row mb-2">
                         <label for="subject" class="col-sm-4 col-form-label">Subject</label>
                         <div class="col-sm-8">
-                            <input name="subject" type="text" class="form-control" placeholder="ex. CS" maxlength="4" value="{{ filter_subject }}" {% if filter_subject %}readonly{% endif %}>
+                            <input name="subject" type="text" class="form-control" placeholder="ex. CS" maxlength="4" value="{{ filter_subject }}">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="course_number" class="col-sm-4 col-form-label">Course Number</label>
                         <div class="col-sm-8">
-                            <input name="course_number" type="number" class="form-control" placeholder="ex. 3240" min="0" max="9999" value="{{ filter_course_number }}" {% if filter_course_number %}readonly{% endif %}>
+                            <input name="course_number" type="number" class="form-control" placeholder="ex. 3240" min="0" max="9999" value="{{ filter_course_number }}">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="course_name" class="col-sm-4 col-form-label">Course Name</label>
                         <div class="col-sm-8">
-                            <input name="course_name" type="text" class="form-control" placeholder="ex. Discrete Math" maxlength="32" value="{{ filter_course_name }}" {% if filter_course_name %}readonly{% endif %}>
+                            <input name="course_name" type="text" class="form-control" placeholder="ex. Discrete Math" maxlength="32" value="{{ filter_course_name }}">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="first_name" class="col-sm-4 col-form-label">First Name</label>
                         <div class="col-sm-8">
-                            <input name="first_name" type="text" class="form-control" placeholder="ex. Mark" maxlength="32" value="{{ filter_first_name }}" {% if filter_first_name %}readonly{% endif %}>
+                            <input name="first_name" type="text" class="form-control" placeholder="ex. Mark" maxlength="32" value="{{ filter_first_name }}">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="last_name" class="col-sm-4 col-form-label">Last Name</label>
                         <div class="col-sm-8">
-                            <input name="last_name" type="text" class="form-control" placeholder="ex. Sherriff" maxlength="32" value="{{ filter_last_name }}" {% if filter_last_name %}readonly{% endif %}>
+                            <input name="last_name" type="text" class="form-control" placeholder="ex. Sherriff" maxlength="32" value="{{ filter_last_name }}">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -66,45 +66,35 @@
             <h5 class="text-center mb-3 mt-2">Tutor Profiles</h5><hr>
             <div id="tutor-profiles">
                 {# relevant profiles populated here #}
-            <div id="tutor-profiles">
-                {# relevant profiles populated here #}
                 {% if tutor_list is None %}
                     <div class="text-center py-3">
                         <h5>No tutor matches your specifications</h5>
                     </div>
                 {% else %}
                    <div class="accordion" id="accordionExample">
-                           {% for current_tutor in tutor_list %}
+                       {% for current_tutor in tutor_list %}
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ current_tutor.id }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ current_tutor.id }}" aria-expanded="false" aria-controls="collapse{{ current_tutor.id }}">
-                                        {{ current_tutor.first_name }} {{ current_tutor.last_name }} - {{ current_tutor.email }} - Rating: {{ current_tutor.average_rating }}
+                                        <div class="container">
+                                            {{ current_tutor.first_name }} {{ current_tutor.last_name }}
+                                            - {% if current_tutor.hourly_rate is None %}
+                                                Hourly rate not set!
+                                            {% else %}
+                                                ${{ current_tutor.hourly_rate }}/hr
+                                            {% endif %}
+                                            - Average rating:
+                                            {% if current_tutor.average_rating is 0 %}
+                                                Not rated yet!
+                                            {% else %}
+                                                {{ current_tutor.average_rating }}/5.0
+                                            {% endif %}
+                                        </div>
                                     </button>
                                 </h2>
                                 <div id="collapse{{ current_tutor.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ current_tutor.id }}" data-bs-parent="#tutorAccordion">
                                     <div class="accordion-body">
-                                        <div class="row mt-2">
-                                            <div class="col">
-                                                <label>Hourly Rate:
-                                                {% if current_tutor.hourly_rate is None %}
-                                                    Not set yet!
-                                                {% else %}
-                                                    ${{ current_tutor.hourly_rate }}
-                                                {% endif %}
-                                                </label>
-                                            </div>
-                                            <div class="col">
-                                                <label>Venmo:
-                                                {% if current_tutor.venmo is None %}
-                                                    Not set yet!
-                                                {% else %}
-                                                    @{{ current_tutor.venmo }}
-                                                {% endif %}
-                                                </label>
-                                            </div>
-                                        </div>
                                         <div>
-                                            <hr>
                                             Bio:
                                         </div>
                                         <div>
@@ -113,13 +103,12 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col" style="border-right: 1px solid gainsboro">
-                                                <label>Courses I can tutor for:</label>
+                                                <label>Courses I tutor for:</label>
                                                 {% if current_tutor.courses is None %}
-                                                    <div></div>
                                                     <label>This tutor has not added any courses yet!</label>
                                                 {% else %}
                                                     {% for c in current_tutor.courses %}
-                                                        <div>{{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}</div>
+                                                        <div>- {{ c.subject }} {{ c.catalog_number }} {{ c.course_name }}</div>
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
@@ -129,7 +118,7 @@
                                                     <label>This tutor has not added any times yet!</label>
                                                 {% else %}
                                                     {% for s in current_tutor.tutor_sessions %}
-                                                        <div>{{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>
+                                                        <div>- {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
@@ -140,11 +129,10 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
+                       {% endfor %}
                     </div>
                 {% endif %}
             </div>
-        </div>
         </div>
     </div>
 </div>

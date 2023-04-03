@@ -90,20 +90,8 @@ class ReviewForm(forms.ModelForm):
         fields = ['rating', 'comment']
         widgets = {
             'rating': forms.NumberInput(attrs={'class': 'form-range', 'type': 'range', 'min': '1', 'max': '5', 'step': '1',
-                                          'id': 'rating'}),
+                                        'id': 'rating'}),
             'comment': forms.Textarea(
-                attrs={'class': 'form-control mt-3 mb-3', 'placeholder': 'Leave a review here!', 'height': '100px',
+                attrs={'class': 'form-control mt-3 mb-3', 'placeholder': 'Leave a review here!', 'style': 'height: 100px',
                        'id': 'comment'})
         }
-
-
-# class SessionForm(forms.ModelForm):
-#     tutor_sessions = forms.ChoiceField(widget=forms.RadioSelect) 
-
-#     class Meta:
-#         model = TutorSession
-#         fields = ['session'] # session that they are selecting and TODO: comment about request
-
-#         widgets = {
-#             'session': forms.RadioSelect(attrs={'class': 'form-check-input', 'type': 'radio', 'name': 'session'})
-#         }
