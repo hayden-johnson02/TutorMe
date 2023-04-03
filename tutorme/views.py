@@ -103,11 +103,12 @@ def edit_profile_view(request):
     if not courses:
         courses = None
     if courses:
+        courses = courses.order_by('catalog_number')
+        courses = courses.order_by('subject')
         for c in courses:
             course_list.append(c.subject + " " + str(c.catalog_number) + " " + c.course_name)
         delete_course_form = DynamicCourseForm(course_list=course_list)
-    courses = courses.order_by('catalog_number')
-    courses = courses.order_by('subject')
+
 
     if request.method == 'POST' and 'removeCourses' in request.POST:
         delete_course_form = DynamicCourseForm(request.POST or None, course_list=course_list)
@@ -147,7 +148,6 @@ def edit_profile_view(request):
         tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
     if not tutor_sessions_list:
         tutor_sessions_list = None
-
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
