@@ -59,7 +59,7 @@ def edit_profile_view(request):
     search_course_form = None
     # https://learndjango.com/tutorials/django-search-tutorial
     if request.method == 'GET' and 'searchCourses' in request.GET:
-        subject = request.GET.get("subject")
+        subject = request.GET.get("subject").upper()
         number = request.GET.get("number")
         cn = request.GET.get("courseName")
         cn = cn.split(" ")
@@ -106,6 +106,8 @@ def edit_profile_view(request):
         for c in courses:
             course_list.append(c.subject + " " + str(c.catalog_number) + " " + c.course_name)
         delete_course_form = DynamicCourseForm(course_list=course_list)
+    courses = courses.order_by('catalog_number')
+    courses = courses.order_by('subject')
 
     if request.method == 'POST' and 'removeCourses' in request.POST:
         delete_course_form = DynamicCourseForm(request.POST or None, course_list=course_list)
@@ -273,6 +275,8 @@ def view_tutor(request, tutor_id):
                                    description=comment)
                 req.save()
         tutor_courses = Course.objects.filter(profile=tutor)
+        tutor_courses = tutor_courses.order_by('catalog_number')
+        tutor_courses = tutor_courses.order_by('subject')
         if not tutor_courses:
             tutor_courses = None
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
