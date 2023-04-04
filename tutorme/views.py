@@ -103,8 +103,7 @@ def edit_profile_view(request):
     if not courses:
         courses = None
     if courses:
-        courses = courses.order_by('catalog_number')
-        courses = courses.order_by('subject')
+        courses = courses.order_by('subject', 'catalog_number')
         for c in courses:
             course_list.append(c.subject + " " + str(c.catalog_number) + " " + c.course_name)
         delete_course_form = DynamicCourseForm(course_list=course_list)
