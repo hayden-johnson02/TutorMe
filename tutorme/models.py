@@ -44,10 +44,17 @@ class Profile(models.Model):
         return self.email
     
     def get_sessions(self):
-        return TutorSession.objects.filter(tutor=self.user)
+        tutor_sessions = TutorSession.objects.filter(tutor=self)
+        if not tutor_sessions:
+            return None
+        return tutor_sessions
 
     def courses(self):
-        return Course.objects.filter(profile=self)
+        courses = Course.objects.filter(profile=self)
+        if not courses:
+            return None
+        courses = courses.order_by('subject', 'catalog_number')
+        return courses
 
     def __delete__(self):
         self.user.delete()

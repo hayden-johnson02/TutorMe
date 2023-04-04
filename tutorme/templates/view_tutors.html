@@ -114,10 +114,10 @@
                                             </div>
                                             <div class="col">
                                                 <label>Times I am available:</label>
-                                                {% if current_tutor.tutor_sessions is None %}
+                                                {% if current_tutor.get_sessions is None %}
                                                     <label>This tutor has not added any times yet!</label>
                                                 {% else %}
-                                                    {% for s in current_tutor.tutor_sessions %}
+                                                    {% for s in current_tutor.get_sessions %}
                                                         <div>- {{ s.day }}, {{ s.start_time }} to {{ s.end_time }}</div>
                                                     {% endfor %}
                                                 {% endif %}
