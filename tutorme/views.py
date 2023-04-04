@@ -274,8 +274,7 @@ def view_tutor(request, tutor_id):
                                    description=comment)
                 req.save()
         tutor_courses = Course.objects.filter(profile=tutor)
-        tutor_courses = tutor_courses.order_by('catalog_number')
-        tutor_courses = tutor_courses.order_by('subject')
+        tutor_courses = tutor_courses.order_by('subject','catalog_number')
         if not tutor_courses:
             tutor_courses = None
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
