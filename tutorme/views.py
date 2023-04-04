@@ -37,6 +37,7 @@ def login_view(request):
 @login_required(login_url='/login/')
 def profile_view(request):
     courses = Course.objects.filter(profile=request.user.profile)
+    courses = courses.order_by('subject', 'catalog_number')
     if not courses:
         courses = None
     tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
