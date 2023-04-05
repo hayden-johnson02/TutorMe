@@ -2,6 +2,20 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Profile{% endblock %}
 {% block content %}
-will add more later - Anna
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 1000px">
+    <div class="card">
+            <div class="card-header" style="text-align: center">
+                <h3 style="margin-top: 10px"> {{ current_student.first_name }} {{ current_student.last_name }}</h3>
+            </div>
+        <div class="card-body bg-light">
+                <div>Email: {{ current_student.email }}</div>
+            <div>
+            <hr>
+                    Bio:
+                <div>{{ current_student.bio }}</div>
+        </div>
+        </div>
 
+    </div>
+</div>
 {% endblock %}

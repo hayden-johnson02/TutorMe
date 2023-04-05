@@ -343,5 +343,6 @@ def student_sessions_update(request, request_id):
 @login_required(login_url='/login/')
 def view_student(request, student_id):
     if request.user.profile.is_tutor:
-        return render(request, 'view_student_profile.html')
+        student = Profile.objects.get(pk=student_id)
+        return render(request, 'view_student_profile.html', {'current_student': student})
     return render(request, 'index.html', {})
