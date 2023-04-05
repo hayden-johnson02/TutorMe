@@ -20,6 +20,7 @@ class Profile(models.Model):
     hourly_rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)],
                                       blank=True, null=True, default=None)
     venmo = models.CharField(max_length=256, blank=True, null=True, default=None)
+
     # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -36,7 +37,8 @@ class Profile(models.Model):
         if len(reviews) == 0:
             return 0
         else:
-            return round(sum([review.rating for review in reviews]) / len(reviews),1)
+            return round(sum([review.rating for review in reviews]) / len(reviews), 1)
+
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
     
@@ -80,6 +82,7 @@ class Review(models.Model):
     def __str__(self):
         return f'Review by {self.reviewer}'
 
+
 class TutorSession(models.Model):
     DAYS_OF_WEEK = [('Monday', 'Monday'),
                     ('Tuesday', 'Tuesday'),
@@ -99,7 +102,6 @@ class TutorSession(models.Model):
     
     def all_requests(self):
         return TutorRequest.objects.filter(tutor_session=self)
-    
 
     def __str__(self):
         return f'{self.tutor} {self.day} {self.start_time} - {self.end_time}'
@@ -107,7 +109,6 @@ class TutorSession(models.Model):
 
 class TutorRequest(models.Model):
     tutor_session = models.ForeignKey(TutorSession, on_delete=models.CASCADE)
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorRequest_student')
     is_accepted = models.BooleanField(default=False)
     description = models.TextField(max_length=1200, default='No description provided.')

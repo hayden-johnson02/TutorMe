@@ -4,14 +4,12 @@ import logging
 import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm
 from .models import Profile, Course, TutorRequest, TutorSession, Review
 
 from django.db.models import Q
-import datetime
 
 app_name = 'tutorme'
 
@@ -19,6 +17,7 @@ app_name = 'tutorme'
 def index(request):
     if request.user.is_authenticated and not request.user.profile.is_tutor and not request.user.profile.is_student:
         return render(request, 'createAccount.html', {})
+
     return render(request, 'index.html', {})
 
 
@@ -345,6 +344,7 @@ def student_sessions_update(request, request_id):
     except:
         print('error')
     return student_sessions(request) 
+
 
 @login_required(login_url='/login/')
 def view_student(request, student_id):

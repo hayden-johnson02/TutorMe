@@ -12,16 +12,41 @@
             {% if user.is_authenticated %}
             <p>Welcome, {{ user.first_name }}!</p>
             {% if user.profile.is_tutor %}
-                <p>You are a tutor!</p>
+                <div class="row rounded" style="margin-left: 5px">
+                    <div class="col rounded" style="background-color: #BAE4D6">
+                        <label class="mt-2">New Requests!</label>
+                        <label> [insert little box with up to 5 new requests to respond to] </label>
+                    </div>
+                    <div class="col-5">
+                        <div class="col rounded" style="background-color: #BAE4D6">
+                            <label class="mt-2" style="margin-left: 5px">Upcoming Appointment! </label>
+                            <label class="mb-2" style="margin-left: 5px">[Show details of next tutoring session, including description]</label>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             {% if user.profile.is_student %}
-                <p>You are a student!</p>
+                <div class="row rounded" style="margin-left: 5px">
+                    <div class="col rounded" style="background-color: #BAE4D6">
+                        <label class="mt-2">View Recently Approved/Denied Requests!</label>
+                        <label> [insert little box with maybe last 5 request decisions or smthg] </label>
+                    </div>
+                    <div class="col-5">
+                        <div class="col rounded" style="background-color: #BAE4D6">
+                            <label class="mt-2" style="margin-left: 5px">Upcoming Appointment! </label>
+                            <label class="mb-2" style="margin-left: 5px">[Show details of next tutoring session]</label>
+                        </div>
+                        <div class="col rounded mt-3" style="background-color: #BAE4D6">
+                            <label class="mt-2" style="margin-left: 5px">Reschedule with a tutor: </label>
+                            <label class="mb-2" style="margin-left: 5px">[List maybe up to last 3 tutors they worked with?]</label>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             {% else %}
             <h1>Welcome to TutorMe</h1>
             <a class="btn btn-outline-primary" href="{% provider_login_url 'google' %}">Login with Google</a>
             {% endif %}
-
         </div>
     </div>
 </div>

@@ -1,8 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Profile, Course, TutorSession, Review, TutorRequest
-import datetime
+from .models import Profile, TutorSession, Review
 
 
 class UserTypeForm(forms.Form):
