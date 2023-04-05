@@ -339,3 +339,9 @@ def student_sessions_update(request, request_id):
     except:
         print('error')
     return student_sessions(request) 
+
+@login_required(login_url='/login/')
+def view_student(request, student_id):
+    if request.user.profile.is_tutor:
+        return render(request, 'view_student_profile.html')
+    return render(request, 'index.html', {})

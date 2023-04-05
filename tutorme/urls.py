@@ -33,7 +33,9 @@ urlpatterns = [
     path('view_tutors/<int:tutor_id>/', views.view_tutor, name='view_tutor'),
     path('delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
     path('requests_page/', views.requests_page, name='requests_page'),
+    path('requests_page/view_student/<int:student_id>/', views.view_student, name='view_student'),
     path('requests_page_update/<int:request_id>/', views.requests_page_update, name='requests_page_update'),
     path('student_sessions/', views.student_sessions, name='student_sessions'),
     path('student_sessions_update/<int:request_id>/', views.student_sessions_update, name='student_sessions_update'),
+
 ]
