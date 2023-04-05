@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm
-from .models import Profile, Course, TutorRequest, TutorSession, Review
+from .models import Profile, Course, TutorRequest, TutorSession, Review, Favorite
 
 from django.db.models import Q
 
@@ -260,6 +260,11 @@ def delete_review(request, review_id):
 def view_tutor(request, tutor_id):
     if request.user.profile.is_student:
         tutor = Profile.objects.get(pk=tutor_id)
+        favorite = Favorite.objects.filter(tutor=tutor.user.profile, student=request.user.profile)
+        if favorite:
+            is_fav = True
+        else:
+            is_fav = False
         if request.method == 'POST': 
             if 'review' in request.POST:
                 # submitting a review
@@ -279,6 +284,14 @@ def view_tutor(request, tutor_id):
                                    student=request.user.profile,
                                    description=comment)
                 req.save()
+            if 'not_favorite' in request.POST and not is_fav:
+                favorite = Favorite(student=request.user.profile, tutor=tutor.user.profile)
+                favorite.save()
+                is_fav = True
+            elif 'favorite' in request.POST and is_fav:
+                favorite = Favorite.objects.filter(tutor=tutor.user.profile, student=request.user.profile)
+                favorite.delete()
+                is_fav = False
         tutor_courses = Course.objects.filter(profile=tutor)
         tutor_courses = tutor_courses.order_by('subject','catalog_number')
         if not tutor_courses:
@@ -294,6 +307,7 @@ def view_tutor(request, tutor_id):
                                                            'tutor_sessions': tutor_sessions,
                                                            'reviews': reviews,
                                                            'review_form': ReviewForm(),
+                                                           'is_fav': is_fav,
                                                            'session_form': (TutorSession.objects.filter(tutor=tutor)),
                                                            'requested_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile).exclude(status='Approved').exclude(status='Denied')],
                                                            'approved_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Approved').exclude(status='Denied').exclude(status='Pending')],

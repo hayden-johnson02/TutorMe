@@ -22,6 +22,7 @@ class Profile(models.Model):
     venmo = models.CharField(max_length=256, blank=True, null=True, default=None)
 
     # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
@@ -71,6 +72,9 @@ class Course(models.Model):
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
     course_name = models.CharField(max_length=256)
 
+class Favorite(models.Model):
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='student_favorite')
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_favorite')
 
 class Review(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutor_reviews')

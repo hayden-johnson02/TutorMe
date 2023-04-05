@@ -37,6 +37,18 @@
                 </div>
                 <div>{{ current_tutor.bio }}</div>
                 <hr>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {% if not is_fav %}
+                    <input type="hidden" name="not_favorite" value="True">
+                    <button type="submit" class="btn btn-primary">Add to Favorites</button>
+                    {%else%}
+                    <input type="hidden" name="favorite" value="True">
+                    <button type="submit" class="btn btn-primary">Remove from Favorites</button>
+                    {%endif%}
+                </form>
+                <hr>
                 <div class="row">
                     <div class="col" style="border-right: 1px solid gainsboro">
                         <label>Courses I tutor for:</label>
