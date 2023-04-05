@@ -58,6 +58,9 @@ def edit_profile_view(request):
 
     clist = None
     search_course_form = None
+    subject = ""
+    number = ""
+    course_name = ""
     # https://learndjango.com/tutorials/django-search-tutorial
     if request.method == 'GET' and 'searchCourses' in request.GET:
         subject = request.GET.get("subject").upper()
@@ -70,6 +73,7 @@ def edit_profile_view(request):
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.' \
               'FieldFormula.IScript_ClassSearch?institution=UVA01&term=1238&page=1'
         url = url + '&subject=' + subject + '&catalog_nbr=' + number + '&keyword=' + course_name
+        course_name = course_name.replace('_', ' ').rstrip()
         r = requests.get(url)
         clist = []
         for c in r.json():
@@ -108,7 +112,6 @@ def edit_profile_view(request):
         for c in courses:
             course_list.append(c.subject + " " + str(c.catalog_number) + " " + c.course_name)
         delete_course_form = DynamicCourseForm(course_list=course_list)
-
 
     if request.method == 'POST' and 'removeCourses' in request.POST:
         delete_course_form = DynamicCourseForm(request.POST or None, course_list=course_list)
@@ -151,6 +154,9 @@ def edit_profile_view(request):
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
                                                  'search_course_form': search_course_form,
+                                                 'searchSubject': subject,
+                                                 'searchNumber': number,
+                                                 'searchCourseName': course_name,
                                                  'delete_course_form': delete_course_form,
                                                  'create_session_form': create_session_form,
                                                  'tutor_sessions_list': tutor_sessions_list,

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
-{% block title %}Tutor Me | Profile{% endblock %}
+{% block title %}Tutor Me | Edit Profile{% endblock %}
 {% block content %}
 
 {% load socialaccount %}
@@ -64,22 +64,22 @@
             <div class="card-body" id="searchC">
                 <form action="#searchC" method="get">
                     {% csrf_token %}
-                    <label>Search for Courses to Add:</label>
+                    <h5>Search for Courses to Add:</h5>
                     <div class="row align-items-center">
                         <div class="col" style="max-width: 150px">
                             <label for="subject">Subject</label>
                             <div></div>
-                            <input name="subject" type="text" style="max-width: 100px" placeholder="ex. CS" maxlength="4">
+                            <input name="subject" type="text" style="max-width: 100px" placeholder="ex. CS" maxlength="4" value="{{ searchSubject }}">
                         </div>
                         <div class="col" style="max-width: 150px">
                             <label for="number">Course Number</label>
                             <div></div>
-                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999">
+                            <input name="number" type="number" placeholder="ex. 3240" min="0" max="9999" value="{{ searchNumber }}">
                         </div>
                         <div class="col">
                             <label for="courseName">Course Name</label>
                             <div></div>
-                            <input name="courseName" type="text" style="min-width: 200px" placeholder="ex. Discrete Math" maxlength="50">
+                            <input name="courseName" type="text" style="min-width: 200px" placeholder="ex. Discrete Math" maxlength="50" value="{{ searchCourseName }}">
                         </div>
                         <div class="col">
                             <div style="margin-top: 20px"></div>
@@ -109,7 +109,7 @@
                     {% if delete_course_form is None %}
                         <label>You have no courses on your profile to remove.</label>
                     {% else %}
-                        <label>Remove courses from your profile: </label>
+                        <h5>Remove courses from your profile: </h5>
                         <div></div>
                         {{ delete_course_form }}
                         <div>
@@ -163,7 +163,7 @@
             {% else %}
                 <form method="post" action="#Sessions" name="deleteSessionForm">
                     {% csrf_token %}
-                     <label>Select sessions you would like to remove from your profile:</label>
+                     <h5> Select sessions you would like to remove from your profile:</h5>
                     <div></div>
                     {% for session in tutor_sessions_list %}
                         <input type="checkbox" value="{{ session.id }}" name="{{ session.id }}">

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
-{% block title %}Tutor Me | Profile{% endblock %}
+{% block title %}Tutor Me | Search Tutors{% endblock %}
 {% block content %}
 
 <div class="container mt-3">
@@ -71,7 +71,7 @@
                         <h5>No tutor matches your specifications</h5>
                     </div>
                 {% else %}
-                   <div class="accordion" id="accordionExample">
+                   <div class="accordion overflow-auto" id="accordionExample" style="height: 75vh">
                        {% for current_tutor in tutor_list %}
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ current_tutor.id }}">
