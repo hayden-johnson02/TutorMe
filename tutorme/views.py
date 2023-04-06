@@ -17,8 +17,13 @@ app_name = 'tutorme'
 def index(request):
     if request.user.is_authenticated and not request.user.profile.is_tutor and not request.user.profile.is_student:
         return render(request, 'createAccount.html', {})
+    if request.user.is_authenticated and request.user.profile.is_student:
+        favorites = Favorite.objects.all().filter(student=request.user.id)
+    else:
+        favorites = None
 
-    return render(request, 'index.html', {})
+
+    return render(request, 'index.html', {'favorites': favorites})
 
 
 def logout_view(request):

@@ -40,6 +40,14 @@
                             <label class="mt-2" style="margin-left: 5px">Reschedule with a tutor: </label>
                             <label class="mb-2" style="margin-left: 5px">[List maybe up to last 3 tutors they worked with?]</label>
                         </div>
+                        <div class="col rounded mt-3" style="background-color: #BAE4D6">
+                            <label class="mt-2" style="margin-left: 5px">Favorites: </label>
+                            <br>
+                            {% for favorite in favorites %}
+                                <td><a type="button" style="text-decoration: none" href="/view_tutors/{{favorite.tutor.id }}">{{ favorite.student.get_full_name }}</a></td>
+                            <br>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             {% endif %}
