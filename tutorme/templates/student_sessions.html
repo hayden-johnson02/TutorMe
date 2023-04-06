@@ -19,7 +19,7 @@
                 <tbody>
                 {% for session in student_sessions %}
                     <tr>
-                            <td>{{ session.tutor_session.tutor.get_full_name }}</td>
+                            <td><a type="button" style="text-decoration: none" href="/view_tutors/{{ session.tutor_session.tutor.id }}">{{ session.tutor_session.tutor.get_full_name }}</a></td>
                             <td> {{session.tutor_session.tutor.get_email }} </td>
                             <td>{{ session.description }}</td>
                             <td>{{ session.tutor_session.day }}, {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>

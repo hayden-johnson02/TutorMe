@@ -22,7 +22,6 @@ def index(request):
     else:
         favorites = None
 
-
     return render(request, 'index.html', {'favorites': favorites})
 
 
