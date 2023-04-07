@@ -245,13 +245,30 @@ class TestUrls(TestCase):
 
 # https://www.youtube.com/watch?v=hA_VxnxCHbo
 class TestView(TestCase):
-    def test_index(self):
+
+    def test_views(self):
         client = Client()
 
-        response = client.get(reverse('index'))
+        viewsDictionary = {
+        "index" : "index.html"
+        }
 
-        self.assertTemplateUsed(response, "index.html")
+        PASS_MESSAGE = " views uses correct template..."
+        FAIL_MESSAGE = " views does NOT match with correct template..."
 
+        print("Testing Views with Templates...")
+        for views in viewsDictionary:
+            response = client.get(reverse(views))
+
+
+            try: 
+                self.assertEquals(response.status_code, 200)
+                self.assertTemplateUsed(response, viewsDictionary[views])
+
+                print("\n" + views + PASS_MESSAGE)
+
+            except:
+                print("\n" + views + FAIL_MESSAGE)
 
 
 
