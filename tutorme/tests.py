@@ -1,4 +1,4 @@
-from django.test import TestCase, SimpleTestCase
+from django.test import TestCase, SimpleTestCase, Client
 from tutorme.models import Profile, Course, TutorSession, TutorRequest, Review
 from django.urls import reverse, resolve
 from tutorme.views import *
@@ -173,9 +173,6 @@ class ReviewModelTests(TestCase) :
 
 class TestUrls(TestCase):
 
-    
-
-
     def test_all_url_is_resolved(self):
        # databases = '__all__'
 
@@ -246,6 +243,14 @@ class TestUrls(TestCase):
             except:
                 print("\n" + urlName + FAIL_MESSAGE)
 
+# https://www.youtube.com/watch?v=hA_VxnxCHbo
+class TestView(TestCase):
+    def test_index(self):
+        client = Client()
+
+        response = client.get(reverse('index'))
+
+        self.assertTemplateUsed(response, "index.html")
 
 
 
