@@ -90,6 +90,12 @@
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
+                                        {% comment %}
+                                        <form method="post" name="testSess">
+                                            {% csrf_token %}
+                                            <div> {{ session_test }} </div>
+                                            <button type="submit" name="submitSess" class="btn btn-primary">Submit Sess</button>
+                                        </form> {% endcomment %}
                                         <form method="post" action="">
                                             {% csrf_token %}
                                             <textarea class="form-control modal-body" name="comment" id="comment" rows="3" placeholder="Provide any details about your request.."></textarea>

@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm
+from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm, DynamicSessionForm
 from .models import Profile, Course, TutorRequest, TutorSession, Review, Favorite
 
 from django.db.models import Q
@@ -306,6 +306,9 @@ def view_tutor(request, tutor_id):
         reviews = Review.objects.filter(tutor=tutor.user)
         if not reviews:
             reviews = None
+        if 'submitSess' in request.POST:
+            print('test')
+        # testSess = DynamicSessionForm(sessionID=1)
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions,
@@ -316,7 +319,14 @@ def view_tutor(request, tutor_id):
                                                            'requested_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile).exclude(status='Approved').exclude(status='Denied')],
                                                            'approved_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Approved').exclude(status='Denied').exclude(status='Pending')],
                                                            'denied_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Denied').exclude(status='Approved').exclude(status='Pending')],
-                                                           }) 
+                                                           # 'session_test': testSess,
+                                                           })
+    return render(request, 'index.html', {})
+
+
+@login_required(login_url='/login/')
+def request_session(request, tutor_id, session_id):
+    pass
     return render(request, 'index.html', {})
 
 

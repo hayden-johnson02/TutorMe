@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+import datetime
 
 from .models import Profile, TutorSession, Review
 
@@ -94,3 +95,32 @@ class ReviewForm(forms.ModelForm):
                 attrs={'class': 'form-control mt-3 mb-3', 'placeholder': 'Leave a review here!', 'style': 'height: 100px',
                        'id': 'comment'})
         }
+
+
+class DynamicSessionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        session_id = kwargs.pop('sessionID')
+        super(DynamicSessionForm, self).__init__(*args, **kwargs)
+
+        session = TutorSession.objects.get(pk=int(session_id))
+
+        choices = []
+        start_day = None
+        today = datetime.datetime.now()
+        s_day = datetime.datetime.strptime(session.day, "%A").weekday()
+        t_day = today.weekday()
+        if s_day == t_day:
+            start_day = today + datetime.timedelta(days=7)
+        if s_day > t_day:
+            diff = s_day - t_day
+            start_day = today + datetime.timedelta(days=diff)
+        if s_day < t_day:
+            diff = 7 - (t_day - s_day)
+            start_day = today + datetime.timedelta(days=diff)
+
+        choices.append((str(start_day), str(start_day)))
+        for i in range(0, 5):
+            start_day = start_day + datetime.timedelta(days=7)
+            choices.append((str(start_day), str(start_day)))
+
+        self.fields['Select_Sess'] = forms.CharField(label='Select a date:', widget=forms.Select(choices=choices))
