@@ -279,7 +279,7 @@ def view_tutor(request, tutor_id):
                     review.reviewer = request.user
                     review.save()
                     return redirect('/view_tutors/' + str(tutor_id))
-            if 'session_request' in request.POST and not TutorRequest.objects.filter(pk=request.POST.get('session_request')).exists(): 
+            if 'session_request' in request.POST and not TutorRequest.objects.filter(pk=request.POST.get('session_request')).exists():
                 # session_request = session.id
                 # submitting a session request
                 comment = request.POST.get('comment')
@@ -308,7 +308,8 @@ def view_tutor(request, tutor_id):
             reviews = None
         if 'submitSess' in request.POST:
             print('test')
-        # testSess = DynamicSessionForm(sessionID=1)
+
+
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions,
@@ -319,16 +320,28 @@ def view_tutor(request, tutor_id):
                                                            'requested_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile).exclude(status='Approved').exclude(status='Denied')],
                                                            'approved_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Approved').exclude(status='Denied').exclude(status='Pending')],
                                                            'denied_sessions': [s.tutor_session for s in TutorRequest.objects.filter(student=request.user.profile, status='Denied').exclude(status='Approved').exclude(status='Pending')],
-                                                           # 'session_test': testSess,
                                                            })
     return render(request, 'index.html', {})
 
 
 @login_required(login_url='/login/')
-def request_session(request, tutor_id, session_id):
-    pass
+def request_session(request, session_id):
+    if request.user.profile.is_student and 'submitSess' in request.POST and request.method == 'POST':
+        form = DynamicSessionForm(request.POST or None, sessionID=session_id)
+        if form.is_valid():
+            date = request.POST.get('Select_Sess')
+            description = request.POST.get('comment')
+            new_request = TutorRequest(tutor_session=TutorSession.objects.get(pk=session_id),
+                                   student=request.user.profile,
+                                   description=description,
+                                   date=date)
+            new_request.save()
+            return render(request, 'index.html', {})
+    if request.user.profile.is_student:
+        session = TutorSession.objects.get(pk=session_id)
+        form = DynamicSessionForm(sessionID=session_id)
+        return render(request, 'request_session.html', {'session': session, 'form': form})
     return render(request, 'index.html', {})
-
 
 @login_required(login_url='/login/')
 def requests_page(request):
