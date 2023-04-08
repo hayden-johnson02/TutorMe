@@ -106,14 +106,19 @@ class DynamicSessionForm(forms.Form):
 
         choices = []
         start_day = None
-        today = datetime.datetime.today()
-        s_day = datetime.datetime.strptime(session.day, "%A").weekday()
+        today = datetime.date.today()
+        s_day = None
+        match session.day:
+            case 'Monday': s_day = 0
+            case 'Tuesday': s_day = 1
+            case 'Wednesday': s_day = 2
+            case 'Thursday': s_day = 3
+            case 'Friday': s_day = 4
+            case 'Saturday': s_day = 5
+            case 'Sunday': s_day = 6
         t_day = today.weekday()
         if s_day == t_day:
-            if datetime.time > session.start_time:
-                start_day = today + datetime.timedelta(days=7)
-            else:
-                start_day = today
+            start_day = today + datetime.timedelta(days=7)
         if s_day > t_day:
             diff = s_day - t_day
             start_day = today + datetime.timedelta(days=diff)
@@ -121,10 +126,10 @@ class DynamicSessionForm(forms.Form):
             diff = 7 - (t_day - s_day)
             start_day = today + datetime.timedelta(days=diff)
         start_day_to_add = start_day.strftime("%m/%d/%Y")
-        choices.append((str(start_day_to_add), str(start_day_to_add)))
+        choices.append((str(start_day), str(start_day_to_add)))
         for i in range(0, 5):
             start_day = start_day + datetime.timedelta(days=7)
             start_day_to_add = start_day.strftime("%m/%d/%Y")
-            choices.append((str(start_day_to_add), str(start_day_to_add)))
+            choices.append((str(start_day), str(start_day_to_add)))
 
         self.fields['Select_Sess'] = forms.CharField(label='Select a date:', widget=forms.Select(choices=choices))

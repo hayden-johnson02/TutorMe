@@ -1,10 +1,12 @@
 # Create your views here.
 import logging
+import datetime
 
 import requests
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.timezone import make_aware
 
 from .forms import EditProfileForm, DynamicCourseForm, CreateSessionForm, ReviewForm, DynamicSessionForm
 from .models import Profile, Course, TutorRequest, TutorSession, Review, Favorite
@@ -297,7 +299,7 @@ def view_tutor(request, tutor_id):
                 favorite.delete()
                 is_fav = False
         tutor_courses = Course.objects.filter(profile=tutor)
-        tutor_courses = tutor_courses.order_by('subject','catalog_number')
+        tutor_courses = tutor_courses.order_by('subject', 'catalog_number')
         if not tutor_courses:
             tutor_courses = None
         tutor_sessions = TutorSession.objects.filter(tutor=tutor)
@@ -306,9 +308,6 @@ def view_tutor(request, tutor_id):
         reviews = Review.objects.filter(tutor=tutor.user)
         if not reviews:
             reviews = None
-        if 'submitSess' in request.POST:
-            print('test')
-
 
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
@@ -326,22 +325,26 @@ def view_tutor(request, tutor_id):
 
 @login_required(login_url='/login/')
 def request_session(request, session_id):
-    if request.user.profile.is_student and 'submitSess' in request.POST and request.method == 'POST':
-        form = DynamicSessionForm(request.POST or None, sessionID=session_id)
-        if form.is_valid():
-            date = request.POST.get('Select_Sess')
-            description = request.POST.get('comment')
-            new_request = TutorRequest(tutor_session=TutorSession.objects.get(pk=session_id),
-                                   student=request.user.profile,
-                                   description=description,
-                                   date=date)
-            new_request.save()
-            return render(request, 'index.html', {})
     if request.user.profile.is_student:
         session = TutorSession.objects.get(pk=session_id)
+        if 'submitSess' in request.POST and request.method == 'POST':
+            form = DynamicSessionForm(request.POST or None, sessionID=session_id)
+            if form.is_valid():
+                date = request.POST.get('Select_Sess')
+                datetime_object = datetime.datetime.strptime(date, '%Y-%m-%d')
+                description = request.POST.get('comment')
+
+                date = make_aware(datetime_object)
+                new_request = TutorRequest(tutor_session=TutorSession.objects.get(pk=session_id),
+                                           student=request.user.profile,
+                                           description=description,
+                                           date=date)
+                new_request.save()
+                return redirect('/view_tutors/' + str(session.tutor_id))
         form = DynamicSessionForm(sessionID=session_id)
         return render(request, 'request_session.html', {'session': session, 'form': form})
     return render(request, 'index.html', {})
+
 
 @login_required(login_url='/login/')
 def requests_page(request):

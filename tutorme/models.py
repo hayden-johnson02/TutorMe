@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import datetime
 
+
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -71,9 +72,11 @@ class Course(models.Model):
     catalog_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
     course_name = models.CharField(max_length=256)
 
+
 class Favorite(models.Model):
     student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='student_favorite')
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_favorite')
+
 
 class Review(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutor_reviews')
@@ -98,7 +101,6 @@ class TutorSession(models.Model):
     start_time = models.TimeField(auto_now=False, auto_now_add=False)
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='TutorSession_tutor')
-    date = models.DateField(default=datetime.date.today)
 
     def tutor_requests(self):
         return TutorRequest.objects.filter(tutor_session=self).exclude(status='Denied')
