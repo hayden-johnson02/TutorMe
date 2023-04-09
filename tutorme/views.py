@@ -349,7 +349,34 @@ def request_session(request, session_id):
 @login_required(login_url='/login/')
 def requests_page(request):
     if request.user.profile.is_tutor:
-        return render(request, 'requests_page.html', {'tutor_sessions': TutorSession.objects.filter(tutor=request.user.profile)})
+        tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+        student_requests = []
+        for session in tutor_sessions:
+            for req in session.tutor_requests():
+                student_requests.append(req)
+        archive = False
+
+        if request.method == 'GET' and 'Pending' in request.GET:
+            for req in student_requests:
+                if req.status != 'Pending':
+                    student_requests.remove(req)
+
+        if request.method == 'GET' and 'Approved' in request.GET:
+            for req in student_requests:
+                if req.status != 'Approved':
+                    student_requests.remove(req)
+
+        if request.method == 'GET' and 'Denied' in request.GET:
+            for req in student_requests:
+                if req.status != 'Denied':
+                    student_requests.remove(req)
+
+        if request.method == 'GET' and 'Archive' in request.GET:
+            archive = True
+            pass  # only old ones where dates have passed. Make sure when implementing this to
+            # exclude old ones from all the others, including "all current"
+        return render(request, 'requests_page.html', {'student_sessions': student_requests,
+                                                      'archive': archive})
     return render(request, 'index.html', {})
 
 
@@ -372,6 +399,7 @@ def requests_page_update(request, request_id):
 @login_required(login_url='/login/')
 def student_sessions(request):
     if request.user.profile.is_student:
+        archive = False
         student_requests = TutorRequest.objects.filter(student=request.user.profile)
         if request.method == 'GET' and 'Pending' in request.GET:
             student_requests = TutorRequest.objects.filter(student=request.user.profile).filter(status='Pending')
@@ -380,9 +408,10 @@ def student_sessions(request):
         if request.method == 'GET' and 'Denied' in request.GET:
             student_requests = TutorRequest.objects.filter(student=request.user.profile).filter(status='Denied')
         if request.method == 'GET' and 'Archive' in request.GET:
+            archive = True
             pass  # only old ones where dates have passed. Make sure when implementing this to
             # exclude old ones from all the others, including "all current"
-        return render(request, 'student_sessions.html', {'student_sessions': student_requests, })
+        return render(request, 'student_sessions.html', {'student_sessions': student_requests, 'archive': archive})
     return render(request, 'index.html', {})
 
 

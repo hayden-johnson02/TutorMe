@@ -2,52 +2,76 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Requests{% endblock %}
 {% block content %}
-<div class="container border rounded py-3">
-    <h1 >My Requests</h1>
-    <hr>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-2">
+        <div class="bg-light border rounded px-2 py-2">
+            <h5 class="text-center mb-3 mt-2">Sort Requests</h5>
+            <hr>
+            <div class="mb-3">
+                <form method="get">
+                    <div class="btn-group-vertical btn-group-md"  style="width: 100%">
 
-    {% for session in tutor_sessions %}
-        <h2>{{ session.day }}, {{ session.start_time }} to {{ session.end_time }}</h2>
-
-        {% if session.tutor_requests.all %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Details</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in session.tutor_requests.all %}
+                        <button type= "submit" name="All" class="btn btn-secondary">All Current</button>
+                        <button type= "submit" name="Pending" class="btn btn-secondary">Pending</button>
+                        <button type= "submit" name="Approved" class="btn btn-secondary">Approved</button>
+                        <button type= "submit" name="Denied" class="btn btn-secondary">Denied</button>
+                        <button type= "submit" name="Archive" class="btn btn-secondary">Archive</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-10 bg-light border rounded px-2 py-2">
+            <h5 class="text-center mb-3 mt-2">Requests</h5>
+            <hr>
+            <div>
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td><a type="button" style="text-decoration: none" href="/requests_page/view_student/{{request.student.id }}">{{ request.student.user.get_full_name }}</a></td>
-
-                            <td>{{ request.description }}</td>
-                            <td>{{request.status }} </td>
-                            <td>{{request.get_date}}</td>
-                            <td>
-                                <form method="POST" action="{% url 'requests_page_update' request.id %}">
-                                    {% csrf_token %}
-                                    <div class="btn-group">
-                                        {% if request.status == 'Approved' %}
-                                            <button type="submit" class="btn btn-success" name="action" value="approve" disabled>Approve</button>
-                                        {% else %}
-                                            <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
-                                        {% endif %}
-                                        <button type="submit" class="btn btn-danger" name="action" value="deny">Deny</button>
-                                    </div>
-                                </form>
-                            </td>
+                            <th>Date & Time</th>
+                            <th>Student</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                            {% if not archive %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>No requests for this day.</p>
-        {% endif %}
-    {% endfor %}
+                    </thead>
+                        <tbody>
+                        {% for request in student_sessions %}
+                            <tr>
+                                <td style="width: 200px"> {{ request.get_date }}, {{ request.tutor_request.day }} <br>
+                                    {{ request.tutor_session.start_time }} to {{ request.tutor_session.end_time }}</td>
+                                <td style="width: 190px">
+                                    <a type="button" style="text-decoration: none; color: #4fa389" href="/requests_page/view_student/{{ request.student.id }}">
+                                        <b>{{ request.student.user.get_full_name }}</b>
+                                    </a>
+                                </td>
+                                <td>{{ request.description }}</td>
+                                <td style="width: 100px">{{ request.status }}</td>
+                                {% if not archive %}
+                                <td style="width: 180px">
+                                    <form method="POST" action="{% url 'requests_page_update' request.id %}">
+                                        {% csrf_token %}
+                                        <div class="btn-group btn-group-sm">
+                                            {% if request.status == 'Pending' %}
+                                                <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
+                                                <button type="submit" class="btn btn-danger" name="action" value="deny">Deny</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-success" name="action" value="approve" disabled>Approve</button>
+                                                <button type="submit" class="btn btn-danger" name="action" value="deny" disabled>Deny</button>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </td>
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
