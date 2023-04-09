@@ -2,46 +2,74 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Sessions{% endblock %}
 {% block content %}
-<div class="container border rounded py-3">
-    <h1 >My Sessions</h1>
-    <hr>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tutor Name</th>
-                    <th>Email</th>
-                    <th>Details</th>
-                    <th>Time</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-                <tbody>
-                {% for session in student_sessions %}
-                    <tr>
-                            <td><a type="button" style="text-decoration: none" href="/view_tutors/{{ session.tutor_session.tutor.id }}">{{ session.tutor_session.tutor.get_full_name }}</a></td>
-                            <td> {{session.tutor_session.tutor.get_email }} </td>
-                            <td>{{ session.description }}</td>
-                            <td>{{ session.tutor_session.day }}, {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
-                            <td>{{session.get_date}}</td>
-                            <td>{{ session.status }}</td>
-                            <td>
-                                <form method="POST" action="{% url 'student_sessions_update' session.id %}">
-                                    {% csrf_token %}
-                                    <div class="btn-group">
-                                        {%if session.status == 'Approved' %}
-                                            <button type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
-                                        {% else %}
-                                            <button type="submit" class="btn btn-danger" name="action" value="cancel" disabled>Cancel</button>
-                                        {% endif %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-2">
+        <div class="bg-light border rounded px-2 py-2">
+            <h5 class="text-center mb-3 mt-2">Sort Requests</h5>
+            <hr>
+            <div class="mb-3">
+                <form method="get">
+                    <div class="btn-group-vertical btn-group-md"  style="width: 100%">
 
-                                    </div>
-                                </form>
-                            </td>
+                        <button type= "submit" name="All" class="btn btn-secondary">All Current</button>
+                        <button type= "submit" name="Pending" class="btn btn-secondary">Pending</button>
+                        <button type= "submit" name="Approved" class="btn btn-secondary">Approved</button>
+                        <button type= "submit" name="Denied" class="btn btn-secondary">Denied</button>
+                        <button type= "submit" name="Archive" class="btn btn-secondary">Archive</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-10 bg-light border rounded px-2 py-2">
+            <h5 class="text-center mb-3 mt-2">Requests</h5>
+            <hr>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Tutor</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                            {% if not archive %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                        <tbody>
+                        {% for session in student_sessions %}
+                            <tr>
+                                <td style="width: 200px"> {{ session.get_date }}, {{ session.tutor_session.day }} <br>
+                                    {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
+                                <td style="width: 190px">
+                                    <a type="button" style="text-decoration: none; color: #4fa389" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                        <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                    </a>
+                                </td>
+                                <td>{{ session.description }}</td>
+                                <td style="width: 100px">{{ session.status }}</td>
+                                {% if not archive %}
+                                <td style="width: 90px">
+                                    <form method="POST" action="{% url 'student_sessions_update' session.id %}">
+                                        {% csrf_token %}
+                                        <div class="btn-group">
+                                            {%if session.status != 'Denied' %}
+                                                <button type="submit" class="btn btn-danger btn sm" name="action" value="cancel">Cancel</button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger btn sm" name="action" value="cancel" disabled>Cancel</button>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </td>
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
