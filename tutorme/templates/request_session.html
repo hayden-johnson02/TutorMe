@@ -1,13 +1,25 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
-{% block title %}Tutor Me | View Tutor Profile{% endblock %}
-{% block content %}
+{% block title %}Tutor Me | Request Session{% endblock %}
 
-<form align="center" method="post" name="testSess">
-  <header>Request Form</header>
-  {% csrf_token %}
-  <div> {{ form }} </div>
-  <textarea class="form-control" name="comment" id="comment" columns="40" rows="3" placeholder="Provide any details about your request.."></textarea>
-  <button type="submit" name="submitSess" class="btn btn-primary">Submit Request</button>
-</form>
+{% block content %}
+    <div class="container col-6 py-5" style="max-width: 900px">
+    <div class="card">
+        <div class="card-header">
+            <header>Request Form for {{ session.day }}, {{ session.start_time }} to {{ session.end_time }}, with {{ session.tutor.get_full_name }}</header>
+        </div>
+        <div class="card-body bg-light">
+            <div class="container mt-3 mb-4" style="max-width: 740px">
+            <form method="post" name="testSess">
+                {% csrf_token %}
+                <div class="mb-3"> {{ form }} </div>
+                <textarea class="form-control" name="comment" id="comment" columns="30" rows="3" placeholder="Provide any details about your request..."></textarea>
+                <div class="mt-3" style="text-align: right">
+                    <button type="submit" name="submitSess" class="btn btn-sm btn-outline-success" style="text-decoration-color: #1D634D">Submit Request</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    </div>
 {% endblock %}
