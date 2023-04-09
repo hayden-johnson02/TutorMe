@@ -6,20 +6,18 @@
         <div class="card">
             <div class="card-header" style="text-align: center">
                 <h3 style="margin-top: 10px"> {{ current_tutor.first_name }} {{ current_tutor.last_name }}</h3>
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    {% if not is_fav %}
-                        <div style="position: absolute; right: 20px; top: -15px">
+                <div style="position: absolute; right: 15px; top: -20px">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {% if not is_fav %}
                             <input type="hidden" name="not_favorite" value="True" style="outline: none; background-color: transparent">
-                            <button type="submit" class="btn" style="font-size: 350%; right: 15px; top: -10px">♡︎</button>
-                        </div>
-                    {%else%}
-                        <div style="position: absolute; right: 15px; top: -5px">
+                            <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">☆︎</button>
+                        {%else%}
                             <input type="hidden" name="favorite" value="True" style="outline: none; background-color: transparent">
-                            <button type="submit" class="btn" style="font-size: 250%">💚</button>
-                        </div>
-                    {%endif%}
-                </form>
+                            <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">★</button>
+                        {%endif%}
+                    </form>
+                </div>
             </div>
             <div class="card-body bg-light">
                 <div>Email: {{ current_tutor.email }}</div>
