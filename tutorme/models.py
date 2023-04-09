@@ -108,6 +108,15 @@ class TutorSession(models.Model):
     def all_requests(self):
         return TutorRequest.objects.filter(tutor_session=self)
 
+    def pending_requests(self):
+        return TutorRequest.objects.filter(tutor_session=self, status='Pending')
+
+    def approved_requests(self):
+        return TutorRequest.objects.filter(tutor_session=self, status='Approved')
+
+    def denied_requests(self):
+        return TutorRequest.objects.filter(tutor_session=self, status='Denied')
+
     def __str__(self):
         return f'{self.tutor} {self.day} {self.start_time} - {self.end_time}'
 

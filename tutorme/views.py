@@ -357,19 +357,25 @@ def requests_page(request):
         archive = False
 
         if request.method == 'GET' and 'Pending' in request.GET:
-            for req in student_requests:
-                if req.status != 'Pending':
-                    student_requests.remove(req)
+            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+            student_requests = []
+            for session in tutor_sessions:
+                for req in session.pending_requests():
+                    student_requests.append(req)
 
         if request.method == 'GET' and 'Approved' in request.GET:
-            for req in student_requests:
-                if req.status != 'Approved':
-                    student_requests.remove(req)
+            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+            student_requests = []
+            for session in tutor_sessions:
+                for req in session.approved_requests():
+                    student_requests.append(req)
 
         if request.method == 'GET' and 'Denied' in request.GET:
-            for req in student_requests:
-                if req.status != 'Denied':
-                    student_requests.remove(req)
+            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+            student_requests = []
+            for session in tutor_sessions:
+                for req in session.denied_requests():
+                    student_requests.append(req)
 
         if request.method == 'GET' and 'Archive' in request.GET:
             archive = True
