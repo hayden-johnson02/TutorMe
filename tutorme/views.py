@@ -352,7 +352,7 @@ def requests_page(request):
         tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
         student_requests = []
         for session in tutor_sessions:
-            for req in session.tutor_requests():
+            for req in session.all_requests():
                 student_requests.append(req)
         archive = False
 
