@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 import datetime
-
+from django.utils.timezone import now, localtime
 from .models import Profile, TutorSession, Review
 
 
@@ -123,8 +123,13 @@ class DynamicSessionForm(forms.Form):
         if session.day == 'Sunday':
             s_day = 6
         t_day = today.weekday()
+        local = localtime() + datetime.timedelta(hours=1)
+        local = local.time()
         if s_day == t_day:
-            start_day = today + datetime.timedelta(days=7)
+            if session.start_time  <= local:
+                start_day = today + datetime.timedelta(days=7)
+            else:
+                start_day = today
         if s_day > t_day:
             diff = s_day - t_day
             start_day = today + datetime.timedelta(days=diff)
