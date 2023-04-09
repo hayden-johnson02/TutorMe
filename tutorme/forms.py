@@ -108,14 +108,20 @@ class DynamicSessionForm(forms.Form):
         start_day = None
         today = datetime.date.today()
         s_day = None
-        match session.day:
-            case 'Monday': s_day = 0
-            case 'Tuesday': s_day = 1
-            case 'Wednesday': s_day = 2
-            case 'Thursday': s_day = 3
-            case 'Friday': s_day = 4
-            case 'Saturday': s_day = 5
-            case 'Sunday': s_day = 6
+        if session.day == 'Monday':
+            s_day = 0
+        if session.day == 'Tuesday':
+            s_day = 1
+        if session.day == 'Wednesday':
+            s_day = 2
+        if session.day == 'Thursday':
+            s_day = 3
+        if session.day == 'Friday':
+            s_day = 4
+        if session.day == 'Saturday':
+            s_day = 5
+        if session.day == 'Sunday':
+            s_day = 6
         t_day = today.weekday()
         if s_day == t_day:
             start_day = today + datetime.timedelta(days=7)
