@@ -56,9 +56,9 @@
                                         {% csrf_token %}
                                         <div class="btn-group">
                                             {%if session.status != 'Denied' %}
-                                                <button type="submit" class="btn btn-danger btn sm" name="action" value="cancel">Cancel</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="cancel">Cancel</button>
                                             {% else %}
-                                                <button type="submit" class="btn btn-danger btn sm" name="action" value="cancel" disabled>Cancel</button>
+                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="cancel" disabled>Cancel</button>
                                             {% endif %}
                                         </div>
                                     </form>
