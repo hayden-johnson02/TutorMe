@@ -352,36 +352,35 @@ def requests_page(request):
         tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
         student_requests = []
         for session in tutor_sessions:
-            reqs = session.all_requests().filter().order_by('date')
-            for req in reqs:
+            for req in session.all_requests():
                 student_requests.append(req)
         archive = False
 
         if request.method == 'GET' and 'Pending' in request.GET:
-            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
             student_requests = []
             for session in tutor_sessions:
                 for req in session.pending_requests():
                     student_requests.append(req)
 
         if request.method == 'GET' and 'Approved' in request.GET:
-            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
             student_requests = []
             for session in tutor_sessions:
                 for req in session.approved_requests():
                     student_requests.append(req)
 
         if request.method == 'GET' and 'Denied' in request.GET:
-            tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
             student_requests = []
             for session in tutor_sessions:
                 for req in session.denied_requests():
                     student_requests.append(req)
-
+        student_requests.sort(key=lambda x: x.date)
         if request.method == 'GET' and 'Archive' in request.GET:
             archive = True
-            pass  # only old ones where dates have passed. Make sure when implementing this to
-            # exclude old ones from all the others, including "all current"
+            student_requests = []
+            for session in tutor_sessions:
+                for req in session.archived_requests():
+                    student_requests.append(req)
+            student_requests.sort(key=lambda x: x.date, reverse=True)
         return render(request, 'requests_page.html', {'student_sessions': student_requests,
                                                       'archive': archive})
     return render(request, 'index.html', {})
@@ -410,7 +409,7 @@ def student_sessions(request):
 
         today = datetime.datetime.today() - datetime.timedelta(1)
 
-        student_requests = TutorRequest.objects.filter(student=request.user.profile, date__gt=today)
+        student_requests = TutorRequest.objects.filter(student=request.user.profile, date__gte=today)
         if request.method == 'GET' and 'Pending' in request.GET:
             student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Pending', date__gte=today)
         if request.method == 'GET' and 'Approved' in request.GET:

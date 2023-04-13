@@ -106,16 +106,24 @@ class TutorSession(models.Model):
         return TutorRequest.objects.filter(tutor_session=self).exclude(status='Denied')
     
     def all_requests(self):
-        return TutorRequest.objects.filter(tutor_session=self)
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        return TutorRequest.objects.filter(tutor_session=self, date__gte=today)
 
     def pending_requests(self):
-        return TutorRequest.objects.filter(tutor_session=self, status='Pending')
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        return TutorRequest.objects.filter(tutor_session=self, status='Pending', date__gte=today)
 
     def approved_requests(self):
-        return TutorRequest.objects.filter(tutor_session=self, status='Approved')
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        return TutorRequest.objects.filter(tutor_session=self, status='Approved', date__gte=today)
 
     def denied_requests(self):
-        return TutorRequest.objects.filter(tutor_session=self, status='Denied')
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        return TutorRequest.objects.filter(tutor_session=self, status='Denied', date__gte=today)
+
+    def archived_requests(self):
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        return TutorRequest.objects.filter(tutor_session=self, date__lte=today)
 
     def __str__(self):
         return f'{self.tutor} {self.day} {self.start_time} - {self.end_time}'
