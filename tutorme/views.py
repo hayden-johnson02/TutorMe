@@ -352,7 +352,8 @@ def requests_page(request):
         tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
         student_requests = []
         for session in tutor_sessions:
-            for req in session.all_requests():
+            reqs = session.all_requests().filter().order_by('date')
+            for req in reqs:
                 student_requests.append(req)
         archive = False
 
@@ -406,17 +407,20 @@ def requests_page_update(request, request_id):
 def student_sessions(request):
     if request.user.profile.is_student:
         archive = False
-        student_requests = TutorRequest.objects.filter(student=request.user.profile)
+
+        today = datetime.datetime.today() - datetime.timedelta(1)
+
+        student_requests = TutorRequest.objects.filter(student=request.user.profile, date__gt=today)
         if request.method == 'GET' and 'Pending' in request.GET:
-            student_requests = TutorRequest.objects.filter(student=request.user.profile).filter(status='Pending')
+            student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Pending', date__gte=today)
         if request.method == 'GET' and 'Approved' in request.GET:
-            student_requests = TutorRequest.objects.filter(student=request.user.profile).filter(status='Approved')
+            student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Approved', date__gte=today)
         if request.method == 'GET' and 'Denied' in request.GET:
-            student_requests = TutorRequest.objects.filter(student=request.user.profile).filter(status='Denied')
+            student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Denied', date__gte=today)
+        student_requests = student_requests.order_by('date')
         if request.method == 'GET' and 'Archive' in request.GET:
             archive = True
-            pass  # only old ones where dates have passed. Make sure when implementing this to
-            # exclude old ones from all the others, including "all current"
+            student_requests = TutorRequest.objects.filter(student=request.user.profile, date__lte=today).order_by('date').reverse()
         return render(request, 'student_sessions.html', {'student_sessions': student_requests, 'archive': archive})
     return render(request, 'index.html', {})
 
