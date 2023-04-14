@@ -334,6 +334,7 @@ def view_tutor(request, tutor_id):
 def request_session(request, session_id):
     if request.user.profile.is_student:
         session = TutorSession.objects.get(pk=session_id)
+        already_requested = False
         if 'submitSess' in request.POST and request.method == 'POST':
             form = DynamicSessionForm(request.POST or None, sessionID=session_id)
             if form.is_valid():
@@ -341,15 +342,23 @@ def request_session(request, session_id):
                 datetime_object = datetime.datetime.strptime(date, '%Y-%m-%d')
                 description = request.POST.get('comment')
 
-                date = make_aware(datetime_object)
-                new_request = TutorRequest(tutor_session=TutorSession.objects.get(pk=session_id),
-                                           student=request.user.profile,
-                                           description=description,
-                                           date=date)
-                new_request.save()
+                check_previous = TutorRequest.objects.filter(tutor_session=TutorSession.objects.get(pk=session_id),
+                                                             student=request.user.profile,
+                                                             date=date)
+                if check_previous.__len__() < 1:
+                    date = make_aware(datetime_object)
+                    new_request = TutorRequest(tutor_session=TutorSession.objects.get(pk=session_id),
+                                               student=request.user.profile,
+                                               description=description,
+                                               date=date)
+                    new_request.save()
+                else:
+                    already_requested = True
+                    return render(request, 'request_session.html',
+                                  {'session': session, 'form': DynamicSessionForm(sessionID=session_id), 'already_requested': already_requested})
                 return redirect('/view_tutors/' + str(session.tutor_id))
         form = DynamicSessionForm(sessionID=session_id)
-        return render(request, 'request_session.html', {'session': session, 'form': form})
+        return render(request, 'request_session.html', {'session': session, 'form': form, 'already_requested': already_requested})
     return render(request, 'index.html', {})
 
 
