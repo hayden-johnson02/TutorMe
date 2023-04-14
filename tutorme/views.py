@@ -308,10 +308,13 @@ def view_tutor(request, tutor_id):
         reviews = Review.objects.filter(tutor=tutor.user)
         if not reviews:
             reviews = None
-
+        already_reviewed = False
+        if Review.objects.filter(tutor=tutor.user, reviewer=request.user):
+            already_reviewed = True
         return render(request, 'view_tutor_profile.html', {'current_tutor': tutor,
                                                            'tutor_courses': tutor_courses,
                                                            'tutor_sessions': tutor_sessions,
+                                                           'already_reviewed': already_reviewed,
                                                            'reviews': reviews,
                                                            'review_form': ReviewForm(),
                                                            'is_fav': is_fav,
