@@ -259,7 +259,10 @@ def delete_review(request, review_id):
     review = Review.objects.get(pk=review_id)
     if request.user == review.reviewer:
         review.delete()
-    return redirect('/view_tutors/' + str(review.tutor.profile.id))
+    if review.tutor.profile.is_tutor:
+        return redirect('/view_tutors/' + str(review.tutor.profile.id))
+    else:
+        return redirect('/requests_page/view_student/' + str(review.tutor.profile.id))
 
 
 @login_required(login_url='/login/')
@@ -445,5 +448,22 @@ def student_sessions_update(request, request_id):
 def view_student(request, student_id):
     if request.user.profile.is_tutor:
         student = Profile.objects.get(pk=student_id)
-        return render(request, 'view_student_profile.html', {'current_student': student})
+        if request.method == 'POST' and 'review' in request.POST:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.tutor = student.user
+                review.reviewer = request.user
+                review.save()
+                return redirect('/requests_page/view_student/' + str(student_id))
+        reviews = Review.objects.filter(tutor=student.user)
+        if not reviews:
+            reviews = None
+        already_reviewed = False
+        if Review.objects.filter(tutor=student.user, reviewer=request.user):
+            already_reviewed = True
+        return render(request, 'view_student_profile.html', {'current_student': student,
+                                                             'already_reviewed': already_reviewed,
+                                                             'reviews': reviews,
+                                                             'review_form': ReviewForm(),})
     return render(request, 'index.html', {})

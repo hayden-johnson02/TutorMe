@@ -15,7 +15,87 @@
                 <div>{{ current_student.bio }}</div>
         </div>
         </div>
-
     </div>
+        <div>
+            <div class="border rounded bg-light">
+                {% if not already_reviewed %}
+                <div class="container" style="max-width: 900px">
+                <h5 class="text-center mb-0 mt-3">Add a Review</h5>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            {{ review_form.comment }}
+                        </div>
+                        <div class="col" style="max-width: 330px;">
+                            <div class="form-group row mb-2 mt-2">
+                                <label for="rating" class="col-sm-2 col-form-label">Rating:</label>
+                                <div class="col-sm-1 mt-2">
+                                    <span id="rating_value" class="ml-2">5</span>
+                                </div>
+                                <div class="col-sm-8 align-items-center mt-2 ">
+                                    {{ review_form.rating }}
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3 mb-3">
+                                <div class="btn-group" role="group">
+                                    <input type="hidden" id="review" name="review" value="True">
+                                    <button class="rounded btn btn-secondary" type="submit">Submit Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                {% endif %}
+                <div class="container" style="max-width: 900px">
+                <hr>
+                {% if reviews is None %}
+                    <div class="mb-3" style="text-align: center">
+                        <label>There are no reviews for this tutor yet.</label>
+                    </div>
+                {% else %}
+                    <div style="text-align: center"> Average Rating: {{ current_student.average_rating }} </div>
+                <hr>
+                {% for review in reviews %}
+                    <div class="review">
+                        <div class="row">
+                            <div class="col">
+                                <div class="rating">Rating:
+                                    {% if review.rating is 5 %}
+                                        ★★★★★
+                                    {% elif review.rating is 4 %}
+                                        ★★★★☆
+                                    {% elif review.rating is 3 %}
+                                        ★★★☆☆
+                                    {% elif review.rating is 2 %}
+                                        ★★☆☆☆
+                                    {% elif review.rating is 1 %}
+                                        ★☆☆☆☆
+                                    {% endif %}
+                                    ({{ review.rating }} stars)
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="created_at" style="float: right">{{ review.created_at }}</div>
+                            </div>
+                        </div>
+                        <div class="reviewer">Reviewer: {{ review.reviewer.username }}</div>
+                        <div class="container" style="max-width: 750px">
+                            <div class="comment">{{ review.comment }}</div>
+                        </div>
+
+                        {% if review.reviewer == user %}
+                            <div style="text-align: right">
+                                <a class="btn btn-outline-danger" href="{% url 'delete_review' review.id %}">Delete Review</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr>
+                {% endfor %}
+                {% endif %}
+                </div>
+            </div>
+        </div>
 </div>
 {% endblock %}
