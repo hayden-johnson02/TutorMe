@@ -45,7 +45,7 @@ def profile_view(request):
     courses = courses.order_by('subject', 'catalog_number')
     if not courses:
         courses = None
-    tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+    tutor_sessions = request.user.profile.get_sessions()
     if not tutor_sessions:
         tutor_sessions = None
     return render(request, 'profile.html', {'courses': courses, 'tutor_sessions': tutor_sessions})
@@ -148,12 +148,13 @@ def edit_profile_view(request):
         else:
             invalid_session_time = True
     create_session_form = CreateSessionForm()
-    tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
+    tutor_sessions_list = request.user.profile.get_sessions()
     if request.method == 'POST' and 'deleteTutorSessions' in request.POST:
         for sess in tutor_sessions_list:
             if str(sess.id) in request.POST:
                 TutorSession.objects.get(id=sess.id).delete()
-        tutor_sessions_list = TutorSession.objects.all().filter(tutor=request.user.profile)
+        tutor_sessions_list = request.user.profile.get_sessions()
+
     if not tutor_sessions_list:
         tutor_sessions_list = None
     form = EditProfileForm(instance=request.user.profile)
@@ -305,7 +306,7 @@ def view_tutor(request, tutor_id):
         tutor_courses = tutor_courses.order_by('subject', 'catalog_number')
         if not tutor_courses:
             tutor_courses = None
-        tutor_sessions = TutorSession.objects.filter(tutor=tutor)
+        tutor_sessions = tutor.get_sessions()
         if not tutor_sessions:
             tutor_sessions = None
         reviews = Review.objects.filter(tutor=tutor.user)

@@ -50,7 +50,18 @@ class Profile(models.Model):
         tutor_sessions = TutorSession.objects.filter(tutor=self)
         if not tutor_sessions:
             return None
-        return tutor_sessions
+        sundays = TutorSession.objects.filter(tutor=self, day='Sunday').order_by('start_time')
+        mondays = TutorSession.objects.filter(tutor=self, day='Monday').order_by('start_time')
+        tuesdays = TutorSession.objects.filter(tutor=self, day='Tuesday').order_by('start_time')
+        wednesdays = TutorSession.objects.filter(tutor=self, day='Wednesday').order_by('start_time')
+        thursdays = TutorSession.objects.filter(tutor=self, day='Thursday').order_by('start_time')
+        fridays = TutorSession.objects.filter(tutor=self, day='Friday').order_by('start_time')
+        saturdays = TutorSession.objects.filter(tutor=self, day='Saturday').order_by('start_time')
+        tutor_sessions_list = []
+        for day in [sundays, mondays, tuesdays, wednesdays, thursdays, fridays, saturdays]:
+            for session in day:
+                tutor_sessions_list.append(session)
+        return tutor_sessions_list
 
     def courses(self):
         courses = Course.objects.filter(profile=self)
