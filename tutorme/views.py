@@ -397,6 +397,8 @@ def requests_page(request):
                 for req in session.archived_requests():
                     student_requests.append(req)
             student_requests.sort(key=lambda x: x.date, reverse=True)
+        if not student_requests:
+            student_requests = None
         return render(request, 'requests_page.html', {'student_sessions': student_requests,
                                                       'archive': archive})
     return render(request, 'index.html', {})
@@ -436,6 +438,8 @@ def student_sessions(request):
         if request.method == 'GET' and 'Archive' in request.GET:
             archive = True
             student_requests = TutorRequest.objects.filter(student=request.user.profile, date__lte=today).order_by('date').reverse()
+        if not student_requests:
+            student_requests = None
         return render(request, 'student_sessions.html', {'student_sessions': student_requests, 'archive': archive})
     return render(request, 'index.html', {})
 
