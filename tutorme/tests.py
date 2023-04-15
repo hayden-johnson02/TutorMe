@@ -1,5 +1,5 @@
 from django.test import TestCase, SimpleTestCase, Client
-from tutorme.models import Profile, Course, TutorSession, TutorRequest, Review
+from tutorme.models import Profile, Course, TutorSession, TutorRequest, Review, Favorite
 from django.urls import reverse, resolve
 from tutorme.views import *
 from django.contrib.auth import get_user_model
@@ -161,7 +161,19 @@ class ReviewModelTests(TestCase) :
         d = datetime(2023, 3, 28, 23, 55, 59, 342380)
         testReview = create_review(testTutorUser, testStudentUser, 5, "Great tutor!", d)
         self.assertEquals(d, testReview.created_at)
-        
+
+class FavoriteModelTests(TestCase):
+    def test_Valid_Favorite_Student(self):
+        tutor = create_tutor()
+        student = create_student()
+        favorite = Favorite(student=student, tutor=tutor)
+        self.assertEquals(student, favorite.student)
+    def test_Valid_Favorite_Tutor(self):
+        tutor = create_tutor()
+        student = create_student()
+        favorite = Favorite(student=student, tutor=tutor)
+        self.assertEquals(tutor, favorite.tutor)
+
 
 # View Tests
 
