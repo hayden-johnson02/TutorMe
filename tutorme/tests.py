@@ -255,6 +255,40 @@ class TutorRequestTests(TestCase) :
 
 
 # View Tests
+validStatusCodes = {200, 301, 302}
+# https://www.youtube.com/watch?v=hA_VxnxCHbo
+class TestView(TestCase):
+
+    
+
+    print("Testing views...")
+    def test_index_view(self): # index view
+        client = Client()
+
+        response = client.get(reverse('index'))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "index.html")
+    
+    def test_login_view(self): # login view
+        client = Client()
+
+        response = client.get(reverse('login'))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "login.html")
+    
+    def test_create_account_view(self): # create account view
+        client = Client()
+        global validStatusCodes
+
+        response = client.get(reverse('createAccount'))
+        
+        if response.status_code in validStatusCodes:
+            self.assertTemplateUsed(response, "createAccount.html")
+        else:
+            print("profile has status code:", response.status_code, "which is not valid")
+            raise Exception(AssertionError)
 
 # Template Tests
 
@@ -333,28 +367,7 @@ class TestUrls(TestCase):
             except:
                 print("\n" + urlName + FAIL_MESSAGE)
 
-# https://www.youtube.com/watch?v=hA_VxnxCHbo
-class TestView(TestCase):
 
-    PASS_MESSAGE = " views uses correct template..."
-    FAIL_MESSAGE = " views does NOT match with correct template..."
-
-    print("Testing views...")
-    def test_index_view(self): # index view
-        client = Client()
-
-        response = client.get(reverse('index'))
-
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "index.html")
-    
-    def test_login_view(self): # login view
-        client = Client()
-
-        response = client.get(reverse('login'))
-
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "login.html")
             
         
 

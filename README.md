@@ -58,3 +58,8 @@ To run locally `heroku local --port 8000` in the heroku cli
   - `dev.py` contains settings set for development (allowed localhosts, sqlite backend, debug mode, and the right google login api client_id and key for testing locally).
   - `prod.py` contains those same settings set for deployment. 
   - **IMPORTANT:** you must set `DJANGO_DEVELOPMENT=true` locally to ensure the correct `settings` file is used. 
+
+**Known Errors**
+
+- Error: `django.db.utils.OperationalError: table "tutorme_favorite" already exists`
+    - make sure you only have `__init__.py` and `0001_initial.py` in your migrations folder
