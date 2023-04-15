@@ -173,6 +173,47 @@ class FavoriteModelTests(TestCase):
         student = create_student()
         favorite = Favorite(student=student, tutor=tutor)
         self.assertEquals(tutor, favorite.tutor)
+class TutorSessionTests(TestCase) :
+    def test_Valid_Session_Tutor(self):
+        tutor = create_tutor()
+        d1 = datetime(2023, 3, 28, 20, 55, 59, 342380)
+        d2 = datetime(2023, 3, 28, 21, 55, 59, 342380)
+        validSession = TutorSession(day = "Thursday", start_time=d1, end_time=d2, tutor =tutor)
+        self.assertEquals(tutor, validSession.tutor)
+
+    def test_Valid_Session_Day(self):
+        tutor = create_tutor()
+        d1 = datetime(2023, 3, 28, 20, 55, 59, 342380)
+        d2 = datetime(2023, 3, 28, 21, 55, 59, 342380)
+        validSession = TutorSession(day = "Thursday", start_time=d1, end_time=d2, tutor =tutor)
+        self.assertEquals("Thursday", validSession.day)
+
+    def test_Valid_Session_Times(self):
+        tutor = create_tutor()
+        d1 = datetime(2023, 3, 28, 20, 55, 59, 342380)
+        d2 = datetime(2023, 3, 28, 21, 55, 59, 342380)
+        validSession = TutorSession(day = "Thursday", start_time=d1, end_time=d2, tutor =tutor)
+        self.assertEquals(d1, validSession.start_time)
+        self.assertEquals(d2, validSession.end_time)
+
+    def test_Invalid_Session_Day(self):
+        tutor = create_tutor()
+        d1 = datetime(2023, 3, 28, 20, 55, 59, 342380)
+        d2 = datetime(2023, 3, 28, 21, 55, 59, 342380)
+        validSession = TutorSession(day = "Thursda", start_time=d1, end_time=d2, tutor =tutor)
+        self.assertEquals("Thursda", validSession.day)
+
+def create_valid_tutor_session(tutor) :
+    d1 = datetime(2023, 3, 28, 20, 55, 59, 342380)
+    d2 = datetime(2023, 3, 28, 21, 55, 59, 342380)
+    validSession = TutorSession(day="Thursday", start_time=d1, end_time=d2, tutor=tutor)
+    return validSession
+
+class TutorRequestReview() :
+
+    def test_Valid_Request_Tutor(self):
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
 
 
 # View Tests
