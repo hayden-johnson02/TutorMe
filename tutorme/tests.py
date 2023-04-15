@@ -209,11 +209,49 @@ def create_valid_tutor_session(tutor) :
     validSession = TutorSession(day="Thursday", start_time=d1, end_time=d2, tutor=tutor)
     return validSession
 
-class TutorRequestReview() :
+class TutorRequestTests(TestCase) :
 
     def test_Valid_Request_Tutor(self):
+        student = create_student()
         tutor = create_tutor()
         session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student)
+        self.assertEquals(tutor, request.tutor_session.tutor)
+
+    def test_Valid_Request_Student(self):
+        student = create_student()
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student)
+        self.assertEquals(student, request.student)
+
+    def test_Valid_Request_Not_Accepted(self):
+        student = create_student()
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student)
+        self.assertEquals(False, request.is_accepted)
+
+    def test_Valid_Request_Accepted(self):
+        student = create_student()
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student, is_accepted=True)
+        self.assertEquals(True, request.is_accepted)
+
+    def test_Valid_Request_Description(self):
+        student = create_student()
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student, description="Testing!")
+        self.assertEquals("Testing!", request.description)
+
+    def test_Valid_Request_Status(self):
+        student = create_student()
+        tutor = create_tutor()
+        session = create_valid_tutor_session(tutor)
+        request = TutorRequest(tutor_session=session, student=student)
+        self.assertEquals("Pending", request.status)
 
 
 # View Tests
