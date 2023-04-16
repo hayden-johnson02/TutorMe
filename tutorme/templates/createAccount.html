@@ -3,6 +3,7 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Create Account{% endblock %}
 {% block content %}
+{% load static %}
 <div class = "container col-6 py-5" style = "max-width: 18rem;">
      <div class = "card justify-content-center border-dark mb-3" align="center">
           <div class = "card-header" >
@@ -14,12 +15,14 @@
                       <div class="btn-group btn-group-toggle" data-toggle="buttons">
                           <label class="btn btn-outline-secondary">
                               <input type="radio"  name="options" id="student_choice" autocomplete="off" value="student_choice">
-                              <object data="../static/icons/student-person-2.svg" height="20" width="20"></object>
+<!--                              <img src="{% static 'icons/student-person-2.svg' %}">-->
+                              <image src="{% static 'icons/student-person-2.svg' %}" height="20" width="20"></image>
                               Student
                           </label>
                           <label class="btn btn-outline-secondary" for="tutor_choice">
                               <input type="radio"  name="options" id="tutor_choice" autocomplete="off" value="tutor_choice">
-                              <object data="../static/icons/teacher-svgrepo-com.svg" height="20" width="20"></object>
+                              <image src="{% static 'icons/teacher-svgrepo-com.svg' %}" height="20" width="20"></image>
+<!--                              <img src="{% static 'icons/teacher-svgrepo-com.svg' %}" alt="Hi!">-->
                               Tutor</label>
                       </div>
                       <hr>
