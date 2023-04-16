@@ -3,7 +3,7 @@
 {% block title %}Tutor Me | Home{% endblock %}
 {% block content %}
 {% load static %}
-<div class="container col-6 py-5">
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 900px">
     <div class="card">
         <div class="card-header">
             Home Page
@@ -15,13 +15,55 @@
             {% if user.profile.is_tutor %}
                 <div class="row rounded" style="margin-left: 5px">
                     <div class="col rounded" style="background-color: #BAE4D6">
-                        <label class="mt-2">New Requests!</label>
-                        <label> [insert little box with up to 5 new requests to respond to] </label>
+                        <label class="mt-2"><b>New Requests!</b></label>
+                        {% if recent_reqs is None %}
+                            <div style="text-align: center">
+                                <label>No requests to see.</label>
+                            </div>
+                        {% else %}
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Student</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for session in recent_reqs %}
+                                    <tr>
+                                    <td style="width: 100px"> {{ session.get_date }}<br>
+                                    <td style="width: 220px">
+                                        <a type="button" style="text-decoration: none; color: #4fa389" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                            <b>{{ session.student.user.get_full_name }}</b>
+                                        </a>
+                                    </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
                     </div>
                     <div class="col-5">
                         <div class="col rounded" style="background-color: #BAE4D6">
-                            <label class="mt-2" style="margin-left: 5px">Upcoming Appointment! </label>
-                            <label class="mb-2" style="margin-left: 5px">[Show details of next tutoring session, including description]</label>
+                            <div style="padding-top: 10px"></div>
+                            <b style="margin-left: 10px">Upcoming Appointment! </b>
+                            {% if upcoming_apt is None %}
+                                <label style="margin-left: 10px; padding-bottom: 10px">No upcoming appointments...</label>
+                            {% else %}
+                            <div style="margin-left: 10px; padding-bottom: 10px">
+                                {% for session in upcoming_apt %}
+                                    <div> {{ session.get_date }}, {{ session.tutor_session.day }} </div>
+                                    <div> {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }} </div>
+                                    <div>
+                                        Tutor:
+                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                            <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                        </a>
+                                    </div>
+                                    <div>Note: {{ session.description }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -29,25 +71,72 @@
             {% if user.profile.is_student %}
                 <div class="row rounded" style="margin-left: 5px">
                     <div class="col rounded" style="background-color: #BAE4D6">
-                        <div style="padding-top: 10px"></div>
-                        <b>View Recently Approved/Denied Requests!</b>
-                        <label> [insert little box with maybe last 5 request decisions or smthg] </label>
+                        <div style="padding-top: 10px">
+                            <b>View Recently Approved/Denied Requests!</b>
+                        </div>
+                        {% if recent_reqs is None %}
+                            <div style="text-align: center">
+                                <label>No requests to see.</label>
+                            </div>
+                        {% else %}
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Tutor</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for session in recent_reqs %}
+                                    <tr>
+                                    <td style="width: 100px"> {{ session.get_date }}<br>
+                                    <td style="width: 220px">
+                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                            <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                        </a>
+                                    </td>
+                                    <td style="width: 100px">{{ session.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
                     </div>
                     <div class="col-5">
                         <div class="col rounded" style="background-color: #BAE4D6">
                             <div style="padding-top: 10px"></div>
                             <b style="margin-left: 10px">Upcoming Appointment! </b>
-                            <label style="margin-left: 10px">[Show details of next tutoring session]</label>
-                            <div style="padding-bottom: 10px"></div>
+                            {% if upcoming_apt is None %}
+                                <label style="margin-left: 10px; padding-bottom: 10px">No upcoming appointments...</label>
+                            {% else %}
+                            <div style="margin-left: 10px; padding-bottom: 10px">
+                                {% for session in upcoming_apt %}
+                                    <div> {{ session.get_date }}, {{ session.tutor_session.day }} </div>
+                                    <div> {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }} </div>
+                                    <div>
+                                        Tutor:
+                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                            <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                        </a>
+                                    </div>
+                                    <div>Note: {{ session.description }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="col rounded mt-3" style="background-color: #BAE4D6">
                             <div style="padding-top: 10px"></div>
                             <b style="margin-left: 10px">Favorites: </b>
                             <br>
+                            {% if favorites is None %}
+                                <label style="margin-left: 10px">No tutors favorited yet!</label>
+                            {% else %}
                             {% for favorite in favorites %}
-                                <td><a type="button" style="text-decoration: none; margin-left: 10px; color: #1D634D" href="/view_tutors/{{favorite.tutor.id }}">★ {{ favorite.tutor.get_full_name }}</a></td>
+                                <td><a type="button" style="text-decoration: none; margin-left: 10px; color: #1D634D" href="/view_tutors/{{favorite.tutor.id }}"><b>★ {{ favorite.tutor.get_full_name }}</b></a></td>
                             <br>
                             {% endfor %}
+                            {% endif %}
                             <div style="padding-bottom: 10px"></div>
                         </div>
                     </div>

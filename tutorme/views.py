@@ -17,14 +17,28 @@ app_name = 'tutorme'
 
 
 def index(request):
+    favorites = None
+    upcoming_apt = None
+    recent_reqs = None
     if request.user.is_authenticated and not request.user.profile.is_tutor and not request.user.profile.is_student:
         return render(request, 'createAccount.html', {})
     if request.user.is_authenticated and request.user.profile.is_student:
         favorites = Favorite.objects.all().filter(student=request.user.id)
-    else:
-        favorites = None
-
-    return render(request, 'index.html', {'favorites': favorites})
+        if favorites.__len__() == 0:
+            favorites = None
+        today = datetime.datetime.today() - datetime.timedelta(1)
+        upcoming_apt = TutorRequest.objects.filter(student=request.user.profile, status='Approved', date__gte=today)[:1]
+        if upcoming_apt.__len__() == 0:
+            upcoming_apt = None
+        recent_reqs = (TutorRequest.objects.filter(student=request.user.profile, status='Denied', date__gte=today) | TutorRequest.objects.filter(student=request.user.profile, status='Approved', date__gte=today))[:5]
+        if recent_reqs.__len__() == 0:
+            recent_reqs = None
+    elif request.user.is_authenticated and request.user.profile.is_tutor:
+        upcoming_apt = None
+        recent_reqs = None
+    return render(request, 'index.html', {'favorites': favorites,
+                                          'upcoming_apt': upcoming_apt,
+                                          'recent_reqs': recent_reqs})
 
 
 def logout_view(request):
@@ -242,6 +256,8 @@ def tutor_list(request):
     for tutor in possible_tutors:
         if tutor.average_rating() < float(min_rating):
             possible_tutors = possible_tutors.exclude(pk=tutor.pk)
+    if not possible_tutors:
+        possible_tutors = None
 
     print(f'rendering with filters: Subject={subject}, Course Number={course_num}, First Name={first_name}, Last Name={last_name}, Course Name={course_name} and Min Rating={min_rating}')
     return render(request, 'view_tutors.html', {
