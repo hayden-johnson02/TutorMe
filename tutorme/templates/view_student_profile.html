@@ -52,7 +52,7 @@
                 <hr>
                 {% if reviews is None %}
                     <div class="mb-3" style="text-align: center">
-                        <label>There are no reviews for this tutor yet.</label>
+                        <label>There are no reviews for this student yet.</label>
                     </div>
                 {% else %}
                     <div style="text-align: center"> Average Rating: {{ current_student.average_rating }} </div>
@@ -97,4 +97,10 @@
             </div>
         </div>
 </div>
+
+<script>
+  document.getElementById("rating").addEventListener("input", function() {
+      document.getElementById("rating_value").innerHTML = this.value;
+  });
+</script>
 {% endblock %}
