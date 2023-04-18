@@ -202,3 +202,6 @@ SOCIALACCOUNT_PROVIDERS = {
 #
 # if os.getenv('DJANGO_DEVELOPMENT') == 'true':
 #     from settings_dev import *  # or specific overrides
+
+# Redirect from HTTP to HTTPS
+SECURE_SSL_REDIRECT = True
