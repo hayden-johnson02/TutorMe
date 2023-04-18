@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+# Redirect from HTTP to HTTPS
+SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = 'tutorme.urls'
 
