@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+# Redirect from HTTP to HTTPS
+SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = 'tutorme.urls'
 
@@ -203,5 +205,3 @@ SOCIALACCOUNT_PROVIDERS = {
 # if os.getenv('DJANGO_DEVELOPMENT') == 'true':
 #     from settings_dev import *  # or specific overrides
 
-# Redirect from HTTP to HTTPS
-SECURE_SSL_REDIRECT = True
