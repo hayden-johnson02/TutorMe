@@ -20,11 +20,11 @@
                 </div>
             </div>
             <div class="card-body bg-light">
-                <div>Email: {{ current_tutor.email }}</div>
+                <div><b>Email:</b> {{ current_tutor.email }}</div>
                 <div class="row" style="margin-top: 10px">
                     <div class="col">
                         <label>
-                            Hourly Rate:
+                            <b>Hourly Rate:</b>
                             {% if current_tutor.hourly_rate is None %}
                                 Not set yet!
                             {% else %}
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col">
                         <label>
-                            Venmo:
+                            <b>Venmo:</b>
                             {% if current_tutor.venmo is None %}
                                 Not set yet!
                             {% else %}
@@ -45,13 +45,13 @@
                 </div>
                 <div>
                     <hr>
-                    Bio:
+                    <b>Bio:</b>
                 </div>
                 <div>{{ current_tutor.bio }}</div>
                 <hr>
                 <div class="row">
                     <div class="col" style="border-right: 1px solid gainsboro">
-                        <label>Courses I tutor for:</label>
+                        <label><b>Courses I tutor for:</b></label>
                         {% if tutor_courses is None %}
                             <div></div>
                             <label>This tutor has not added any courses yet!</label>
@@ -60,7 +60,7 @@
                         {% endif %}
                     </div>
                     <div class="col">
-                        <label>Available Sessions:</label>
+                        <label><b>Available Sessions:</b></label>
                         {% if tutor_sessions is None %}
                             <label>This tutor has not added any times yet!</label>
                         {% else %}
@@ -82,7 +82,7 @@
             <div class="border rounded bg-light">
                 {% if not already_reviewed %}
                 <div class="container" style="max-width: 900px">
-                <h5 class="text-center mb-0 mt-3">Add a Review</h5>
+                <h5 class="text-center mb-0 mt-3"><b>Add a Review</b></h5>
                 <form method="post" action="">
                     {% csrf_token %}
                     <div class="row">
@@ -117,7 +117,7 @@
                         <label>There are no reviews for this tutor yet.</label>
                     </div>
                 {% else %}
-                    <div style="text-align: center"> Average Rating: {{ current_tutor.average_rating }} </div>
+                    <div style="text-align: center"> <b>Average Rating:</b> {{ current_tutor.average_rating }} </div>
                 <hr>
                 {% for review in reviews %}
                     <div class="review">
@@ -139,7 +139,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="created_at" style="float: right">{{ review.created_at }}</div>
+                                <div class="created_at" style="float: right">{{ review.created_at.date }}</div>
                             </div>
                         </div>
                         <div class="container" style="max-width: 750px">

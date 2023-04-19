@@ -8,10 +8,10 @@
                 <h3 style="margin-top: 10px"> {{ current_student.first_name }} {{ current_student.last_name }}</h3>
             </div>
         <div class="card-body bg-light">
-                <div>Email: {{ current_student.email }}</div>
+                <div><b>Email:</b> {{ current_student.email }}</div>
             <div>
             <hr>
-                    Bio:
+                    <b>Bio:</b>
                 <div>{{ current_student.bio }}</div>
         </div>
         </div>
@@ -55,7 +55,7 @@
                         <label>There are no reviews for this student yet.</label>
                     </div>
                 {% else %}
-                    <div style="text-align: center"> Average Rating: {{ current_student.average_rating }} </div>
+                    <div style="text-align: center"> <b>Average Rating:</b> {{ current_student.average_rating }} </div>
                 <hr>
                 {% for review in reviews %}
                     <div class="review">
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="created_at" style="float: right">{{ review.created_at }}</div>
+                                <div class="created_at" style="float: right">{{ review.created_at.date }}</div>
                             </div>
                         </div>
                         <div class="container" style="max-width: 750px">
