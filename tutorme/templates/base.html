@@ -13,37 +13,37 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
          <a class="navbar-brand"></a>
-        <span class="navbar-brand position-absolute mx-0 nav-title" >Tutor Me</span>
+        <span class="navbar-brand position-absolute mx-0 nav-title" style="color: #0f4836">Tutor Me</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" ><span class="nav-text">Home</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" style="color: #0f4836"><span>Home</span></a></li>
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
                     {% if user.profile.is_student %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'view_tutors' %}"><span class="nav-text">View Tutors</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'view_tutors' %}" style="color: #0f4836;"><span>View Tutors</span></a></li>
                     {% endif %}
                     {% if user.profile.is_tutor %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'requests_page' %}" style="color: #2F846A;"><span>View Requests</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'requests_page' %}" style="color: #0f4836;"><span>View Requests</span></a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'student_sessions' %}" style="color: #2F846A;"><span>View Sessions</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'student_sessions' %}" style="color: #0f4836;"><span>View Sessions</span></a></li>
                     {% endif %}
 
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #2F846A;">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #0f4836;">
                         Settings </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" style="color: #2F846A;"><span>View Profile</span></a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}" style="color: #2F846A;"><span>Edit Profile</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" style="color: #0f4836;"><span>View Profile</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}" style="color: #0f4836;"><span>Edit Profile</span></a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: #2F846A;"><span>Logout</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: #0f4836;"><span>Logout</span></a></li>
                         </ul>
                     </li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}"><span class="nav-text">Login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}" style="color: #0f4836"><span>Login</span></a></li>
                 {% endif %}
             </ul>
         </div>
