@@ -77,25 +77,31 @@
                                 <h2 class="accordion-header" id="heading{{ current_tutor.id }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ current_tutor.id }}" aria-expanded="false" aria-controls="collapse{{ current_tutor.id }}">
                                         <div class="container">
-                                            {{ current_tutor.first_name }} {{ current_tutor.last_name }}
-                                            - {% if current_tutor.hourly_rate is None %}
-                                                Hourly rate not set!
-                                            {% else %}
-                                                ${{ current_tutor.hourly_rate }}/hr
-                                            {% endif %}
-                                            - Average rating:
-                                            {% if current_tutor.average_rating is 0 %}
-                                                Not rated yet!
-                                            {% else %}
-                                                {{ current_tutor.average_rating }}/5.0
-                                            {% endif %}
+                                            <div class="row">
+                                                <div class="col">
+                                                    <b>{{ current_tutor.first_name }} {{ current_tutor.last_name }}</b>
+                                                    {% if current_tutor.hourly_rate is None %}
+
+                                                    {% else %}
+                                                        (${{ current_tutor.hourly_rate }}/hr)
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col" style="text-align: right">
+                                                    Rating:
+                                                    {% if current_tutor.average_rating is 0 %}
+                                                        N/A
+                                                    {% else %}
+                                                        {{ current_tutor.average_rating }}/5.0
+                                                    {% endif %}
+                                                </div>
+                                            </div>
                                         </div>
                                     </button>
                                 </h2>
                                 <div id="collapse{{ current_tutor.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ current_tutor.id }}" data-bs-parent="#tutorAccordion">
                                     <div class="accordion-body">
                                         <div>
-                                            Bio:
+                                            <b>Bio:</b>
                                         </div>
                                         <div>
                                             {{ current_tutor.bio }}
@@ -103,7 +109,7 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col" style="border-right: 1px solid gainsboro">
-                                                <label>Courses I tutor for:</label>
+                                                <label><b>Courses I tutor for:</b></label>
                                                 {% if current_tutor.courses is None %}
                                                     <label>This tutor has not added any courses yet!</label>
                                                 {% else %}
@@ -113,7 +119,7 @@
                                                 {% endif %}
                                             </div>
                                             <div class="col">
-                                                <label>Times I am available:</label>
+                                                <label><b>Times I am available:</b></label>
                                                 {% if current_tutor.get_sessions is None %}
                                                     <label>This tutor has not added any times yet!</label>
                                                 {% else %}

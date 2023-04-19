@@ -12,11 +12,11 @@
                 <form method="get">
                     <div class="btn-group-vertical btn-group-md"  style="width: 100%">
 
-                        <button type= "submit" name="All" class="btn btn-secondary">All Current</button>
-                        <button type= "submit" name="Pending" class="btn btn-secondary">Pending</button>
-                        <button type= "submit" name="Approved" class="btn btn-secondary">Approved</button>
-                        <button type= "submit" name="Denied" class="btn btn-secondary">Denied</button>
-                        <button type= "submit" name="Archive" class="btn btn-secondary">Archive</button>
+                        <button type= "submit" name="All" class="btn btn-success">All Current</button>
+                        <button type= "submit" name="Pending" class="btn btn-success">Pending</button>
+                        <button type= "submit" name="Approved" class="btn btn-success">Approved</button>
+                        <button type= "submit" name="Denied" class="btn btn-success">Denied</button>
+                        <button type= "submit" name="Archive" class="btn btn-success">Archive</button>
                     </div>
                 </form>
             </div>
@@ -49,7 +49,7 @@
                                 <td style="width: 200px"> {{ request.get_date }}, {{ request.tutor_request.day }} <br>
                                     {{ request.tutor_session.start_time }} to {{ request.tutor_session.end_time }}</td>
                                 <td style="width: 190px">
-                                    <a type="button" style="text-decoration: none; color: #4fa389" href="/requests_page/view_student/{{ request.student.id }}">
+                                    <a type="button" style="text-decoration: none; color: #2F846A" href="/requests_page/view_student/{{ request.student.id }}">
                                         <b>{{ request.student.user.get_full_name }}</b>
                                     </a>
                                 </td>

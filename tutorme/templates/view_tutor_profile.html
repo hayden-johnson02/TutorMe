@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Tutor Me | View Tutor Profile{% endblock %}
+
 {% block content %}
     <div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 1000px">
         <div class="card">
@@ -62,6 +63,7 @@
                     <div class="col">
                         <label><b>Available Sessions:</b></label>
                         {% if tutor_sessions is None %}
+                            <div></div>
                             <label>This tutor has not added any times yet!</label>
                         {% else %}
                             {% for session in tutor_sessions %}
@@ -69,7 +71,7 @@
                                 <div class="row border my-0 justify-content-center">
                                     <div class="col-md-8 mt-1"> {{ session.day }}, {{ session.start_time }} to {{ session.end_time }} </div>
                                     <div class="col-md-4" style="text-align: right">
-                                        <a href= "/view_tutors/req_session/{{session.id}}/" class="btn btn-sm btn-outline-dark" style="width: 90px">Request</a>
+                                        <a href= "/view_tutors/req_session/{{session.id}}/" class="btn btn-sm btn-outline-success" style="width: 90px">Request</a>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -102,7 +104,7 @@
                             <div class="form-group row mt-3 mb-3">
                                 <div class="btn-group" role="group">
                                     <input type="hidden" id="review" name="review" value="True">
-                                    <button class="rounded btn btn-secondary" type="submit">Submit Review</button>
+                                    <button class="rounded btn btn-success" type="submit">Submit Review</button>
                                 </div>
                             </div>
                         </div>
