@@ -311,6 +311,7 @@ def view_tutor(request, tutor_id):
             if 'review' in request.POST:
                 # submitting a review
                 form = ReviewForm(request.POST)
+                form.rating = request.POST["rating"]
                 if form.is_valid():
                     review = form.save(commit=False)
                     review.tutor = tutor.user
