@@ -33,7 +33,7 @@
                                 {% for session in recent_reqs %}
                                     <tr>
                                     <td style="max-width: 70px"> {{ session.get_date }}<br>
-                                    <td style="max-width: 120px"> {{ session.tutor_session.start_time }}-{{ session.tutor_session.end_time }}</td>
+                                    <td style="max-width: 120px"> {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
                                     <td style="max-width: 190px">
                                         <a type="button" style="text-decoration: none; color: #1D634D" href="/requests_page/view_student/{{ session.student.id }}">
                                             <b>{{ session.student.user.get_full_name }}</b>

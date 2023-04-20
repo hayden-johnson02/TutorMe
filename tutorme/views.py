@@ -496,6 +496,7 @@ def view_student(request, student_id):
         student = Profile.objects.get(pk=student_id)
         if request.method == 'POST' and 'review' in request.POST:
             form = ReviewForm(request.POST)
+            form.rating = request.POST["rating"]
             if form.is_valid():
                 review = form.save(commit=False)
                 review.tutor = student.user
