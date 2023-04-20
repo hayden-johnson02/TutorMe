@@ -3,6 +3,7 @@
 {% block title %}Tutor Me | Home{% endblock %}
 {% block content %}
 {% load static %}
+
 <div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 900px">
     {% if user.is_authenticated %}
     {% load socialaccount %}
@@ -144,8 +145,228 @@
         </div>
     </div>
     {% else %}
-        <h1>Welcome to TutorMe</h1>
-        <a class="btn btn-outline-primary" href="{% provider_login_url 'google' %}">Login with Google</a>
+        <!-- source: https://uiverse.io/cssbuttons-io/calm-tiger-4
+        https://bbbootstrap.com/snippets/opening-envelope-css-html-91462710 -->
+        <style>
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            border: 1px solid #BAE4D6;
+            background-color: #BAE4D6;
+            border-radius: 4px;
+            transition: all 0.2s ease-in;
+            position: relative;
+            overflow: hidden;
+            font-size: 19px;
+            color: #0f4836;
+            z-index: 1;
+        }
+        .button:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.25);
+            top: 100%;
+            width: 140%;
+            height: 180%;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: -1;
+        }
+        .button:after {
+            content: "";
+            position: absolute;
+            left: 55%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.45);
+            top: 180%;
+            width: 160%;
+            height: 190%;
+            background-color: #39bda7;
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: -1;
+        }
+        .button:hover {
+            color: #ffffff;
+            border: 1px solid #39bda7;
+        }
+        .button:hover:before {
+            top: -35%;
+            background-color: #39bda7;
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+        }
+        .button:hover:after {
+            top: -45%;
+            background-color: #39bda7;
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+        }
+
+        .letter-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+        .animated-mail {
+            position: absolute;
+            height: 150px;
+            width: 200px;
+            -webkit-transition: 0.4s;
+            -moz-transition: 0.4s;
+            transition: 0.4s;
+        }
+        .animated-mail .body {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 100px 200px;
+            border-color: transparent transparent #2F846A transparent;
+            z-index: 2;
+        }
+        .animated-mail .top-fold {
+            position: absolute;
+            top: 50px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 50px 100px 0 100px;
+            -webkit-transform-origin: 50% 0%;
+            -webkit-transition: transform 0.4s 0.4s, z-index 0.2s 0.4s;
+            -moz-transform-origin: 50% 0%;
+            -moz-transition: transform 0.4s 0.4s, z-index 0.2s 0.4s;
+            transform-origin: 50% 0%;
+            transition: transform 0.4s 0.4s, z-index 0.2s 0.4s;
+            border-color: #1D634D transparent transparent transparent;
+            z-index: 2;
+        }
+        .animated-mail .back-fold {
+            position: absolute;
+            bottom: 0;
+            width: 200px;
+            height: 100px;
+            background: #1D634D;
+            z-index: 0;
+        }
+        .animated-mail .left-fold {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 50px 0 50px 100px;
+            border-color: transparent transparent transparent #2F846A;
+            z-index: 2;
+        }
+        .animated-mail .letter {
+            left: 20px;
+            bottom: 0px;
+            position: absolute;
+            width: 160px;
+            height: 60px;
+            background: #BAE4D6;
+            z-index: 1;
+            overflow: hidden;
+            -webkit-transition: 0.4s 0.2s;
+            -moz-transition: 0.4s 0.2s;
+            transition: 0.4s 0.2s;
+        }
+        .animated-mail .letter .letter-border {
+            height: 10px;
+            width: 100%;
+            background: repeating-linear-gradient(-45deg, #1D634D, #1D634D 8px, transparent 8px, transparent 18px);
+        }
+        .animated-mail .letter .letter-title {
+            margin-top: 10px;
+            margin-left: 5px;
+            height: 10px;
+            width: 40%;
+            background: #1D634D;
+        }
+        .animated-mail .letter .letter-context {
+            margin-top: 10px;
+            margin-left: 5px;
+            height: 10px;
+            width: 20%;
+            background: #1D634D;
+            content: 'ram avtar';
+        }
+        .animated-mail .letter .letter-context-body {
+            margin-top: 10px;
+            margin-left: 5px;
+            /* height: 10px; */
+            width: 99%;
+            color: black;
+            content: 'ram avtar';
+        }
+        .animated-mail .letter .letter-stamp {
+            margin-top: 30px;
+            margin-left: 120px;
+            border-radius: 100%;
+            height: 30px;
+            width: 30px;
+            background: #1D634D;
+            opacity: 0.3;
+        }
+        .letter-image:hover .animated-mail {
+            transform: translateY(50px);
+            -webkit-transform: translateY(50px);
+            -moz-transform: translateY(50px);
+        }
+        .letter-image:hover .animated-mail .top-fold {
+            transition: transform 0.4s, z-index 0.2s;
+            transform: rotateX(180deg);
+            -webkit-transition: transform 0.4s, z-index 0.2s;
+            -webkit-transform: rotateX(180deg);
+            -moz-transition: transform 0.4s, z-index 0.2s;
+            -moz-transform: rotateX(180deg);
+            z-index: 0;
+        }
+        .letter-image:hover .animated-mail .letter {
+            height: 280px;
+            content: 'ram avtar';
+            color: #000;
+        }
+        .letter-image:hover .shadow {
+            width: 250px;
+        }
+        </style>
+
+        <div class="row">
+            <div class="col">
+                 <h1 style="color: #0f4836">Welcome to TutorMe!</h1>
+            </div>
+            <div class="col">
+                <a class="button" style="text-decoration: none" href="{% provider_login_url 'google' %}">Login with Google</a>
+            </div>
+        </div>
+        <div class="letter-image">
+            <div class="animated-mail">
+                <div class="back-fold"></div>
+                <div class="letter">
+                    <div class="letter-border"></div>
+                    <div class="letter-title"></div>
+                    <div class="letter-context"></div>
+                    <div class="letter-context-body">
+                        <p><strong>Hey!</strong> <br> You have a tutoring session soon! <br></p>
+                    </div>
+                </div>
+                <div class="top-fold"></div>
+                <div class="body"></div>
+                <div class="left-fold"></div>
+            </div>
+            <div class="shadow"></div>
+        </div>
+
     {% endif %}
 </div>
 {% endblock %}
