@@ -15,7 +15,7 @@
             {% if user.profile.is_tutor %}
                 <div class="row rounded" style="margin-left: 5px">
                     <div class="col rounded" style="background-color: #cff1e5">
-                        <label class="mt-2"><b>New Requests!</b></label>
+                        <label class="mt-2"><b>New Pending Requests!</b></label>
                         {% if recent_reqs is None %}
                             <div style="text-align: center">
                                 <label>No requests to see.</label>
@@ -33,7 +33,7 @@
                                     <tr>
                                     <td style="width: 100px"> {{ session.get_date }}<br>
                                     <td style="width: 220px">
-                                        <a type="button" style="text-decoration: none; color: #4fa389" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/requests_page/view_student/{{ session.student.id }}">
                                             <b>{{ session.student.user.get_full_name }}</b>
                                         </a>
                                     </td>
@@ -55,9 +55,9 @@
                                     <div> {{ session.get_date }}, {{ session.tutor_session.day }} </div>
                                     <div> {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }} </div>
                                     <div>
-                                        Tutor:
-                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
-                                            <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                        Student:
+                                        <a type="button" style="text-decoration: none; color: #1D634D" href="/requests_page/view_student/{{ session.student.id }}">
+                                            <b>{{ session.student.get_full_name }}</b>
                                         </a>
                                     </div>
                                     <div>Note: {{ session.description }}</div>

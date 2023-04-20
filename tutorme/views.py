@@ -34,8 +34,24 @@ def index(request):
         if recent_reqs.__len__() == 0:
             recent_reqs = None
     elif request.user.is_authenticated and request.user.profile.is_tutor:
-        upcoming_apt = None
-        recent_reqs = None
+        tutor_sessions = TutorSession.objects.filter(tutor=request.user.profile)
+        upcoming_apt = []
+        for session in tutor_sessions:
+            for req in session.approved_requests():
+                upcoming_apt.append(req)
+        upcoming_apt.sort(key=lambda x: x.date)
+        if upcoming_apt.__len__() == 0:
+            upcoming_apt = None
+        else:
+            upcoming_apt = upcoming_apt[:1]
+        recent_reqs = []
+        for session in tutor_sessions:
+            for req in session.pending_requests():
+                recent_reqs.append(req)
+        if recent_reqs.__len__() == 0:
+            recent_reqs = None
+        else:
+            recent_reqs = recent_reqs[:5]
     return render(request, 'index.html', {'favorites': favorites,
                                           'upcoming_apt': upcoming_apt,
                                           'recent_reqs': recent_reqs})
