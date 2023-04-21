@@ -342,7 +342,7 @@ def view_tutor(request, tutor_id):
         tutor_sessions = tutor.get_sessions()
         if not tutor_sessions:
             tutor_sessions = None
-        reviews = Review.objects.filter(tutor=tutor.user)
+        reviews = Review.objects.filter(tutor=tutor.user).order_by("created_at").reverse()
         if not reviews:
             reviews = None
         already_reviewed = False
@@ -504,7 +504,7 @@ def view_student(request, student_id):
                 review.reviewer = request.user
                 review.save()
                 return redirect('/requests_page/view_student/' + str(student_id))
-        reviews = Review.objects.filter(tutor=student.user)
+        reviews = Review.objects.filter(tutor=student.user).order_by("created_at").reverse()
         if not reviews:
             reviews = None
         already_reviewed = False
