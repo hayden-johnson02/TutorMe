@@ -16,7 +16,7 @@
                         <button type= "submit" name="Pending" class="btn btn-outline-success">Pending</button>
                         <button type= "submit" name="Approved" class="btn btn-outline-success">Approved</button>
                         <button type= "submit" name="Denied" class="btn btn-outline-success">Denied</button>
-                        <button type= "submit" name="Archive" class="btn btn-outline-success">Archive</button>
+                        <button type= "submit" name="Archive" class="btn btn-outline-success">Past Dates</button>
                     </div>
                 </form>
             </div>
@@ -64,8 +64,10 @@
                                                 <button type="submit" class="btn btn-success" name="action" value="approve">Approve</button>
                                                 <button type="submit" class="btn btn-danger" name="action" value="deny">Deny</button>
                                             {% else %}
+                                                <!--
                                                 <button type="submit" class="btn btn-success" name="action" value="approve" disabled>Approve</button>
                                                 <button type="submit" class="btn btn-danger" name="action" value="deny" disabled>Deny</button>
+                                                -->
                                             {% endif %}
                                         </div>
                                     </form>

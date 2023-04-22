@@ -411,12 +411,14 @@ def requests_page(request):
                     student_requests.append(req)
 
         if request.method == 'GET' and 'Approved' in request.GET:
+            archive = True
             student_requests = []
             for session in tutor_sessions:
                 for req in session.approved_requests():
                     student_requests.append(req)
 
         if request.method == 'GET' and 'Denied' in request.GET:
+            archive = True
             student_requests = []
             for session in tutor_sessions:
                 for req in session.denied_requests():
@@ -463,8 +465,10 @@ def student_sessions(request):
         if request.method == 'GET' and 'Pending' in request.GET:
             student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Pending', date__gte=today)
         if request.method == 'GET' and 'Approved' in request.GET:
+            archive = True
             student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Approved', date__gte=today)
         if request.method == 'GET' and 'Denied' in request.GET:
+            archive = True
             student_requests = TutorRequest.objects.filter(student=request.user.profile, status='Denied', date__gte=today)
         student_requests = student_requests.order_by('date')
         if request.method == 'GET' and 'Archive' in request.GET:
