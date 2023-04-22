@@ -89,7 +89,6 @@ def edit_profile_view(request):
         form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')
 
     clist = None
     search_course_form = None

@@ -11,7 +11,7 @@
         <div class="card-header">
             <h3 style="margin-top: 10px">Edit Profile</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-light">
             <form method="post">
                 {% csrf_token %}
                 <div class="row">
@@ -61,7 +61,7 @@
             <div class="card-header">
                 <h3 style="margin-top: 10px">Add/Remove Courses</h3>
             </div>
-            <div class="card-body" id="searchC">
+            <div class="card-body bg-light" id="searchC">
                 <form action="#searchC" method="get">
                     {% csrf_token %}
                     <h5>Search for Courses to Add:</h5>
@@ -88,7 +88,7 @@
                     </div>
                 </form>
                 {% if clist is None %}
-                    <label style="margin-bottom: 20px">Search for courses you would like to add to your profile!</label>
+                    <label style="margin-bottom: 10px; margin-top: 10px">Search for courses you would like to add to your profile!</label>
                 {% else %}
                     <div style="margin-bottom: 20px"></div>
                     <form action="#searchC" method="post">
@@ -96,13 +96,14 @@
                         {% if search_course_form is None %}
                             <label style="margin-bottom: 20px">Search for a valid course!</label>
                         {% else %}
-                            <label>Add courses to your profile: </label>
+                            <label><b>Add courses to your profile: </b></label>
                             <div></div>
                             {{ search_course_form }}
                             <button type="submit" name="addCourses" value ="{{ clist }}" class="btn btn-success" style="margin-top: 20px; margin-bottom: 20px">Add Courses</button>
                         {% endif %}
                     </form>
                 {% endif %}
+                <hr>
                 <div id="removeC"></div>
                 <form action="#removeC" method="post" id="addCourseForm">
                     {% csrf_token %}
@@ -125,39 +126,40 @@
         <div class="card-header">
             <h3 style="margin-top: 10px">Add/Remove Available Tutoring Times</h3>
         </div>
-        <div class="card-body" id="Sessions">
+        <div class="card-body bg-light" id="Sessions">
             <form method="post" action="#Sessions">
                 {% csrf_token %}
-                {{ create_session_form.non_field_errors }}
-                <div class="row">
-                    <div class="col">
-                        <div>
-                            <label for="day">Day</label>
+                    <div class="row align-items-center">
+                        <div class="col" style="max-width: 150px">
+                            <label>Day</label>
+                            <div></div>
                             {{ create_session_form.day }}
                         </div>
-                    </div>
-                    <div class="col">
-                        <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time !-->
-                        <!-- Possible other https://bootstrap-vue.org/docs/components/form-timepicker !-->
-                        <div>
-                            <label for="start_time">Start Time</label>
+                        <div class="col" style="max-width: 150px">
+                            <label>Start Time</label>
+                            <div></div>
                             {{ create_session_form.start_time }}
                         </div>
-                    </div>
-                    <div class="col">
-                        <div>
-                            <label for="end_time">End Time</label>
+                        <div class="col">
+                            <label>End Time</label>
+                            <div></div>
                             {{ create_session_form.end_time }}
                         </div>
+                        <div class="col">
+                            <div style="margin-top: 20px"></div>
+                            <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 10px">Create Session</button>
+                        </div>
                     </div>
-                </div>
                 {% if invalid_session_time %}
                     <label style="margin-top: 10px"> Make sure your ending time is after your start time!</label>
                     <div></div>
                 {% endif %}
-                <button type="submit" name="createTutorSession" class="btn btn-success" style="margin-top: 10px">Create Session</button>
+                {{ create_session_form.non_field_errors }}
+                        <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time !-->
+                        <!-- Possible other https://bootstrap-vue.org/docs/components/form-timepicker !-->
             </form>
             <div style="margin-top: 20px"></div>
+            <hr>
             {% if tutor_sessions_list is None %}
                 <label>You have no sessions on your profile to remove.</label>
             {% else %}

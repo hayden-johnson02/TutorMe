@@ -21,16 +21,17 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" style="color: #0f4836"><span>Home</span></a></li>
+                     <li class="nav-item"><a class="nav-link" href="{% url 'index' %}" style="color: #0f4836"><span>Home</span></a></li>
                     {% if user.profile.is_student %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'view_tutors' %}" style="color: #0f4836;"><span>View Tutors</span></a></li>
                     {% endif %}
                     {% if user.profile.is_tutor %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'requests_page' %}" style="color: #0f4836;"><span>View Requests</span></a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'student_sessions' %}" style="color: #0f4836;"><span>View Sessions</span></a></li>
+                    {% elif user.profile.is_student %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'student_sessions' %}" style="color: #0f4836;"><span>View Requests</span></a></li>
                     {% endif %}
 
+                    {% if user.profile.is_student or user.profile.is_tutor %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #0f4836;">
                         Settings </a>
@@ -41,6 +42,7 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: #0f4836;"><span>Logout</span></a></li>
                         </ul>
                     </li>
+                    {% endif %}
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% provider_login_url 'google' %}" style="color: #0f4836"><span>Login</span></a></li>
                 {% endif %}

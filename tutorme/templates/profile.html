@@ -7,14 +7,14 @@
         <div class="card-header">
             <h3 style="margin-top: 10px"> {{ user.profile.first_name }} {{ user.profile.last_name }}</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-light">
             {% load socialaccount %}
             {% if user.is_authenticated %}
-                <label>Email: {{ user.email }}</label>
+                <label><b>Email:</b> {{ user.email }}</label>
                 {% if user.profile.is_tutor %}
                     <div class="row" style="margin-top: 10px">
                         <div class="col">
-                            <label>Hourly Rate:
+                            <label><b>Hourly Rate:</b>
                             {% if user.profile.hourly_rate is None %}
                                 Not set yet!
                             {% else %}
@@ -23,7 +23,7 @@
                             </label>
                         </div>
                         <div class="col">
-                            <label>Venmo:
+                            <label><b>Venmo:</b>
                             {% if user.profile.venmo is None %}
                                 Not set yet!
                             {% else %}
@@ -37,7 +37,7 @@
                     <!-- Do we have anything specific to students? !-->
                 {% endif %}
                 <hr>
-                <label>Bio: </label>
+                <label><b>Bio: </b></label>
                 {% if user.profile.bio is None %}
                     <p>You have not added a bio yet!</p>
                 {% else %}
@@ -47,7 +47,7 @@
                 {% if user.profile.is_tutor %}
                     <div class="row">
                         <div class="col" style="border-right: 1px solid gainsboro">
-                            <label style="margin-bottom: 10px">Courses:</label>
+                            <label style="margin-bottom: 10px"><b>Courses:</b></label>
                             {% if courses is None %}
                                 <div></div>
                                 <label>You have not added any courses yet!</label>
@@ -60,7 +60,7 @@
                             {% endif %}
                         </div>
                         <div class="col">
-                            <label style="margin-bottom: 10px">Available Times:</label>
+                            <label style="margin-bottom: 10px"><b>Available Times:</b></label>
                             {% if tutor_sessions is None %}
                                 <div></div>
                                 <label>You have not added any available tutoring times yet!</label>
