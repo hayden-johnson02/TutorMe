@@ -154,6 +154,10 @@
                     <label style="margin-top: 10px"> Make sure your ending time is after your start time!</label>
                     <div></div>
                 {% endif %}
+                {% if overlapping_time %}
+                    <label style="margin-top: 10px"> This duration would overlap with an existing session!</label>
+                    <div></div>
+                {% endif %}
                 {{ create_session_form.non_field_errors }}
                         <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time !-->
                         <!-- Possible other https://bootstrap-vue.org/docs/components/form-timepicker !-->

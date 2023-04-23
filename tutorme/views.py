@@ -169,11 +169,18 @@ def edit_profile_view(request):
 
     # https://stackoverflow.com/questions/50547018/delete-object-with-form-in-django
     invalid_session_time = False
+    overlapping_time = False
     if request.method == 'POST' and 'createTutorSession' in request.POST:
         create_session_form = CreateSessionForm(request.POST)
         if create_session_form.is_valid():
-            TutorSession.objects.create(day=request.POST.get('day'), start_time=request.POST.get('start_time'),
-                                        end_time=request.POST.get('end_time'), tutor=request.user.profile)
+            day = request.POST.get('day')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            for session in TutorSession.objects.filter(tutor=request.user.profile):
+                if session.start_time < datetime.datetime.strptime(end_time, '%H:%M').time() and datetime.datetime.strptime(start_time, '%H:%M').time() < session.end_time:
+                    overlapping_time = True
+            if not overlapping_time:
+                TutorSession.objects.create(day=day, start_time=start_time, end_time=end_time, tutor=request.user.profile)
         else:
             invalid_session_time = True
     create_session_form = CreateSessionForm()
@@ -195,7 +202,8 @@ def edit_profile_view(request):
                                                  'delete_course_form': delete_course_form,
                                                  'create_session_form': create_session_form,
                                                  'tutor_sessions_list': tutor_sessions_list,
-                                                 'invalid_session_time': invalid_session_time, })
+                                                 'invalid_session_time': invalid_session_time,
+                                                 'overlapping_time': overlapping_time})
 
 
 def create_account_view(request):

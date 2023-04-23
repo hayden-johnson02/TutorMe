@@ -126,7 +126,7 @@ class DynamicSessionForm(forms.Form):
         local = localtime() + datetime.timedelta(hours=1)
         local = local.time()
         if s_day == t_day:
-            if session.start_time  <= local:
+            if session.start_time <= local:
                 start_day = today + datetime.timedelta(days=7)
             else:
                 start_day = today
