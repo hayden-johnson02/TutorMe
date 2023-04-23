@@ -85,10 +85,12 @@ def profile_view(request):
 # https://stackoverflow.com/questions/54438473/how-to-execute-file-py-on-html-button-press-using-django/54451774#54451774
 @login_required(login_url='/login/')
 def edit_profile_view(request):
+    confirmation_saved_changes = False
     if request.method == 'POST' and 'editProfile' in request.POST:
         form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
+            confirmation_saved_changes = True
 
     clist = None
     search_course_form = None
@@ -195,6 +197,7 @@ def edit_profile_view(request):
         tutor_sessions_list = None
     form = EditProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', {'form': form, 'courses': courses, 'clist': clist,
+                                                 'confirmation_saved_changes': confirmation_saved_changes,
                                                  'search_course_form': search_course_form,
                                                  'searchSubject': subject,
                                                  'searchNumber': number,

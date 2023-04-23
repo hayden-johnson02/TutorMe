@@ -52,7 +52,16 @@
                 {% endif %}
                  <span class="input-group-text">Biography</span>
                 {{ form.bio }}
-            <button type="submit" name="editProfile" class="btn btn-success" style="margin-top: 20px">Save Changes</button>
+                <div class="row">
+                    <div class="col" style="max-width: 150px">
+                        <button type="submit" name="editProfile" class="btn btn-success" style="margin-top: 20px">Save Changes</button>
+                    </div>
+                    <div class="col">
+                        {% if confirmation_saved_changes %}
+                            <label style="margin-top: 25px">Your profile changes have saved successfully!</label>
+                        {% endif %}
+                    </div>
+                </div>
             </form>
         </div>
     </div>
