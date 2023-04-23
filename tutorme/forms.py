@@ -61,7 +61,7 @@ class CreateSessionForm(forms.ModelForm):
 
         if start_time.hour > end_time.hour:
             raise ValidationError("End time must be after start time")
-        if end_time.hour == start_time.hour and start_time.minute > end_time.minute:
+        if end_time.hour == start_time.hour and start_time.minute >= end_time.minute:
             raise ValidationError("End time must be after start time")
         return cleaned_data
 
