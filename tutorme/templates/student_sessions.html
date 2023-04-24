@@ -2,6 +2,13 @@
 {% load bootstrap5 %}
 {% block title %}Tutor Me | Requests{% endblock %}
 {% block content %}
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-2">
@@ -48,9 +55,11 @@
                                 <td style="width: 200px"> {{ session.get_date }}, {{ session.tutor_session.day }} <br>
                                     {{ session.tutor_session.start_time }} to {{ session.tutor_session.end_time }}</td>
                                 <td style="width: 190px">
-                                    <a type="button" style="text-decoration: none; color: #2F846A" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
-                                        <b>{{ session.tutor_session.tutor.get_full_name }}</b>
-                                    </a>
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="View tutor profile">
+                                        <a type="button" style="text-decoration: none; color: #2F846A" href="/view_tutors/{{ session.tutor_session.tutor.id }}">
+                                            <b>{{ session.tutor_session.tutor.get_full_name }}</b>
+                                        </a>
+                                    </span>
                                 </td>
                                 <td>{{ session.description }}</td>
                                 <td style="width: 100px">{{ session.status }}</td>
