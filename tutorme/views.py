@@ -179,7 +179,7 @@ def edit_profile_view(request):
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
             for session in TutorSession.objects.filter(tutor=request.user.profile):
-                if session.start_time < datetime.datetime.strptime(end_time, '%H:%M').time() and datetime.datetime.strptime(start_time, '%H:%M').time() < session.end_time:
+                if session.day == day and session.start_time < datetime.datetime.strptime(end_time, '%H:%M').time() and datetime.datetime.strptime(start_time, '%H:%M').time() < session.end_time:
                     overlapping_time = True
             if not overlapping_time:
                 TutorSession.objects.create(day=day, start_time=start_time, end_time=end_time, tutor=request.user.profile)
