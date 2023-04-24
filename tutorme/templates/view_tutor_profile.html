@@ -40,6 +40,12 @@
     }
 </style>
 
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
+
     <div class="container" style="margin-top: 50px; margin-bottom: 50px; max-width: 1000px">
         <div class="card">
             <div class="card-header" style="text-align: center">
@@ -48,11 +54,15 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         {% if not is_fav %}
-                            <input type="hidden" name="not_favorite" value="True" style="outline: none; background-color: transparent">
-                            <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">☆︎</button>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Favorite this tutor">
+                                <input type="hidden" name="not_favorite" value="True" style="outline: none; background-color: transparent">
+                                <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">☆︎</button>
+                            </span>
                         {%else%}
-                            <input type="hidden" name="favorite" value="True" style="outline: none; background-color: transparent">
-                            <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">★</button>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Remove from favorites">
+                                <input type="hidden" name="favorite" value="True" style="outline: none; background-color: transparent">
+                                <button type="submit" class="btn" style="font-size: 350%; color: #2F846A">★</button>
+                            </span>
                         {%endif%}
                     </form>
                 </div>
