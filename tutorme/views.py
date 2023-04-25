@@ -272,9 +272,9 @@ def tutor_list(request):
 
     profile_filters = Q(is_tutor=True)
     if first_name != '':
-        profile_filters &= Q(first_name__iexact=first_name)
+        profile_filters &= Q(first_name__icontains=first_name)
     if last_name != '':
-        profile_filters &= Q(last_name__iexact=last_name)
+        profile_filters &= Q(last_name__icontains=last_name)
 
     possible_tutors = Profile.objects.filter(profile_filters).filter(course_filters).order_by('first_name').distinct()
 
