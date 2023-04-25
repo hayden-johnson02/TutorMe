@@ -77,7 +77,28 @@
                 {% endif %}
                 <div style="float: right">
                     <td><a class="btn btn-outline-success" href="{% url 'edit_profile' %}">Edit Profile</a></td>
-                    <td><a class="btn btn-outline-danger" href="delete/">Delete Account</a></td>
+                    {% comment %} from https://getbootstrap.com/docs/5.0/components/modal/#exampleModalLongTitle {% endcomment %}
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Account</button>
+                    <!-- Modal -->
+                    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="col py-0">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label>Are you sure you want to delete your account? This action cannot be undone, and you will no longer be able to retrieve your profile.</label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <td><a class="btn btn-outline-danger" href="delete/">Delete My Account</a></td>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         </div>
