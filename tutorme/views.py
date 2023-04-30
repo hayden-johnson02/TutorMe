@@ -171,6 +171,7 @@ def edit_profile_view(request):
                 delete_course_form = DynamicCourseForm(course_list=course_list)
             else:
                 delete_course_form = None
+            course_name = ""
 
     # https://stackoverflow.com/questions/50547018/delete-object-with-form-in-django
     invalid_session_time = False
