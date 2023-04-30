@@ -136,6 +136,9 @@ def edit_profile_view(request):
                 if not user_already_has_course:
                     Course.objects.create(subject=subj, catalog_number=course_num,
                                           course_name=course_name, profile=request.user.profile)
+            course_name = ""
+
+
             clist = None
 
     courses = Course.objects.filter(profile=request.user.profile)
