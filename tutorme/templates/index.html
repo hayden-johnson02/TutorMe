@@ -15,7 +15,7 @@
     {% load socialaccount %}
     <div class="card">
         <div class="card-header">
-            <b>Welcome, {{ user.first_name }}!</b>
+            <b>Welcome, {{ user.profile.first_name}}!</b>
         </div>
         <div class="card-body bg-light">
             {% if user.profile.is_tutor %}
@@ -43,7 +43,7 @@
                                     <td style="max-width: 190px">
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="View student profile">
                                             <a type="button" style="text-decoration: none; color: #1D634D" href="/requests_page/view_student/{{ session.student.id }}">
-                                                <b>{{ session.student.user.get_full_name }}</b>
+                                                <b>{{ session.student.get_full_name}}</b>
                                             </a>
                                         </span>
                                     </td>
