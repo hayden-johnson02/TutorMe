@@ -1,5 +1,4 @@
-# Django Practice Assessment
-
+# TutorMe
 
 **Roles:**
 - Anna Goco (aeg3dh): Requirements Manager
